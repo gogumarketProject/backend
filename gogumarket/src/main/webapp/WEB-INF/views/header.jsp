@@ -6,7 +6,9 @@
 </form>
 <header>
     <div class="header-container">
-        <div class="logo">Gogumarket</div>
+        <div class="logo">
+        	<a href="javascript:location.href='market'" style="">Gogumarket</a>
+       	</div>
         <div class="search-bar">
             <i class="fa-solid fa-magnifying-glass" style="color: black; margin-right: 5px;"></i>
             <input type="text" placeholder="어떤 상품을 찾으시나요? 카페상품, 앱상품 모두 검색">
@@ -15,7 +17,7 @@
         	<!-- 임시 컨슈머, 판매장창 -->
         	<input type = "button" onclick = "goConsumer()" value = "컨슈머창">
         	<input type = "button" onclick = "goSeller()" value = "판매장창">
-            <button>s
+            <button>
                 <span class="icon chat" id="noteButton" style="width:80px;" 
                 <c:if test="${empty sessionLevel}">onclick="goLogin();"</c:if>
                 >쪽지</span>

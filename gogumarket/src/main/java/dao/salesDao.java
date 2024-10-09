@@ -3,7 +3,9 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
+import common.CommonUtil;
 import common.DBConnection;
 import dto.salesDto;
 
@@ -43,7 +45,7 @@ public class salesDao {
 				+ "values\n"
 				+ "('"+dto.getS_id()+"', '"+dto.getCategory_id()+"', '"+dto.getTitle()+"', '"+dto.getContents()+"',\n"
 				+ "'"+dto.getProduct_status()+"', '"+dto.getTrade()+"', '"+dto.getArea()+"', to_date('"+dto.getReg_date()+"', 'yyyy-MM-dd HH24:mi:ss'),\n"
-				+ "'"+dto.getImageDir()+"', '"+dto.getS_no()+"', '"+dto.getPrice()+"')";
+				+ "'"+dto.getImage_dir()+"', '"+dto.getS_no()+"', '"+dto.getPrice()+"')";
 		System.out.println(query);
 		try {
 			con = DBConnection.getConnection();
@@ -139,5 +141,59 @@ public class salesDao {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		return result;
+	}
+	
+	//인덱스 목록
+	public ArrayList<salesDto> getIndexView(String gubun){
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select * from\n"
+				+ "(select rownum, tbl.*\n"
+				+ "from\n"
+				+ "(select s_no, image_dir, title, to_char(price, '999,999,999')||'원' as price,\n"
+				+ "    area, to_char(reg_date, 'YYYY-MM-DD') as reg_date, round((sysdate - reg_date) * 24 * 60) as mm\n"
+				+ "from sales\n"
+				+ "where status = '1'\n"
+				+ "order by "+gubun+" desc\n"
+				+ ")tbl)\n"
+				+ "where rownum <= 10";
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				int s_no = rs.getInt("s_no");
+				String image_dir = rs.getString("image_dir");
+				String title = rs.getString("title");
+				String price = rs.getString("price");
+				String area = rs.getString("area");
+				if(area == null) area = "";
+				
+				//시간 계산 
+				int mm = rs.getInt("mm"); // 현재시간 - 등록시간 분으로
+				String reg_date = "";
+				if(mm > 24 * 60 * 7) {
+					reg_date = "2023-10-23";
+					
+				} else if(mm < 60){
+					reg_date = Integer.toString(mm) + "분 전";
+					
+				} else if(mm < 24 * 60) {
+					int time = mm / 60;
+					reg_date = Integer.toString(time) + "시간 전";
+					
+				} else if(mm < 24 * 60 * 7) {
+					int time = mm / (24 * 60);
+					reg_date = Integer.toString(time) + "일 전";
+				}
+				
+				salesDto dto = new salesDto(title, area, reg_date, image_dir, price, s_no);
+				dtos.add(dto);
+			}
+		} catch(Exception e) {
+			System.out.println("getIndexLikes method 오류!");
+			System.out.println(query);
+			e.printStackTrace();
+		}
+		return dtos;
 	}
 }

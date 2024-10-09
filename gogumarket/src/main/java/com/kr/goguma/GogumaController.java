@@ -13,6 +13,7 @@ import common.CommonExecute;
 import dao.salesDao;
 import member.command.MemberLogin;
 import product.command.ConsumerView;
+import product.command.IndexView;
 import product.command.UploadSales;
 
 @Controller
@@ -24,7 +25,11 @@ public class GogumaController {
 		String viewPage = "";
 		
 		//인덱스
-		if(gubun == null) viewPage = "index";
+		if(gubun == null) {
+			CommonExecute goguma = new IndexView();
+			goguma.execute(request);
+			viewPage = "index";
+		}
 		
 		//로그인 폼
 		else if(gubun.equals("login")) {

@@ -28,7 +28,7 @@ public class UploadSales implements CommonExecute {
 			String image	= (String)mpr.getFilesystemName("image");
 			if(image == null) image = "";
 			int s_no = dao.getSaleNo();
-			int price = Integer.parseInt(mpr.getParameter("price"));
+			String price = mpr.getParameter("price");
 			String s_id	= (String)session.getAttribute("sessionId");
 			String reg_date	= CommonUtil.getTodayTime();
 			String category_id = mpr.getParameter("category_id");
@@ -47,7 +47,7 @@ public class UploadSales implements CommonExecute {
 			trade = delivery + meet;
 			if(trade.equals("12")) trade = "3";
 			
-			salesDto dto = new salesDto(s_id, category_id, title, contents, product_status, trade, area, reg_date, image, s_no, price);
+			salesDto dto = new salesDto(s_id, category_id, title, contents, product_status, trade, area, reg_date, image, price, s_no);
 			
 			int result = dao.uploadSales(dto);
 			if(result == 1) {

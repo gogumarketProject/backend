@@ -1,12 +1,12 @@
 package dto;
 
 public class salesDto {
-	private String s_id, category_id, title, contents, status, product_status, trade, area, reg_date, imageDir;
-	private int s_no, price, likes;
+	private String s_id, category_id, title, contents, status, product_status, trade, area, reg_date, image_dir, price;
+	private int s_no, likes;
 	
 	//물품 등록
 	public salesDto(String s_id, String category_id, String title, String contents, String product_status, String trade,
-			String area, String reg_date, String imageDir, int s_no, int price) {
+			String area, String reg_date, String image_dir, String price, int s_no) {
 		super();
 		this.s_id = s_id;
 		this.category_id = category_id;
@@ -16,11 +16,22 @@ public class salesDto {
 		this.trade = trade;
 		this.area = area;
 		this.reg_date = reg_date;
-		this.imageDir = imageDir;
+		this.image_dir = image_dir;
 		this.s_no = s_no;
 		this.price = price;
 	}
 	
+	//IndexView
+	public salesDto(String title, String area, String reg_date, String image_dir, String price, int s_no) {
+		super();
+		this.title = title;
+		this.area = area;
+		this.reg_date = reg_date;
+		this.image_dir = image_dir;
+		this.s_no = s_no;
+		this.price = price;
+	}
+
 	public String getS_id() {
 		return s_id;
 	}
@@ -48,14 +59,14 @@ public class salesDto {
 	public String getReg_date() {
 		return reg_date;
 	}
-	public String getImageDir() {
-		return imageDir;
+	public String getImage_dir() {
+		return image_dir;
+	}
+	public String getPrice() {
+		return price;
 	}
 	public int getS_no() {
 		return s_no;
-	}
-	public int getPrice() {
-		return price;
 	}
 	public int getLikes() {
 		return likes;

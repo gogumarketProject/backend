@@ -6,7 +6,7 @@ import java.util.Date;
 public class CommonUtil {
 	//Images Directory
 	public static String getImageDir() {
-		String dir = "C:\\Users\\yiku6\\OneDrive\\바탕 화면\\123\\gogumarket\\src\\main\\webapp\\resources\\images\\";
+		String dir = "/Users/Hoejun/Desktop/workspace/git/gogumarket/src/main/webapp/resources/images/";
 		return dir;
 	}
 	//getTodayTime yyyy-MM-dd
