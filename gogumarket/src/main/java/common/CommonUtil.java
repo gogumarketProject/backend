@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CommonUtil {
+	
 	//Images Directory
 	public static String getImageDir() {
 		String dir = "/Users/Hoejun/Desktop/workspace/git/gogumarket/src/main/webapp/resources/images/";
