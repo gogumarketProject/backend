@@ -13,10 +13,6 @@
     
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/index.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
-
-    <style>
-    	
-    </style>
     <script>
 		function goLogin() {
 			mem.t_gubun.value = "login";
