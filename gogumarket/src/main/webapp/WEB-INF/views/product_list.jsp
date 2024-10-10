@@ -93,16 +93,30 @@
 		</div>
 	
 	    <!-- 상품 목록 -->
-		<div class="product-list" id="product-list">
-		    <!-- 상품 카드들이 동적으로 생성될 영역 -->
+		<div class="product-list">
+	    <c:forEach items="${dtos }" var="dto">
+        	<div class="item">
+        		<a href=javascript:goConsumer('${dto.getS_no() }')>
+            	<img src="${pageContext.request.contextPath}/resources/images/${dto.getImage_dir() }" alt="product image">
+            	<h3>${dto.getTitle() }</h3>
+            	<p>${dto.getPrice() }</p>
+            	<p>
+            	<c:choose>
+               	 	<c:when test="${dto.getArea() eq '' }">${dto.getReg_date() }</c:when>
+               	 	<c:otherwise>${dto.getArea() } | ${dto.getReg_date() }</c:otherwise>
+            	</c:choose>
+            	</p>
+            	</a>
+       		</div>
+        </c:forEach>
 		</div>
 		
 		<!-- 페이징 버튼 -->
-		<div class="pagination" id="pagination">
-		    <button id="prev-btn" disabled>Prev</button>
-		    <span id="page-numbers"></span>
-		    <button id="next-btn">Next</button>
-		</div>
+		<nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+            	${pageDis }
+            </ul>
+        </nav>
 	</div>
 
 	<%@include file="footer.jsp" %>	

@@ -1,37 +1,4 @@
 
-const products = [
-    { img: 'product1.png', name: '상품명 1', price: '100,000원', location: '서울특별시', uploadTime: '업로드 1시간 전', wishlist: '찜 2' },
-    { img: 'product2.png', name: '상품명 2', price: '120,000원', location: '부산광역시', uploadTime: '업로드 2시간 전', wishlist: '찜 5' },
-    { img: 'product3.png', name: '상품명 3', price: '90,000원', location: '대구광역시', uploadTime: '업로드 30분 전', wishlist: '찜 8' },
-    { img: 'product4.png', name: '상품명 4', price: '110,000원', location: '인천광역시', uploadTime: '업로드 1일 전', wishlist: '찜 4' },
-    { img: 'product5.png', name: '상품명 5', price: '150,000원', location: '대전광역시', uploadTime: '업로드 5분 전', wishlist: '찜 1' },
-    { img: 'product6.png', name: '상품명 6', price: '200,000원', location: '울산광역시', uploadTime: '업로드 6시간 전', wishlist: '찜 12' },
-    { img: 'product7.png', name: '상품명 7', price: '85,000원', location: '광주광역시', uploadTime: '업로드 3시간 전', wishlist: '찜 9' },
-    { img: 'product8.png', name: '상품명 8', price: '60,000원', location: '경기도', uploadTime: '업로드 4시간 전', wishlist: '찜 7' },
-    { img: 'product9.png', name: '상품명 9', price: '130,000원', location: '충청북도', uploadTime: '업로드 30분 전', wishlist: '찜 3' },
-    { img: 'product10.png', name: '상품명 10', price: '95,000원', location: '전라북도', uploadTime: '업로드 10분 전', wishlist: '찜 2' },
-    { img: 'product11.png', name: '상품명 11', price: '125,000원', location: '경상북도', uploadTime: '업로드 1일 전', wishlist: '찜 6' },
-    { img: 'product12.png', name: '상품명 12', price: '170,000원', location: '제주도', uploadTime: '업로드 12시간 전', wishlist: '찜 10' },
-    { img: 'product13.png', name: '상품명 13', price: '140,000원', location: '강원도', uploadTime: '업로드 2일 전', wishlist: '찜 15' },
-    { img: 'product14.png', name: '상품명 14', price: '210,000원', location: '서울특별시', uploadTime: '업로드 30분 전', wishlist: '찜 4' },
-    { img: 'product15.png', name: '상품명 15', price: '240,000원', location: '부산광역시', uploadTime: '업로드 1시간 전', wishlist: '찜 2' },
-    { img: 'product16.png', name: '상품명 16', price: '50,000원', location: '대구광역시', uploadTime: '업로드 3시간 전', wishlist: '찜 3' },
-    { img: 'product17.png', name: '상품명 17', price: '75,000원', location: '인천광역시', uploadTime: '업로드 5분 전', wishlist: '찜 7' },
-    { img: 'product18.png', name: '상품명 18', price: '99,000원', location: '대전광역시', uploadTime: '업로드 10분 전', wishlist: '찜 11' },
-    { img: 'product19.png', name: '상품명 19', price: '135,000원', location: '울산광역시', uploadTime: '업로드 20분 전', wishlist: '찜 5' },
-    { img: 'product20.png', name: '상품명 20', price: '160,000원', location: '광주광역시', uploadTime: '업로드 4시간 전', wishlist: '찜 2' },
-    { img: 'product21.png', name: '상품명 21', price: '180,000원', location: '경기도', uploadTime: '업로드 5분 전', wishlist: '찜 6' },
-    { img: 'product22.png', name: '상품명 22', price: '230,000원', location: '충청북도', uploadTime: '업로드 1시간 전', wishlist: '찜 9' },
-    { img: 'product23.png', name: '상품명 23', price: '280,000원', location: '전라북도', uploadTime: '업로드 2시간 전', wishlist: '찜 10' },
-    { img: 'product24.png', name: '상품명 24', price: '300,000원', location: '경상북도', uploadTime: '업로드 3시간 전', wishlist: '찜 12' },
-    { img: 'product25.png', name: '상품명 25', price: '350,000원', location: '제주도', uploadTime: '업로드 4시간 전', wishlist: '찜 5' },
-    { img: 'product26.png', name: '상품명 26', price: '400,000원', location: '강원도', uploadTime: '업로드 1일 전', wishlist: '찜 8' },
-    { img: 'product27.png', name: '상품명 27', price: '450,000원', location: '서울특별시', uploadTime: '업로드 2일 전', wishlist: '찜 1' },
-    { img: 'product28.png', name: '상품명 28', price: '500,000원', location: '부산광역시', uploadTime: '업로드 1시간 전', wishlist: '찜 9' },
-    { img: 'product29.png', name: '상품명 29', price: '550,000원', location: '대구광역시', uploadTime: '업로드 3시간 전', wishlist: '찜 4' },
-    { img: 'product30.png', name: '상품명 30', price: '600,000원', location: '인천광역시', uploadTime: '업로드 30분 전', wishlist: '찜 2' },
-];
-
 // 카테고리 배열
 const categories = [
     "패션의류", "패션잡화", "가방/핸드백", "시계/쥬얼리", 

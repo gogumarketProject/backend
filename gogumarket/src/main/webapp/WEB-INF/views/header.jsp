@@ -5,15 +5,18 @@
 	<input type="hidden" name="t_gubun">
 	<input type="hidden" name="s_no">
 </form>
+<form name="list" method="get">
 <header>
     <div class="header-container">
         <div class="logo">
         	<a href="javascript:location.href='market'" style="">Gogumarket</a>
        	</div>
-        <div class="search-bar">
-            <i class="fa-solid fa-magnifying-glass" style="color: black; margin-right: 5px;"></i>
-            <input type="text" placeholder="어떤 상품을 찾으시나요? 카페상품, 앱상품 모두 검색">
-        </div>
+	        <div class="search-bar">
+	            <i class="fa-solid fa-magnifying-glass" style="color: black; margin-right: 5px;"></i>
+	           	<input type="text" name="search" placeholder="어떤 상품을 찾으시나요? 카페상품, 앱상품 모두 검색" value="${search }">
+	           	<input type="button" onclick="goList()" style="display:none;">
+	           	<input type="hidden" name="t_gubun" value="Search">
+	        </div>
         <div class="search-buttons">
         	<!-- 임시 컨슈머, 판매장창 -->
             <button>
@@ -36,4 +39,40 @@
             </button>
         </div>
     </div>
+    <script>
+		function goLogin() {
+			mem.t_gubun.value = "login";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		
+		function goWrite() {
+			mem.t_gubun.value = "writeForm";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		
+		function goMyPage() {
+			mem.t_gubun.value = "myPage";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		function goConsumer(no){
+			mem.t_gubun.value = "Consumer";
+			mem.s_no.value = no;
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		function goSeller(){
+			mem.t_gubun.value = "Seller";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+    </script>
 </header>
+</form>

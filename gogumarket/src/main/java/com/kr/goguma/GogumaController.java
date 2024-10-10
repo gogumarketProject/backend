@@ -14,6 +14,7 @@ import dao.salesDao;
 import member.command.MemberLogin;
 import product.command.ConsumerView;
 import product.command.IndexView;
+import product.command.SeachList;
 import product.command.UploadSales;
 
 @Controller
@@ -60,9 +61,16 @@ public class GogumaController {
 			CommonExecute goguma = new ConsumerView();
 			goguma.execute(request);
 			viewPage = "product_sell_consumer";
-		}//판매자창 임시 버튼
+		}
+		//판매자창 임시 버튼
 		else if(gubun.equals("Seller")) {
 			viewPage = "product_sell_seller";
+		}
+		//검색 및 메뉴 > 카테고리 클릭
+		else if(gubun.equals("Search")) {
+			CommonExecute goguma = new SeachList();
+			goguma.execute(request);
+			viewPage = "product_list";
 		}
 		
 		return viewPage;
