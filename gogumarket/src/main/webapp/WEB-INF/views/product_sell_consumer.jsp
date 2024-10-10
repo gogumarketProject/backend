@@ -60,20 +60,20 @@
 			</div>
 			<!-- 우측: 판매 정보 div -->
 			<div class="info-box">
-				<div class="info-box-category">홈 > 도서/음반/문구 > 문구/사무용품</div>
-				<div class="info-box-product-name">슬라이딩 키보드 트레이</div>
-				<div class="info-box-price"><strong>10,000원</strong></div>
-				<div class="info-box-product-meta">34분 전 조회 3 채팅 0 찜 0</div>
+				<div class="info-box-category">홈 > ${dto.getCategory_id() }</div>
+				<div class="info-box-product-name">${dto.getTitle() }</div>
+				<div class="info-box-price"><strong>${dto.getPrice() }</strong></div>
+				<div class="info-box-product-meta">${dto.getReg_date() } | 채팅 0 | 찜 ${dto.getLikes() }</div>
 				<!-- 한 줄로 나란히 배치된 li -->
 				<ul class="li-details">
-					<li class="li-line"><span>제품상태</span><button>중고</button></li>
-					<li class="li-line"><span>거래방식</span><button>직거래</button></li>
+					<li class="li-line"><span>제품상태</span><button>${dto.getProduct_status() }</button></li>
+					<li class="li-line"><span>거래방식</span><button>${dto.getTrade() }</button></li>
 					<li class="li-line"><span>배송비</span><button>-</button></li>
 					<li class="li-line"><span>거래제안</span><button>가능</button></li>
 				</ul>
 				<div class="trade">
 					<div class="trade-location">・거래희망지역</div>
-					<div><button class="trade-location-btn">중화제2동</button></div>
+					<div><button class="trade-location-btn">${dto.getArea() }</button></div>
 				</div>
 				
 				<!-- ajax 임시 form -->
@@ -139,32 +139,12 @@
 			<!-- 좌측 큰 div -->
 			<div class="left-box">
 				<h3 class="left-box-header">상품 정보</h3>
-				<p class="left-box-text">[반값이하, 특가] 키보드 트레이<br><br>
-					[1] 제품링크<br>
-					[2] 구매시기: 작년 즈음<br>
-					[3] 구매가: 44,000원<br>
-					[4] 제품 설명:<br>
-					--- [1] 화이트 1개 - 상태: 상급<br>
-					기능: 정상기능 작동<br>
-					하자내용: 약간의 사용감<br>
-					가격: 15,000원<br><br>
-					--- [2] 블랙 1개 - 상태: 중상급<br>
-					기능: 정상기능 작동<br>
-					하자내용: 뒷면에 나사 흔적이 있음<br>
-					가격: 10,000원<br><br>
-					
-					[⭐⭐ 핫딜 ⭐⭐]<br>
-					2개를 한번에 구매하시면, 20000원에 드립니다.<br><br>
-					
-					마무리 주의사항<br>
-					네고 없습니다.<br>
-					무조건 직거래로 제가 지정한 장소에서 거래합니다.<br>
-					거래장소는 CU 중화제일점 옆 공원입니다.<br>
-					감사합니다.
+				<p class="left-box-text">[반값이하, 특가] ${dto.getTitle() }<br><br>
+					${dto.getContents() }
 				</p>
 				<div class="location-info">
 					<p>거래희망지역</p>
-					<button>중화제2동</button>
+					<button>${dto.getArea() }</button>
 				</div>
 			</div>
 			<!-- 우측 큰 div -->
@@ -178,7 +158,7 @@
 				<div class="right-box-trade">
 					<a href="#">
 						<p class="counterparty">
-							매너거래칼거래
+							${dto.getS_id() }
 							<i class="fa-solid fa-circle-user"></i>
 						</p>
 					</a>

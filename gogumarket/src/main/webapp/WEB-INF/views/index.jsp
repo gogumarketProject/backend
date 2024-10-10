@@ -38,8 +38,9 @@
 			mem.action = "market";
 			mem.submit();
 		}
-		function goConsumer(){
+		function goConsumer(no){
 			mem.t_gubun.value = "Consumer";
+			mem.s_no.value = no;
 			mem.method = "post";
 			mem.action = "market";
 			mem.submit();
@@ -94,7 +95,7 @@
                 <!-- 실시간 인기 상품 아이템들 -->
                 <c:forEach items="${likesDtos }" var="dto">
                 	<div class="item">
-                		<a href=#>
+                		<a href=javascript:goConsumer('${dto.getS_no() }')>
 		                    <img src="${pageContext.request.contextPath}/resources/images/${dto.getImage_dir() }" alt="product image">
 		                    <h3>${dto.getTitle() }</h3>
 		                    <p>${dto.getPrice() }</p>
@@ -124,7 +125,7 @@
                 <!-- 방금 등록된 상품 아이템들 -->
                <c:forEach items="${recentDtos }" var="dto">
                 	<div class="item">
-                		<a href=#>
+                		<a href=javascript:goConsumer('${dto.getS_no() }')>
 		                    <img src="${pageContext.request.contextPath}/resources/images/${dto.getImage_dir() }" alt="product image">
 		                    <h3>${dto.getTitle() }</h3>
 		                    <p>${dto.getPrice() }</p>

@@ -63,7 +63,7 @@ public class salesDao {
 	}
 	
 	//찜 하기 전에 찜목록 테이블에 있는지 없는지 확인
-	public int WishListCheck(String s_no, String id) {
+	public int WishListCheck(int s_no, String id) {
 		int result = 0;
 		String query = "select count(*) as count from wish_list\n" + 
 				"where s_no = "+s_no+"\n" + 
@@ -87,7 +87,7 @@ public class salesDao {
 	}
 	
 	// 찜 추가
-	public int OnLikes(String s_no, String id) {
+	public int OnLikes(int s_no, String id) {
 		int result = 0;
 		String updatequery = "UPDATE sales\n" + 
 				"SET likes = likes + 1\n" + 
@@ -115,7 +115,7 @@ public class salesDao {
 		return result;
 	}
 	//찜 제거
-	public int OffLikes(String s_no, String id) {
+	public int OffLikes(int s_no, String id) {
 		int result = 0;
 		String updatequery = "UPDATE sales\n" + 
 				"SET likes = likes - 1\n" + 
@@ -149,13 +149,20 @@ public class salesDao {
 		String query = "select * from\n"
 				+ "(select rownum, tbl.*\n"
 				+ "from\n"
-				+ "(select s_no, image_dir, title, to_char(price, '999,999,999')||'원' as price,\n"
-				+ "    area, to_char(reg_date, 'YYYY-MM-DD') as reg_date, round((sysdate - reg_date) * 24 * 60) as mm\n"
+				+ "(select s_no, image_dir, title, to_char(price, '999,999,999')||'원' as price, area,\n"
+				+ "        CASE\n"
+				+ "           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\n"
+				+ "           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\n"
+				+ "           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\n"
+				+ "           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\n"
+				+ "           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\n"
+				+ "        END AS reg_date\n"
 				+ "from sales\n"
 				+ "where status = '1'\n"
 				+ "order by "+gubun+" desc\n"
 				+ ")tbl)\n"
 				+ "where rownum <= 10";
+		System.out.println(query);
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(query);
@@ -167,24 +174,8 @@ public class salesDao {
 				String price = rs.getString("price");
 				String area = rs.getString("area");
 				if(area == null) area = "";
+				String reg_date = rs.getString("reg_date");
 				
-				//시간 계산 
-				int mm = rs.getInt("mm"); // 현재시간 - 등록시간 분으로
-				String reg_date = "";
-				if(mm > 24 * 60 * 7) {
-					reg_date = "2023-10-23";
-					
-				} else if(mm < 60){
-					reg_date = Integer.toString(mm) + "분 전";
-					
-				} else if(mm < 24 * 60) {
-					int time = mm / 60;
-					reg_date = Integer.toString(time) + "시간 전";
-					
-				} else if(mm < 24 * 60 * 7) {
-					int time = mm / (24 * 60);
-					reg_date = Integer.toString(time) + "일 전";
-				}
 				
 				salesDto dto = new salesDto(title, area, reg_date, image_dir, price, s_no);
 				dtos.add(dto);
@@ -196,4 +187,52 @@ public class salesDao {
 		}
 		return dtos;
 	}
+	
+	//상품 상세보기 불러오기
+	   public salesDto ProductView(int s_no) {
+	      salesDto dto = null;
+	      String query = "SELECT s_no, s_id, category_id, title, contents, status, product_status,\n" + 
+	            "       to_char(price, '999,999,999')||'원' as price, -- 천의 자리마다 ',' 포맷\n" + 
+	            "       trade, area, likes, image_dir,\n" + 
+	            "       CASE\n" + 
+	            "           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\n" + 
+	            "           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\n" + 
+	            "           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\n" + 
+	            "           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\n" + 
+	            "           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\n" + 
+	            "       END AS reg_date\n" + 
+	            "FROM sales\n" + 
+	            "where s_no = '"+s_no+"'";
+	      System.out.println(query);
+	      try {
+	         con = DBConnection.getConnection();
+	         ps = con.prepareStatement(query);
+	         rs = ps.executeQuery();
+	         
+	         if(rs.next()) {
+	            String s_id = rs.getString("s_id");
+	            String category_id = rs.getString("category_id");
+	            String title = rs.getString("title");
+	            String contents = rs.getString("contents");
+	            String status = rs.getString("status");
+	            String product_status = rs.getString("product_status");
+	            String price = rs.getNString("price");
+	            String trade = rs.getString("trade");
+	            String area = rs.getString("area");
+	            int likes = rs.getInt("likes");
+	            String reg_date = rs.getNString("reg_date");
+	            String image_dir = rs.getNString("image_dir");
+	            //X분전, X일전, X주전, X달전 표시, DTO time_diff 추가
+	            dto = new salesDto(s_id, category_id, title, contents, status, product_status, trade, area, reg_date, image_dir, s_no, price, likes);
+	         }
+	      } catch(Exception e) {
+	         System.out.println("ProductView method 오류!");
+	         System.out.println(query);
+	         e.printStackTrace();
+	      } finally {
+	         DBConnection.closeDB(con, ps, rs);
+	      }
+	      
+	      return dto ;
+	   }
 }

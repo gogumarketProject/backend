@@ -3,6 +3,7 @@
 
 <form name="mem">
 	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="s_no">
 </form>
 <header>
     <div class="header-container">
@@ -15,8 +16,6 @@
         </div>
         <div class="search-buttons">
         	<!-- 임시 컨슈머, 판매장창 -->
-        	<input type = "button" onclick = "goConsumer()" value = "컨슈머창">
-        	<input type = "button" onclick = "goSeller()" value = "판매장창">
             <button>
                 <span class="icon chat" id="noteButton" style="width:80px;" 
                 <c:if test="${empty sessionLevel}">onclick="goLogin();"</c:if>
