@@ -64,11 +64,11 @@
 					<div class="info-box-category">홈 > ${productdto.getCategory_id() }</div>
 					<div style="margin-right: 14px;">
 						<c:if test="${id eq productdto.getS_id() }">
-						<select style=" width:70px; height: 24px;border-radius: 5px;">
-							<option>판매중</option>
-							<option>예약중</option>
-							<option>판매완료</option>
-						</select>
+							<select style=" width:70px; height: 24px;border-radius: 5px;">
+								<option>판매중</option>
+								<option>예약중</option>
+								<option>판매완료</option>
+							</select>
 						</c:if>
 					</div>
 				</div>
@@ -79,14 +79,14 @@
 				<ul class="li-details">
 					<li class="li-line"><span>제품상태</span><button>${productdto.getProduct_status() }</button></li>
 					<li class="li-line"><span>거래방식</span><button>${productdto.getTrade() }</button></li>
-					<li class="li-line"><span>배송비</span><button>-</button></li>
 					<li class="li-line"><span>거래제안</span><button>가능</button></li>
 				</ul>
+				<c:if test="${productdto.getTrade() eq '직거래' or productdto.getTrade() eq '직거래 | 택배'}">
 				<div class="trade">
 					<div class="trade-location">・거래희망지역</div>
-					<div><button class="trade-location-btn">${productdto.getArea() }</button></div>
-				</div>
-				
+						<div><button class="trade-location-btn">${productdto.getArea() }</button></div>
+					</div>
+				</c:if>
 				<!-- 가격제안 -->
 			<c:if test="${id eq productdto.getS_id() }">	
 				<div class="trade-seller-container">
@@ -219,8 +219,10 @@
 					${productdto.getContents() }
 				</p>
 				<div class="location-info">
-					<p>거래희망지역</p>
-					<button>${productdto.getArea() }</button>
+					<c:if test="${productdto.getTrade() eq '직거래' or productdto.getTrade() eq '직거래 | 택배'}">
+						<p>거래희망지역</p>
+						<button>${productdto.getArea() }</button>
+					</c:if>	
 				</div>
 			</div>
 			<!-- 우측 큰 div -->
