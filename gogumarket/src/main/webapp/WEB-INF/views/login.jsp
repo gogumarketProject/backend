@@ -67,6 +67,11 @@
             
             <button class="google-btn" style="margin-top:100px;"><i class="fab fa-google"></i> Google로 시작하기</button>
             <button class="naver-btn"><i class="fab fa-n"></i> 네이버로 시작하기</button>
+            <!-- 네이버 로그인 화면으로 이동 시키는 URL -->
+			<!-- 네이버 로그인 화면에서 ID, PW를 올바르게 입력하면 callback 메소드 실행 요청 -->
+			<div id="naver_id_login" style="text-align:center"><a href="${url}">
+			<img width="223" src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png"/></a></div>
+			<br>
             <button class="kakao-btn"><i class="fab fa-kakao"></i> 카카오로 시작하기</button>
             <button class="phone-btn"><i class="fas fa-mobile-alt"></i> 휴대폰번호로 시작하기</button>
             <div class="checkbox">

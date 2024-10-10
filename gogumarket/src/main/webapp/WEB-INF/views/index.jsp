@@ -13,6 +13,53 @@
     
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/index.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
+<<<<<<< HEAD
+=======
+
+    <style>
+    	
+    </style>
+    <script>
+		function goLogin() {
+			mem.t_gubun.value = "login";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		
+		function goWrite() {
+			mem.t_gubun.value = "writeForm";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		
+		function goMyPage() {
+			mem.t_gubun.value = "myPage";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		function goConsumer(no){
+			mem.t_gubun.value = "Consumer";
+			mem.s_no.value = no;
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		function goSeller(){
+			mem.t_gubun.value = "Seller";
+			mem.method = "post";
+			mem.action = "market";
+			mem.submit();
+		}
+		function goLogout(){
+			mem.method = "get";
+			mem.action = "logout";
+			mem.submit();
+		}
+    </script>
+>>>>>>> a47a6331365115ed3c570831716d73bb02d9d0a4
 </head>
 <body>
 	<%@include file="header.jsp" %>
