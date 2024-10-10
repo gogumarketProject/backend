@@ -13,12 +13,6 @@
     
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/index.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
-<<<<<<< HEAD
-=======
-
-    <style>
-    	
-    </style>
     <script>
 		function goLogin() {
 			mem.t_gubun.value = "login";
@@ -59,7 +53,6 @@
 			mem.submit();
 		}
     </script>
->>>>>>> a47a6331365115ed3c570831716d73bb02d9d0a4
 </head>
 <body>
 	<%@include file="header.jsp" %>

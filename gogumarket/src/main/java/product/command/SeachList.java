@@ -4,6 +4,11 @@ package product.command;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.ui.Model;
+
+import com.kr.goguma.NaverLoginBO;
 
 import common.CommonExecute;
 import common.CommonUtil;
@@ -58,6 +63,12 @@ public class SeachList implements CommonExecute {
 		request.setAttribute("dtos", dtos);
 		request.setAttribute("search", search);
 		request.setAttribute("pageDis", pageDis);
+	}
+
+	@Override
+	public void naver(NaverLoginBO naverLoginBO, Model model, HttpSession session) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
