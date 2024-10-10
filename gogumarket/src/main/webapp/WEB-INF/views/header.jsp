@@ -14,7 +14,7 @@
        		<form action="market" method="get">
 		        <div class="search-bar">
 		            <i class="fa-solid fa-magnifying-glass" style="color: black; margin-right: 5px;"></i>
-		           	<input type="text" name="search" placeholder="어떤 상품을 찾으시나요? 카페상품, 앱상품 모두 검색" value="${search }">
+		           	<input type="text" name="search" value="${search }" placeholder="어떤 상품을 찾으시나요? 카페상품, 앱상품 모두 검색">
 		           	<input type="button" onclick="goList()" style="display:none;">
 		           	<input type="hidden" name="t_gubun" value="Search">
 		        </div>

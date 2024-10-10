@@ -268,7 +268,7 @@ public class salesDao {
 			String max_price, String trade, String product_status, String sort) {
 		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
 		String query = "select * from(\n"
-				+ "select rownum, tbl.*\n"
+				+ "select rownum as rnum, tbl.*\n"
 				+ "from(\n"
 				+ "select s_no, image_dir, title, to_char(price, '999,999,999')||'원' as price, area,\n"
 				+ "        CASE\n"
@@ -280,14 +280,14 @@ public class salesDao {
 				+ "        END AS reg_date\n"
 				+ "from sales\n"
 				+ "where (title like '%"+search+"%' or contents like '%"+search+"%' or area like'%"+search+"%')\n"
-				+ "and category_id like '%"+trade+"%'\n"
+				+ "and category_id like '%"+category_id+"%'\n"
 				+ "and trade like '%"+trade+"%'\n"
-				+ "and product_status like '%%'\n"
+				+ "and product_status like '%"+product_status+"%'\n"
 				+ "and price >= "+min_price+"\n"
 				+ "and price <= "+max_price+"\n"
 				+ "order by "+sort+"\n"
 				+ ")tbl)\n"
-				+ "where rownum >= "+start+" and rownum <= "+end;
+				+ "where rnum >= "+start+" and rnum <= "+end;
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(query);

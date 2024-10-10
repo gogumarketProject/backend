@@ -97,6 +97,15 @@ td {
     border-radius: 3px;
 }
 
+#search-btn {
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
 /* 필터 박스 */
 .filter-box {
     display: flex;
