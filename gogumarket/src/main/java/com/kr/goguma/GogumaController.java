@@ -111,7 +111,7 @@ public class GogumaController {
 	      }
 		salesDao dao = new salesDao(); 
 		int result = 0; 
-		int s_no = 1;
+		int s_no = Integer.parseInt(request.getParameter("s_no"));
 		String id = "test"; 
 		int count = dao.WishListCheck(s_no,id);
 		  
