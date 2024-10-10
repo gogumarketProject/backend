@@ -56,36 +56,111 @@
 		<div class="section1">
 			<!-- 좌측: 사진 div -->
 			<div class="image-box">
-				<img src="이미지경로" alt="상품 이미지">
+				<img src="${pageContext.request.contextPath}/resources/images/${productdto.getImage_dir() }" alt="product image">
 			</div>
 			<!-- 우측: 판매 정보 div -->
 			<div class="info-box">
-				<div class="info-box-category">홈 > ${dto.getCategory_id() }</div>
-				<div class="info-box-product-name">${dto.getTitle() }</div>
-				<div class="info-box-price"><strong>${dto.getPrice() }</strong></div>
-				<div class="info-box-product-meta">${dto.getReg_date() } | 채팅 0 | 찜 ${dto.getLikes() }</div>
+				<div style="display: flex; justify-content: space-between;align-items: center;">
+					<div class="info-box-category">홈 > ${productdto.getCategory_id() }</div>
+					<div style="margin-right: 14px;">
+						<c:if test="${id eq productdto.getS_id() }">
+						<select style=" width:70px; height: 24px;border-radius: 5px;">
+							<option>판매중</option>
+							<option>예약중</option>
+							<option>판매완료</option>
+						</select>
+						</c:if>
+					</div>
+				</div>
+				<div class="info-box-product-name">${productdto.getTitle() }</div>
+				<div class="info-box-price"><strong>${productdto.getPrice() }</strong></div>
+				<div class="info-box-product-meta">${productdto.getReg_date() } | 채팅 0 | 찜 ${productdto.getLikes() }</div>
 				<!-- 한 줄로 나란히 배치된 li -->
 				<ul class="li-details">
-					<li class="li-line"><span>제품상태</span><button>${dto.getProduct_status() }</button></li>
-					<li class="li-line"><span>거래방식</span><button>${dto.getTrade() }</button></li>
+					<li class="li-line"><span>제품상태</span><button>${productdto.getProduct_status() }</button></li>
+					<li class="li-line"><span>거래방식</span><button>${productdto.getTrade() }</button></li>
 					<li class="li-line"><span>배송비</span><button>-</button></li>
 					<li class="li-line"><span>거래제안</span><button>가능</button></li>
 				</ul>
 				<div class="trade">
 					<div class="trade-location">・거래희망지역</div>
-					<div><button class="trade-location-btn">${dto.getArea() }</button></div>
+					<div><button class="trade-location-btn">${productdto.getArea() }</button></div>
 				</div>
 				
+				<!-- 가격제안 -->
+			<c:if test="${id eq productdto.getS_id() }">	
+				<div class="trade-seller-container">
+	               <p class="trade-seller-line">가격제안</p>
+	               <div class="trade-overflow">
+	                  <div class="trade-seller">
+	                     <div class="trade-seller-left">
+	                        <p>가렌</p>
+	                        <p class="trade-counterparty-location">중화제2동</p>
+	                     </div>
+	                     <div class="trade-seller-right">
+	                        <span class="seller-price"><strong>9500원</strong></span>
+	                        <label class="trade-seller-msg">
+	                           <button><i class="fa-regular fa-envelope"></i></button>
+	                        </label>
+	                        <button class="trade-btn">수락</button>
+	                        <button class="trade-btn">거절</button>
+	                     </div>
+	                  </div>
+	                  <div class="trade-seller">
+	                     <div class="trade-seller-left">
+	                        <p>다리우스</p>
+	                        <p class="trade-counterparty-location">중화짜장동</p>
+	                     </div>
+	                     <div class="trade-seller-right">
+	                        <span class="seller-price"><strong>9300원</strong></span>
+	                        <label class="trade-seller-msg">
+	                           <button><i class="fa-regular fa-envelope"></i></button>
+	                        </label>
+	                        <button class="trade-btn">수락</button>
+	                        <button class="trade-btn">거절</button>
+	                     </div>
+	                  </div>
+	                  <div class="trade-seller">
+	                     <div class="trade-seller-left">
+	                        <p>신짜오</p>
+	                        <p class="trade-counterparty-location">중화짬뽕</p>
+	                     </div>
+	                     <div class="trade-seller-right">
+	                        <span class="seller-price"><strong>999999원</strong></span>
+	                        <label class="trade-seller-msg">
+	                           <button><i class="fa-regular fa-envelope"></i></button>
+	                        </label>
+	                        <button class="trade-btn">수락</button>
+	                        <button class="trade-btn">거절</button>
+	                     </div>
+	                  </div>
+	                  <div class="trade-seller">
+	                     <div class="trade-seller-left">
+	                        <p>신짜오</p>
+	                        <p class="trade-counterparty-location">중화짬뽕</p>
+	                     </div>
+	                     <div class="trade-seller-right">
+	                        <span class="seller-price"><strong>999999원</strong></span>
+	                        <label class="trade-seller-msg">
+	                           <button><i class="fa-regular fa-envelope"></i></button>
+	                        </label>
+	                        <button class="trade-btn">수락</button>
+	                        <button class="trade-btn">거절</button>
+	                     </div>
+	                  </div>
+	               </div>
+	            </div>
+			</c:if>	
 				<!-- ajax 임시 form -->
 				<form name = "like">
-					<input type = "hidden" name = "s_no" value = "1"> 
-					<input type = "hidden" name = "id" value = "test">
+					<input type = "hidden" name = "s_no" value = "${productdto.getS_no() }"> 
+					<input type = "hidden" name = "id" value = "test"> 
 				</form>
-				
+			<c:if test="${id != productdto.getS_id() }">		
 				<div class="action-buttons">
 					<label class="wishlist">
 					<!-- 찜 버튼, like 1이면 활성화, 0이면 비활성화-->
-						<input type="checkbox" style="display: none;" onclick = "OnLikes()" <c:if test="${like eq '1'}">checked</c:if>>
+						<input type="checkbox" style="display: none;" onclick = "OnLikes()" <c:if test="${CheckUserlike eq '1'}">checked</c:if>>
 						<i class="fa-regular fa-heart"></i>
 					</label>
 					<button class="send-msg" onclick="alert('쪽지보내기 버튼 클릭됨')">쪽지보내기</button>
@@ -96,7 +171,7 @@
 					<input type="text" class="trade-offer-price" placeholder=" 제안할 금액을 입력하세요.">
 					<button class="trade-offer-price-submit">제안하기</button>
 				</div>
-
+			</c:if>
 
 			</div>
 		</div>
@@ -104,47 +179,48 @@
 
 		<!-- 2번째 섹션 div -->
 		<div class="section2">
-			<div class="section2-title">새 상품은 어떠세요?</div>
+			<div class="section2-title">현재 인기 상품이에요!</div>
 			<ul class="recommended-products">
+				<c:forEach items="${likesDtos}" var="likesDtos">
 				<li>
-					<img src="이미지경로" alt="상품 이미지">
+					<a href=javascript:goConsumer('${likesDtos.getS_no() }')><img src="${pageContext.request.contextPath}/resources/images/${likesDtos.getImage_dir() }" alt="product image"></a> <!-- 사진 -->
 					<div class="recommend-products-content">
-						<a href="#">엘디 엘마운트 슬라이딩 책상 키보드 트레이 APL-KT52 1개 엘디 엘마운트 슬라이딩 책상 키보드 트레이</a>
-						<div class="recommend-price"><strong>36,700원</strong></div>
-						<div class="recommend-advertisy"><span>쿠팡 | 광고</span></div>
+						<a href=javascript:goConsumer('${likesDtos.getS_no() }')>${likesDtos.getTitle() }</a> <!-- 제목 누르면 a태그 -->
+						<div class="recommend-price"><strong>${likesDtos.getPrice() }</strong></div> <!-- 가격칸 -->
+						<div class="recommend-advertisy"><span>${likesDtos.getReg_date() } | <!-- 날짜 | 지역 -->
+						<c:choose>
+							<c:when test="${not empty likesDtos.getArea() }">${likesDtos.getArea() }</c:when>
+							<c:when test="${empty likesDtos.getArea() }">택배</c:when>
+						</c:choose>
 					</div>
 				</li>
-				<li>
-					<img src="이미지경로" alt="상품 이미지">
-					<div class="recommend-products-content">
-						<a href="#">헬시위드 탈부착 레일형 슬라이딩 키보드 트레이 월넛(상부) + 화이트(하부) 1개</a>
-						<div class="recommend-price"><strong>35,000원</strong></div>
-						<div class="recommend-advertisy"><span>쿠팡 | 광고</span></div>
-					</div>
-				</li>
-				<li>
-					<img src="이미지경로" alt="상품 이미지">
-					<div class="recommend-products-content">
-						<a href="#">헬시위드 탈부착 레일형 슬라이딩 키보드 트레이 월넛(상부) + 화이트(하부) 1개</a>
-						<div class="recommend-price"><strong>35,000원</strong></div>
-						<div class="recommend-advertisy"><span>쿠팡 | 광고</span></div>
-					</div>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
-
 
 		<!-- 3번째 섹션 div -->
 		<div class="section3">
 			<!-- 좌측 큰 div -->
 			<div class="left-box">
-				<h3 class="left-box-header">상품 정보</h3>
-				<p class="left-box-text">[반값이하, 특가] ${dto.getTitle() }<br><br>
-					${dto.getContents() }
+				<h3 class="left-box-header">상품 정보
+				<!-- 작성자만 보이는 수정 삭제 -->
+					<c:if test="${id eq productdto.getS_id() }">	
+						<div class="left-box-setting-box"> 
+							<a href="write.html">
+								수정<i class="fa-regular fa-pen-to-square"></i>
+							</a>
+							<a href="javascript:goDelete()">
+								삭제<i class="fa-regular fa-trash-can"></i>
+							</a>
+						</div>
+					</c:if>	
+				</h3>
+				<p class="left-box-text">[반값이하, 특가] ${productdto.getTitle() }<br><br>
+					${productdto.getContents() }
 				</p>
 				<div class="location-info">
 					<p>거래희망지역</p>
-					<button>${dto.getArea() }</button>
+					<button>${productdto.getArea() }</button>
 				</div>
 			</div>
 			<!-- 우측 큰 div -->
@@ -158,7 +234,7 @@
 				<div class="right-box-trade">
 					<a href="#">
 						<p class="counterparty">
-							${dto.getS_id() }
+							${productdto.getS_id() }
 							<i class="fa-solid fa-circle-user"></i>
 						</p>
 					</a>

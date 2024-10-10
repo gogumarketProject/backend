@@ -242,7 +242,11 @@ a:hover {
 	font-size: 12px;
 }
 
-
+.trade-overflow{
+   overflow: auto;
+   width:455px;
+   height: 123px;
+}
 /* section 2 */
 .section2 {
   padding: 0 0 48px;

@@ -46,7 +46,6 @@ public class salesDao {
 				+ "('"+dto.getS_id()+"', '"+dto.getCategory_id()+"', '"+dto.getTitle()+"', '"+dto.getContents()+"',\n"
 				+ "'"+dto.getProduct_status()+"', '"+dto.getTrade()+"', '"+dto.getArea()+"', to_date('"+dto.getReg_date()+"', 'yyyy-MM-dd HH24:mi:ss'),\n"
 				+ "'"+dto.getImage_dir()+"', '"+dto.getS_no()+"', '"+dto.getPrice()+"')";
-		System.out.println(query);
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(query);
@@ -162,7 +161,6 @@ public class salesDao {
 				+ "order by "+gubun+" desc\n"
 				+ ")tbl)\n"
 				+ "where rownum <= 10";
-		System.out.println(query);
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(query);
@@ -191,19 +189,19 @@ public class salesDao {
 	//상품 상세보기 불러오기
 	   public salesDto ProductView(int s_no) {
 	      salesDto dto = null;
-	      String query = "SELECT s_no, s_id, category_id, title, contents, status, product_status,\n" + 
-	            "       to_char(price, '999,999,999')||'원' as price, -- 천의 자리마다 ',' 포맷\n" + 
-	            "       trade, area, likes, image_dir,\n" + 
-	            "       CASE\n" + 
-	            "           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\n" + 
-	            "           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\n" + 
-	            "           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\n" + 
-	            "           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\n" + 
-	            "           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\n" + 
-	            "       END AS reg_date\n" + 
-	            "FROM sales\n" + 
-	            "where s_no = '"+s_no+"'";
-	      System.out.println(query);
+	      String query = "SELECT s_no, s_id,c.c_name, title, contents, status, product_status,\r\n" + 
+	      		"       to_char(price, '999,999,999')||'원' as price, -- 천의 자리마다 ',' 포맷\r\n" + 
+	      		"       trade, area, likes, image_dir,\r\n" + 
+	      		"       CASE\r\n" + 
+	      		"           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\r\n" + 
+	      		"           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\r\n" + 
+	      		"           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\r\n" + 
+	      		"           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\r\n" + 
+	      		"           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\r\n" + 
+	      		"       END AS reg_date\r\n" + 
+	      		"FROM sales s, category c\r\n" + 
+	      		"where s_no = '"+s_no+"'\r\n" + 
+	      		"and c.category_id = s.category_id";
 	      try {
 	         con = DBConnection.getConnection();
 	         ps = con.prepareStatement(query);
@@ -211,7 +209,7 @@ public class salesDao {
 	         
 	         if(rs.next()) {
 	            String s_id = rs.getString("s_id");
-	            String category_id = rs.getString("category_id");
+	            String category_id = rs.getString("c_name");
 	            String title = rs.getString("title");
 	            String contents = rs.getString("contents");
 	            String status = rs.getString("status");
@@ -222,7 +220,6 @@ public class salesDao {
 	            int likes = rs.getInt("likes");
 	            String reg_date = rs.getNString("reg_date");
 	            String image_dir = rs.getNString("image_dir");
-	            //X분전, X일전, X주전, X달전 표시, DTO time_diff 추가
 	            dto = new salesDto(s_id, category_id, title, contents, status, product_status, trade, area, reg_date, image_dir, s_no, price, likes);
 	         }
 	      } catch(Exception e) {
@@ -235,4 +232,49 @@ public class salesDao {
 	      
 	      return dto ;
 	   }
+	   
+	 //인덱스 목록
+		public ArrayList<salesDto> getViewLikesDtos(String likes){
+			ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+			String query = "select * from\n"
+					+ "(select rownum, tbl.*\n"
+					+ "from\n"
+					+ "(select s_no, image_dir, title, to_char(price, '999,999,999')||'원' as price, area,\n"
+					+ "        CASE\n"
+					+ "           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\n"
+					+ "           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\n"
+					+ "           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\n"
+					+ "           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\n"
+					+ "           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\n"
+					+ "        END AS reg_date\n"
+					+ "from sales\n"
+					+ "where status = '1'\n"
+					+ "order by "+likes+" desc\n"
+					+ ")tbl)\n"
+					+ "where rownum <= 3";
+			try {
+				con = DBConnection.getConnection();
+				ps = con.prepareStatement(query);
+				rs = ps.executeQuery();
+				while(rs.next()) {
+					int s_no = rs.getInt("s_no");
+					String image_dir = rs.getString("image_dir");
+					String title = rs.getString("title");
+					String price = rs.getString("price");
+					String area = rs.getString("area");
+					if(area == null) area = "";
+					String reg_date = rs.getString("reg_date");
+					
+					
+					salesDto dto = new salesDto(title, area, reg_date, image_dir, price, s_no);
+					dtos.add(dto);
+				}
+			} catch(Exception e) {
+				System.out.println("getIndexLikes method 오류!");
+				System.out.println(query);
+				e.printStackTrace();
+			}
+			return dtos;
+		}   
+	   
 }
