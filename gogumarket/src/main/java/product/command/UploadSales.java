@@ -6,6 +6,9 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.ui.Model;
+
+import com.kr.goguma.NaverLoginBO;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
@@ -71,6 +74,12 @@ public class UploadSales implements CommonExecute {
 		}
 		request.setAttribute("msg", msg);
 		request.setAttribute("url", url);
+	}
+
+	@Override
+	public void naver(NaverLoginBO naverLoginBO, Model model, HttpSession session) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -3,6 +3,11 @@ package product.command;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.ui.Model;
+
+import com.kr.goguma.NaverLoginBO;
 
 import common.CommonExecute;
 import dao.salesDao;
@@ -30,6 +35,12 @@ public class ConsumerView implements CommonExecute {
 		request.setAttribute("CheckUserlike", CheckUserlike);
 		request.setAttribute("likesDtos", likesDtos);
 		request.setAttribute("productdto", productdto);
+	}
+
+	@Override
+	public void naver(NaverLoginBO naverLoginBO, Model model, HttpSession session) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

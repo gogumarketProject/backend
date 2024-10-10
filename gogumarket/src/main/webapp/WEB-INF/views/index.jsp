@@ -13,10 +13,6 @@
     
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/index.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
-
-    <style>
-    	
-    </style>
     <script>
 		function goLogin() {
 			mem.t_gubun.value = "login";
@@ -49,6 +45,11 @@
 			mem.t_gubun.value = "Seller";
 			mem.method = "post";
 			mem.action = "market";
+			mem.submit();
+		}
+		function goLogout(){
+			mem.method = "get";
+			mem.action = "logout";
 			mem.submit();
 		}
     </script>
