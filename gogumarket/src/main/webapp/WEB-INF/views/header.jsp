@@ -18,21 +18,26 @@
         	<!-- 임시 컨슈머, 판매장창 -->
             <button>
                 <span class="icon chat" id="noteButton" style="width:80px;" 
-                <c:if test="${empty sessionLevel}">onclick="goLogin();"</c:if>
+                <c:if test="${empty email}">onclick="goLogin();"</c:if>
                 >쪽지</span>
                 <span class="notification-count">0</span>
             </button>
             <button>
                 <span class="icon sell" style="width:80px;" 
-                <c:if test="${empty sessionLevel}">onclick="goLogin();"</c:if>
-                <c:if test="${not empty sessionLevel}">onclick="goWrite();"</c:if>
+                <c:if test="${empty email}">onclick="goLogin();"</c:if>
+                <c:if test="${not empty email}">onclick="goWrite();"</c:if>
                 >판매하기</span>
             </button>
             <button>
                 <span class="icon my-account" style="width:80px;" 
-                <c:if test="${empty sessionLevel}">onclick="goLogin();"</c:if>
-                <c:if test="${not empty sessionLevel}">onclick="goMyPage();"</c:if>
+                <c:if test="${empty email}">onclick="goLogin();"</c:if>
+                <c:if test="${not empty email}">onclick="goMyPage();"</c:if>
                 >마이</span> 
+            </button>
+            <button>
+                <span class="icon-logout" style="width:80px;" 
+                <c:if test="${not empty email}">onclick="goLogout();"</c:if>
+                >로그아웃</span> 
             </button>
         </div>
     </div>

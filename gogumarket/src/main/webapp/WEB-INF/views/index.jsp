@@ -51,6 +51,11 @@
 			mem.action = "market";
 			mem.submit();
 		}
+		function goLogout(){
+			mem.method = "get";
+			mem.action = "logout";
+			mem.submit();
+		}
     </script>
 </head>
 <body>

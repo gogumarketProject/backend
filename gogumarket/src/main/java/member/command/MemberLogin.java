@@ -3,6 +3,10 @@ package member.command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.ui.Model;
+
+import com.kr.goguma.NaverLoginBO;
+
 import common.CommonExecute;
 
 public class MemberLogin implements CommonExecute {
@@ -22,6 +26,12 @@ public class MemberLogin implements CommonExecute {
 		request.setAttribute("msg", msg);
 		request.setAttribute("url", "market");
 
+	}
+
+	@Override
+	public void naver(NaverLoginBO naverLoginBO, Model model, HttpSession session) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
