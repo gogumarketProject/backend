@@ -74,12 +74,6 @@
 			mem.action = "market";
 			mem.submit();
 		}
-		function goSeller(){
-			mem.t_gubun.value = "Seller";
-			mem.method = "post";
-			mem.action = "market";
-			mem.submit();
-		}
     </script>
 </header>
 

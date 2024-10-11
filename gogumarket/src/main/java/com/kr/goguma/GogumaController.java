@@ -101,7 +101,7 @@ public class GogumaController {
 	
 	//product_sell_consumer ajax, 찜기능 매핑
 	@RequestMapping("OnLikes") 
-	public void checkLikes(HttpServletRequest request, HttpServletResponse response) {
+	public void checkLikes(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = null;
 		try {
@@ -112,7 +112,7 @@ public class GogumaController {
 		salesDao dao = new salesDao(); 
 		int result = 0; 
 		int s_no = Integer.parseInt(request.getParameter("s_no"));
-		String id = "test"; 
+		String id = (String)session.getAttribute("sessionId");
 		int count = dao.WishListCheck(s_no,id);
 		  
 		if(count == 0) { 

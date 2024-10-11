@@ -17,15 +17,15 @@ public class ConsumerView implements CommonExecute {
 	//int 1이면 찜 체크박스 활성화, 0이면 비활성화
 	@Override
 	public void execute(HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		salesDao dao = new salesDao();
 		
 		int s_no = Integer.parseInt(request.getParameter("s_no"));
-		String id = "test";
+		String id = (String)session.getAttribute("sessionId");
 		
 		//로그인한 구매자가 찜을 했는지 안했는지 구분
 		int CheckUserlike = dao.WishListCheck(s_no,id); 
 		
-		//상품 정보 db에서 불러오기
 		salesDto productdto = dao.ProductView(s_no); 	
 		
 		//인기상품 - 좋아요 순 3개
@@ -35,6 +35,7 @@ public class ConsumerView implements CommonExecute {
 		request.setAttribute("CheckUserlike", CheckUserlike);
 		request.setAttribute("likesDtos", likesDtos);
 		request.setAttribute("productdto", productdto);
+		
 	}
 
 	@Override

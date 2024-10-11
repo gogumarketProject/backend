@@ -159,12 +159,18 @@
 			<c:if test="${id != productdto.getS_id() }">		
 				<div class="action-buttons">
 					<label class="wishlist">
-					<!-- 찜 버튼, like 1이면 활성화, 0이면 비활성화-->
-						<input type="checkbox" style="display: none;" onclick = "OnLikes()" <c:if test="${CheckUserlike eq '1'}">checked</c:if>>
+					<!-- 찜 버튼, like 1이면 활성화, 0이면 비활성화, 로그인 안되어있으면 alert후 로그인창-->
+						<input type="checkbox" style="display: none;" 
+						onclick="if (${sessionId == null}) { alert('로그인 후 이용해주세요.'); goLogin(); } 
+						else { OnLikes(); }" <c:if test="${CheckUserlike eq '1'}">checked</c:if>>
 						<i class="fa-regular fa-heart"></i>
 					</label>
 					<button class="send-msg" onclick="alert('쪽지보내기 버튼 클릭됨')">쪽지보내기</button>
-					<button class="trade-offer" onclick="togglePriceBox()">가격제안</button>
+					<!-- sessionId가 null이면 alert후 로그인창, 아니면 가격제안 나오게 -->
+					<button class="trade-offer" 
+					onclick="if(${sessionId == null}) {alert('로그인 후 이용해주세요.'); goLogin();}
+						else { togglePriceBox();}">
+						<!-- "togglePriceBox()"> -->가격제안</button>
 				</div>
 				<div class="trade-offer-price-box" style="visibility: hidden;">
 					<div style="width:25px;"></div>
