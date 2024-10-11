@@ -285,4 +285,89 @@ public class salesDao {
 			return dtos;
 		}   
 	   
+<<<<<<< HEAD
+=======
+=======
+	//검색, 목록(게시물 총 개수) -- 페이징
+	public int getTotalCount(String search, String category_id, String min_price, String max_price, String trade,
+			String product_status) {
+		int count = 0;
+		String query = "select count(*) as count\n"
+				+ "from sales\n"
+				+ "where (title like '%"+search+"%' or contents like '%"+search+"%' or area like'%"+search+"%')\n"
+				+ "and category_id like '%"+category_id+"%'\n"
+				+ "and trade like '%"+trade+"%'\n"
+				+ "and product_status like '%"+product_status+"%'\n"
+				+ "and price >= "+min_price+"\n"
+				+ "and price <= " + max_price;
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				count = rs.getInt("count");
+			}
+		} catch(Exception e) {
+			System.out.println("getTotalCount() Method Error");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return count;
+	}
+	
+	//검색 및 목록 게시물 불러오기
+	public ArrayList<salesDto> getSeachView(int start, int end, String search, String category_id, String min_price,
+			String max_price, String trade, String product_status, String sort) {
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select * from(\n"
+				+ "select rownum as rnum, tbl.*\n"
+				+ "from(\n"
+				+ "select s_no, image_dir, title, to_char(price, '999,999,999')||'원' as price, area,\n"
+				+ "        CASE\n"
+				+ "           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\n"
+				+ "           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\n"
+				+ "           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\n"
+				+ "           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\n"
+				+ "           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\n"
+				+ "        END AS reg_date\n"
+				+ "from sales\n"
+				+ "where (title like '%"+search+"%' or contents like '%"+search+"%' or area like'%"+search+"%')\n"
+				+ "and category_id like '%"+category_id+"%'\n"
+				+ "and trade like '%"+trade+"%'\n"
+				+ "and product_status like '%"+product_status+"%'\n"
+				+ "and price >= "+min_price+"\n"
+				+ "and price <= "+max_price+"\n"
+				+ "order by "+sort+"\n"
+				+ ")tbl)\n"
+				+ "where rnum >= "+start+" and rnum <= "+end;
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				int s_no = rs.getInt("s_no");
+				String image_dir = rs.getString("image_dir");
+				String title = rs.getString("title");
+				String price = rs.getString("price");
+				String area = rs.getString("area");
+				if(area == null) area = "";
+				String reg_date = rs.getString("reg_date");
+				
+				
+				salesDto dto = new salesDto(title, area, reg_date, image_dir, price, s_no);
+				dtos.add(dto);
+			}
+		} catch(Exception e) {
+			System.out.println("getSearchView() Method Error");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return dtos;
+	}
+>>>>>>> cefd2264dc1229b72e57ab52dc77f0c5f1c815da
+>>>>>>> 6f8c203aff0d9a615cb3df0b4fbd59bb6279c413
 }
