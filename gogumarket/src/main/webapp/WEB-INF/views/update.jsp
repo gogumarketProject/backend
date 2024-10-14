@@ -176,7 +176,7 @@
 			    </div>
 			
 			    <!-- 직거래 위치가 출력되는 부분 -->
-			    <input type="text" name="areaname" value="${productdto.getArea() }" style="height:30px; width:40px; background-color: transparent; border:none" readonly>&nbsp;&nbsp;
+			    <input type="text" name="areaname" value="${productdto.getArea() }" style="height:30px; width:60px; background-color: transparent; border:none" readonly>&nbsp;&nbsp;
 			    <input type="button" name="delarea" value="삭제" style="width: 30px; border: 1px solid #ddd; height: 100%;" onclick="DelArea()">
             </div>
             <!-- 체크박스 아래에 "등록" 박스 추가 -->
