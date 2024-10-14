@@ -27,7 +27,10 @@ import member.command.MemberLogin;
 import product.command.ConsumerView;
 import product.command.IndexView;
 import product.command.SeachList;
+import product.command.UpdateView;
+import product.command.UploadDelete;
 import product.command.UploadSales;
+import product.command.Uploadupdate;
 
 @Controller
 public class GogumaController {
@@ -85,17 +88,29 @@ public class GogumaController {
 			goguma.execute(request);
 			viewPage = "product_sell_consumer";
 		}
-		//판매자창 임시 버튼
-		else if(gubun.equals("Seller")) {
-			viewPage = "product_sell_seller";
-		}
 		//검색 및 메뉴 > 카테고리 클릭
 		else if(gubun.equals("Search")) {
 			CommonExecute goguma = new SeachList();
 			goguma.execute(request);
 			viewPage = "product_list";
 		}
-		
+		//판매자 물품 수정창 폼 이동
+		else if(gubun.equals("UpdateForm")) {
+			CommonExecute goguma = new UpdateView();
+			goguma.execute(request);
+			viewPage = "update";
+		}
+		//판매자 물품 db에 수정
+		else if(gubun.equals("update")) {
+			CommonExecute goguma = new Uploadupdate();
+			goguma.execute(request);
+			viewPage = "common_alert";
+		}
+		else if(gubun.equals("Delete")) {
+			CommonExecute goguma = new UploadDelete();
+			goguma.execute(request);
+			viewPage = "common_alert";
+		}
 		return viewPage;
 	}
 	

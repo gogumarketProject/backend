@@ -18,12 +18,30 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <script type="text/javascript">
+
+	function goUpdate(no){
+		update.s_no.value = no;
+		update.t_gubun.value = "UpdateForm";
+		update.method = "post";
+		update.action = "market";
+		update.submit();
+	}
+	
+	function goDelete(no){
+		if(confirm('삭제된 게시물은 복구할 수 없습니다. \n해당 게시물을 삭제하시겠습니까?')){
+			update.s_no.value = no;
+			update.t_gubun.value = "Delete";
+			update.method = "post";
+			update.action = "market";
+			update.submit();
+		}
+	}
 	/* 찜 추가, 제거 펑션 */ 
 	function OnLikes(){
 		$.ajax({
   			type:"post",
   			url :"OnLikes",
-  			data:"s_no="+like.s_no.value+"&id="+like.id.value,
+  			data:"s_no="+like.s_no.value,
   			dataType:"text",
   			error:function(){
   				alert("통신 실패!!!!");
@@ -43,7 +61,7 @@
   		});
 		
 	}
-
+	
 </script>
 <body>
 
@@ -61,7 +79,7 @@
 			<!-- 우측: 판매 정보 div -->
 			<div class="info-box">
 				<div style="display: flex; justify-content: space-between;align-items: center;">
-					<div class="info-box-category">홈 > ${productdto.getCategory_id() }</div>
+					<div class="info-box-category">홈 > ${productdto.getCategory_name() }</div>
 					<div style="margin-right: 14px;">
 						<c:if test="${id eq productdto.getS_id() }">
 							<select style=" width:70px; height: 24px;border-radius: 5px;">
@@ -73,7 +91,7 @@
 					</div>
 				</div>
 				<div class="info-box-product-name">${productdto.getTitle() }</div>
-				<div class="info-box-price"><strong>${productdto.getPrice() }</strong></div>
+				<div class="info-box-price"><strong>${productdto.getPrice() }원</strong></div>
 				<div class="info-box-product-meta">${productdto.getReg_date() } | 채팅 0 | 찜 ${productdto.getLikes() }</div>
 				<!-- 한 줄로 나란히 배치된 li -->
 				<ul class="li-details">
@@ -154,13 +172,12 @@
 				<!-- ajax 임시 form -->
 				<form name = "like">
 					<input type = "hidden" name = "s_no" value = "${productdto.getS_no() }"> 
-					<input type = "hidden" name = "id" value = "test"> 
 				</form>
 			<c:if test="${id != productdto.getS_id() }">		
 				<div class="action-buttons">
 					<label class="wishlist">
 					<!-- 찜 버튼, like 1이면 활성화, 0이면 비활성화, 로그인 안되어있으면 alert후 로그인창-->
-						<input type="checkbox" style="display: none;" 
+						<input type="checkbox" style= "display: none;" 
 						onclick="if (${sessionId == null}) { alert('로그인 후 이용해주세요.'); goLogin(); } 
 						else { OnLikes(); }" <c:if test="${CheckUserlike eq '1'}">checked</c:if>>
 						<i class="fa-regular fa-heart"></i>
@@ -203,7 +220,14 @@
 				</c:forEach>
 			</ul>
 		</div>
-
+		
+		
+		<!-- 업데이트 전용 Form -->
+		<form name = "update">
+			<input type = "hidden" name = "s_no">
+			<input type = "hidden" name = "t_gubun">  
+		</form>
+		
 		<!-- 3번째 섹션 div -->
 		<div class="section3">
 			<!-- 좌측 큰 div -->
@@ -212,18 +236,18 @@
 				<!-- 작성자만 보이는 수정 삭제 -->
 					<c:if test="${id eq productdto.getS_id() }">	
 						<div class="left-box-setting-box"> 
-							<a href="write.html">
-								수정<i class="fa-regular fa-pen-to-square"></i>
-							</a>
-							<a href="javascript:goDelete()">
+							<c:if test="${productdto.getStatus() !=  '예약완료'}">
+								<a href="javascript:goUpdate('${productdto.getS_no() }')">
+									수정<i class="fa-regular fa-pen-to-square"></i>
+								</a>
+							</c:if>	
+							<a href="javascript:goDelete('${productdto.getS_no() }')">
 								삭제<i class="fa-regular fa-trash-can"></i>
 							</a>
 						</div>
 					</c:if>	
 				</h3>
-				<p class="left-box-text">[반값이하, 특가] ${productdto.getTitle() }<br><br>
-					${productdto.getContents() }
-				</p>
+				<p class="left-box-text">${productdto.getContents() }</p>
 				<div class="location-info">
 					<c:if test="${productdto.getTrade() eq '직거래' or productdto.getTrade() eq '직거래 | 택배'}">
 						<p>거래희망지역</p>
