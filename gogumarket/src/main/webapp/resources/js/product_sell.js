@@ -68,7 +68,8 @@ window.onload = function() {
 document.addEventListener('DOMContentLoaded', function () {
     const tradeButtons = document.querySelectorAll('.trade-options'); // 모든 거래 옵션 버튼 선택
     const tradeSlidePanel = document.getElementById('tradeSlidePanel'); // 슬라이드 패널
-
+   const closeButton = document.getElementsByClassName('msg-close-btn');
+   
     // 각 거래 옵션 버튼에 이벤트 리스너 추가
     tradeButtons.forEach(function (button) {
         button.addEventListener('click', function () {
@@ -80,4 +81,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+    
+     // 모든 닫기 버튼에 이벤트 리스너 추가
+    Array.from(closeButton).forEach(function (button) {
+        button.addEventListener('click', function () {
+            tradeSlidePanel.classList.remove('open'); // 패널 닫기
+        });
+    });
 });
+
