@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 
+import com.kr.goguma.GoogleLoginBO;
 import com.kr.goguma.NaverLoginBO;
 
 import common.CommonExecute;
@@ -31,6 +32,12 @@ public class IndexView implements CommonExecute {
 
 	@Override
 	public void naver(NaverLoginBO naverLoginBO, Model model, HttpSession session) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void google(GoogleLoginBO googleLoginBO, Model model, HttpSession session) {
 		// TODO Auto-generated method stub
 		
 	}

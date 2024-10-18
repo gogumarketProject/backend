@@ -13,9 +13,19 @@ import java.nio.charset.StandardCharsets; // UTF-8 인코딩을 위해 추가
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
@@ -137,7 +147,39 @@ public class NaverLoginBO {
             System.out.println("Access Token 무효화 실패");
         }
     }
+    
+    public boolean unlinkNaver(String accessToken) {
+        String url = "https://nid.naver.com/oauth2.0/token";
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        String body = "client_id=" + CLIENT_ID + 
+                      "&client_secret=" + CLIENT_SECRET + 
+                      "&access_token=" + accessToken + 
+                      "&grant_type=delete";
+
+        HttpEntity<String> request = new HttpEntity<>(body, headers);
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
+            
+            // 응답 상태 코드 확인
+            if (response.getStatusCode() == HttpStatus.OK) {
+                System.out.println("연동 해제 성공: " + response.getBody());
+                return true; // 연동 해제 성공
+            } else {
+                System.out.println("연동 해제 실패: " + response.getBody());
+                return false; // 연동 해제 실패
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // 예외 발생 시 로그 출력
+            return false; // 오류 발생
+        }
+    }
+
+	
 
 
 }

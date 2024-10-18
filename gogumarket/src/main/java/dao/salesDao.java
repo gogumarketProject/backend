@@ -189,7 +189,6 @@ public class salesDao {
 	//상품 상세보기 불러오기
 	   public salesDto ProductView(int s_no) {
 	      salesDto dto = null;
-<<<<<<< HEAD
 	      String query = "SELECT s_no, s_id,c.c_name, title, contents, status, product_status,\r\n" + 
 	      		"       to_char(price, '999,999,999')||'원' as price, -- 천의 자리마다 ',' 포맷\r\n" + 
 	      		"       trade, area, likes, image_dir,\r\n" + 
@@ -203,20 +202,6 @@ public class salesDao {
 	      		"FROM sales s, category c\r\n" + 
 	      		"where s_no = '"+s_no+"'\r\n" + 
 	      		"and c.category_id = s.category_id";
-=======
-	      String query = "SELECT s_no, s_id, category_id, title, contents, status, product_status,\n" + 
-	            "       to_char(price, '999,999,999')||'원' as price, -- 천의 자리마다 ',' 포맷\n" + 
-	            "       trade, area, likes, image_dir,\n" + 
-	            "       CASE\n" + 
-	            "           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\n" + 
-	            "           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\n" + 
-	            "           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\n" + 
-	            "           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\n" + 
-	            "           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\n" + 
-	            "       END AS reg_date\n" + 
-	            "FROM sales\n" + 
-	            "where s_no = '"+s_no+"'";
->>>>>>> cefd2264dc1229b72e57ab52dc77f0c5f1c815da
 	      try {
 	         con = DBConnection.getConnection();
 	         ps = con.prepareStatement(query);
@@ -248,7 +233,6 @@ public class salesDao {
 	      return dto ;
 	   }
 	   
-<<<<<<< HEAD
 	 //인덱스 목록
 		public ArrayList<salesDto> getViewLikesDtos(String likes){
 			ArrayList<salesDto> dtos = new ArrayList<salesDto>();
@@ -293,7 +277,6 @@ public class salesDao {
 			return dtos;
 		}   
 	   
-=======
 	//검색, 목록(게시물 총 개수) -- 페이징
 	public int getTotalCount(String search, String category_id, String min_price, String max_price, String trade,
 			String product_status) {
@@ -374,5 +357,4 @@ public class salesDao {
 		}
 		return dtos;
 	}
->>>>>>> cefd2264dc1229b72e57ab52dc77f0c5f1c815da
 }

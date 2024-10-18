@@ -44,6 +44,14 @@
                 <c:if test="${not empty email}">onclick="goLogout();"</c:if>
                 >로그아웃</span> 
             </button>
+            <form action="/gogumarket/naver/unlink" method="post">
+			    <input type="hidden" name="accessToken" value="user_access_token"/>
+			    <button type="submit">Naver 로그인 연동해제</button>
+			</form>
+			<form action="/gogumarket/google/unlink" method="post">
+			    <input type="hidden" name="accessToken" value="user_access_token"/>
+			    <button type="submit">Google 로그인 연동해제</button>
+			</form>
         </div>
     </div>
     <script>
@@ -78,6 +86,11 @@
 			mem.t_gubun.value = "Seller";
 			mem.method = "post";
 			mem.action = "market";
+			mem.submit();
+		}
+		function goLogout(){
+			mem.method = "get";
+			mem.action = "logout";
 			mem.submit();
 		}
     </script>

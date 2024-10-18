@@ -133,10 +133,19 @@ function applyPriceFilter() {
 // 카테고리 선택 시 필터 적용
 document.getElementById('category-list').addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('category-item')) {
-        document.getElementById('selected-category').textContent = event.target.textContent;
-        applyPriceFilter();  // 카테고리 선택 시 필터 텍스트 업데이트
+        var selectedCategory = event.target.textContent;
+        
+        // 선택된 카테고리를 표시
+        document.getElementById('selected-category').textContent = selectedCategory;
+        
+        // input 필드의 value에 선택된 카테고리 값을 설정
+        document.getElementById('category-input').value = selectedCategory;
+        
+        // 카테고리 선택 시 필터 텍스트 업데이트 (필요 시 추가 작업)
+        applyPriceFilter();
     }
 });
+
 
 // 체크박스와 라디오 버튼 변경 시 필터 적용
 document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {

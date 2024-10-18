@@ -35,6 +35,8 @@
 		                <button id="category-btn" class="category-btn">+</button>
 	                </td>
 	                <td id="selected-category"></td>
+	                <!-- 카테고리 선택 시 필터 적용되는 input 필드 추가 -->
+					<input type="text" id="category-input" placeholder="카테고리 선택" />
 	            </tr>
 	            <tr id="hidden-row" style="display: none;"> <!-- 기본적으로 숨겨져 있는 행 -->
 			        <td></td>
