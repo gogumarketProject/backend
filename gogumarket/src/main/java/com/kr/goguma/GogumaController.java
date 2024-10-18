@@ -124,7 +124,7 @@ public class GogumaController {
 	}
 	
 	
-	//product_sell_consumer ajax, 찜기능 매핑
+	//거래상태 select 실시간 변경 ajax
 		@RequestMapping("ChangeStatus") 
 		public void ChangeStatus(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
 			response.setContentType("text/html; charset=utf-8");
