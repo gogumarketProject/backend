@@ -35,8 +35,12 @@ import member.command.Login;
 import member.command.MemberLogin;
 import product.command.ConsumerView;
 import product.command.IndexView;
+import product.command.PriceOffer;
 import product.command.SeachList;
+import product.command.UpdateView;
+import product.command.UploadDelete;
 import product.command.UploadSales;
+import product.command.Uploadupdate;
 
 @Controller
 public class GogumaController {
@@ -109,23 +113,72 @@ public class GogumaController {
 			goguma.execute(request);
 			viewPage = "product_sell_consumer";
 		}
-		//판매자창 임시 버튼
-		else if(gubun.equals("Seller")) {
-			viewPage = "product_sell_seller";
-		}
 		//검색 및 메뉴 > 카테고리 클릭
 		else if(gubun.equals("Search")) {
 			CommonExecute goguma = new SeachList();
 			goguma.execute(request);
 			viewPage = "product_list";
 		}
+		//판매자 물품 수정창 폼 이동
+		else if(gubun.equals("UpdateForm")) {
+			CommonExecute goguma = new UpdateView();
+			goguma.execute(request);
+			viewPage = "update";
+		}
+		//판매자 물품 db에 수정
+		else if(gubun.equals("update")) {
+			CommonExecute goguma = new Uploadupdate();
+			goguma.execute(request);
+			viewPage = "common_alert";
+		}
+		//판매자 물품 글 삭제
+		else if(gubun.equals("Delete")) {
+			CommonExecute goguma = new UploadDelete();
+			goguma.execute(request);
+			viewPage = "common_alert";
+		}
+		//가격제안
+		else if(gubun.equals("Offer")) { 
+			CommonExecute goguma = new PriceOffer();
+			goguma.execute(request); 
+			viewPage = "common_alert"; 
+		}
 		
 		return viewPage;
 	}
 	
+	
+	//거래상태 select 실시간 변경 ajax
+		@RequestMapping("ChangeStatus") 
+		public void ChangeStatus(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = null;
+			try {
+		         out = response.getWriter();
+		      } catch (IOException e) {
+		         e.printStackTrace();
+		      }
+			salesDao dao = new salesDao(); 
+			int s_no = Integer.parseInt(request.getParameter("s_no"));
+			String status = request.getParameter("status");
+			if(status.equals("판매중")) {
+				status = "1";
+			}else if(status.equals("예약중")) {
+				status = "2";
+			}else if(status.equals("판매완료")) {
+				status = "3";
+			}
+			int result = dao.ChangeStatus(s_no,status);
+			if(result == 1) {
+				out.print("거래 제안 변경 완료!");
+			}else {
+				out.print("거래 제안 변경 실패! 관리자에게 문의해주세요.");
+			}
+		}
+	
 	//product_sell_consumer ajax, 찜기능 매핑
 	@RequestMapping("OnLikes") 
-	public void checkLikes(HttpServletRequest request, HttpServletResponse response) {
+	public void checkLikes(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = null;
 		try {
@@ -136,7 +189,7 @@ public class GogumaController {
 		salesDao dao = new salesDao(); 
 		int result = 0; 
 		int s_no = Integer.parseInt(request.getParameter("s_no"));
-		String id = "test"; 
+		String id = (String)session.getAttribute("sessionId");
 		int count = dao.WishListCheck(s_no,id);
 		  
 		if(count == 0) { 
@@ -150,21 +203,23 @@ public class GogumaController {
 		}
 	}
 	
-	// 네이버 로그인 성공 시 callback 호출 메소드
-	@RequestMapping(value = "callback", method = { RequestMethod.GET, RequestMethod.POST })
-	public String callback(Model model, @RequestParam(required = false) String code,
-	        @RequestParam(required = false) String state, @RequestParam(required = false) String error,
-	        @RequestParam(required = false) String error_description, HttpSession session)
-	        throws IOException, InterruptedException, ExecutionException {
+    //네이버 로그인 성공시 callback호출 메소드
+    @RequestMapping(value = "callback", method = { RequestMethod.GET, RequestMethod.POST })
+    public String callback(Model model,  @RequestParam(required = false) String code, 
+            @RequestParam(required = false) String state, 
+    		@RequestParam(required = false) String error,
+            @RequestParam(required = false) String error_description,HttpSession session)
+            throws IOException, InterruptedException, ExecutionException {
+        System.out.println("여기는 callback");
+        
+        // 에러가 있는 경우 처리
+        if (error != null) {
+            System.out.println("로그인 취소됨: " + error + ", 설명: " + error_description);
+            model.addAttribute("errorMessage", "로그인 취소되었습니다.");
+            return "redirect:market"; // 로그인 페이지로 리다이렉트
+        }
 
 	    System.out.println("여기는 callback");
-
-	    // 에러가 있는 경우 처리
-	    if (error != null) {
-	        System.out.println("로그인 취소됨: " + error + ", 설명: " + error_description);
-	        model.addAttribute("errorMessage", "로그인 취소되었습니다.");
-	        return "redirect:market"; // 로그인 페이지로 리다이렉트
-	    }
 
 	    // code와 state가 null일 경우 처리
 	    if (code == null || state == null) {

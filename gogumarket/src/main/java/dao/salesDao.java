@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import common.CommonUtil;
 import common.DBConnection;
 import dto.salesDto;
 
@@ -179,18 +178,18 @@ public class salesDao {
 				dtos.add(dto);
 			}
 		} catch(Exception e) {
-			System.out.println("getIndexView method 오류!");
+			System.out.println("getIndexLikes method 오류!");
 			System.out.println(query);
 			e.printStackTrace();
 		}
 		return dtos;
 	}
 	
-	//상품 상세보기 불러오기
+	 //상품 상세보기 불러오기
 	   public salesDto ProductView(int s_no) {
 	      salesDto dto = null;
-	      String query = "SELECT s_no, s_id,c.c_name, title, contents, status, product_status,\r\n" + 
-	      		"       to_char(price, '999,999,999')||'원' as price, -- 천의 자리마다 ',' 포맷\r\n" + 
+	      String query = "SELECT s_no, s_id,s.category_id,c.c_name, title, contents, status, product_status,\r\n" + 
+	      		"       price,\r\n" + 
 	      		"       trade, area, likes, image_dir,\r\n" + 
 	      		"       CASE\r\n" + 
 	      		"           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\r\n" + 
@@ -209,18 +208,27 @@ public class salesDao {
 	         
 	         if(rs.next()) {
 	            String s_id = rs.getString("s_id");
-	            String category_id = rs.getString("c_name");
+	            String category_id = rs.getString("category_id");
+	            String c_name = rs.getString("c_name");
 	            String title = rs.getString("title");
 	            String contents = rs.getString("contents");
 	            String status = rs.getString("status");
+	            if(status.equals("1")) status = "판매중";
+	            else if(status.equals("2")) status = "에약중";
+	            else if(status.equals("3")) status = "판매완료";
 	            String product_status = rs.getString("product_status");
+	            if(product_status.equals("1")) product_status = "중고";
+	            else if(product_status.equals("2")) product_status = "새 상품";
 	            String price = rs.getNString("price");
 	            String trade = rs.getString("trade");
+	            if(trade.equals("1")) trade = "택배거래";
+	            else if(trade.equals("2")) trade = "직거래";
+	            else if(trade.equals("3")) trade = "직거래 | 택배";
 	            String area = rs.getString("area");
 	            int likes = rs.getInt("likes");
 	            String reg_date = rs.getNString("reg_date");
 	            String image_dir = rs.getNString("image_dir");
-	            dto = new salesDto(s_id, category_id, title, contents, status, product_status, trade, area, reg_date, image_dir, s_no, price, likes);
+	            dto = new salesDto(s_id, category_id, title, contents, product_status, trade, area, reg_date, image_dir, price, s_no);
 	         }
 	      } catch(Exception e) {
 	         System.out.println("ProductView method 오류!");
@@ -231,10 +239,10 @@ public class salesDao {
 	      }
 	      
 	      return dto ;
-	   }
+	   }  
 	   
 	 //인덱스 목록
-		public ArrayList<salesDto> getViewLikesDtos(String likes){
+		public ArrayList<salesDto> getViewLikesDtos(int s_no){
 			ArrayList<salesDto> dtos = new ArrayList<salesDto>();
 			String query = "select * from\n"
 					+ "(select rownum, tbl.*\n"
@@ -248,8 +256,9 @@ public class salesDao {
 					+ "           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\n"
 					+ "        END AS reg_date\n"
 					+ "from sales\n"
-					+ "where status = '1'\n"
-					+ "order by "+likes+" desc\n"
+					+ "where status = '1'\r\n"  
+					+ "and s_no NOT IN ("+s_no+")"
+					+ "order by likes desc\n"
 					+ ")tbl)\n"
 					+ "where rownum <= 3";
 			try {
@@ -257,7 +266,7 @@ public class salesDao {
 				ps = con.prepareStatement(query);
 				rs = ps.executeQuery();
 				while(rs.next()) {
-					int s_no = rs.getInt("s_no");
+					s_no = rs.getInt("s_no");
 					String image_dir = rs.getString("image_dir");
 					String title = rs.getString("title");
 					String price = rs.getString("price");
@@ -311,7 +320,7 @@ public class salesDao {
 			String max_price, String trade, String product_status, String sort) {
 		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
 		String query = "select * from(\n"
-				+ "select rownum, tbl.*\n"
+				+ "select rownum as rnum, tbl.*\n"
 				+ "from(\n"
 				+ "select s_no, image_dir, title, to_char(price, '999,999,999')||'원' as price, area,\n"
 				+ "        CASE\n"
@@ -323,14 +332,14 @@ public class salesDao {
 				+ "        END AS reg_date\n"
 				+ "from sales\n"
 				+ "where (title like '%"+search+"%' or contents like '%"+search+"%' or area like'%"+search+"%')\n"
-				+ "and category_id like '%"+trade+"%'\n"
+				+ "and category_id like '%"+category_id+"%'\n"
 				+ "and trade like '%"+trade+"%'\n"
-				+ "and product_status like '%%'\n"
+				+ "and product_status like '%"+product_status+"%'\n"
 				+ "and price >= "+min_price+"\n"
 				+ "and price <= "+max_price+"\n"
 				+ "order by "+sort+"\n"
 				+ ")tbl)\n"
-				+ "where rownum >= "+start+" and rownum <= "+end;
+				+ "where rnum >= "+start+" and rnum <= "+end;
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(query);
@@ -356,5 +365,165 @@ public class salesDao {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		return dtos;
+	}
+	
+	
+	//물품 수정
+	public int updateSales(salesDto dto) {
+		int result = 0;
+		String query = "update sales\r\n" + 
+				"set title = '"+dto.getTitle()+"',\r\n" + 
+				"price = "+dto.getPrice()+",\r\n" + 
+				"category_id = '"+dto.getCategory_id()+"',\r\n" + 
+				"contents = '"+dto.getContents()+"',\r\n" + 
+				"product_status = '"+dto.getProduct_status()+"',\r\n" + 
+				"trade = '"+dto.getTrade()+"',\r\n" + 
+				"area = '"+dto.getArea()+"'\r\n" + 
+				"where s_no = '"+dto.getS_no()+"'";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			result = ps.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("updateSales() method 오류!");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return result;
+	}
+	
+	
+	//물품 삭제
+	public int DeleteSales(int s_no) {
+		int result = 0;
+		String query = "delete sales\r\n" + 
+				"where s_no = "+s_no+"";
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			result = ps.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("DeleteSales() method 오류!");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
+	
+	//이 사람이 제의를 했었는지 안했는지 검사
+	public int SearchOfferPrice(int s_no, String id) {
+		int result = 0;
+		String query = "select s_no, id, offer_price\r\n" + 
+				"from offer_price\r\n" + 
+				"where s_no = "+s_no+"\r\n" + 
+				"and id = '"+id+"'";
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			result = ps.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("SearchOfferPrice() method 오류!");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
+	
+	// 가격제안
+	public int InsertOffer(int s_no, String id, int offer_price) {
+		int result = 0;
+		String query = "insert into offer_price\r\n" + 
+				"(s_no,id,offer_price)\r\n" + 
+				"values\r\n" + 
+				"("+s_no+",'"+id+"',"+offer_price+")";
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			result = ps.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("InsertOffer() method 오류!");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
+	
+	//가격 제안 수정
+	public int UpdateOffer(int s_no, String id, int offer_price) {
+		int result = 0;
+		String query = "update offer_price\r\n" + 
+				"set offer_price = "+offer_price+"\r\n" + 
+				"where id = '"+id+"'\r\n" + 
+				"and s_no = "+s_no+"";
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			result = ps.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("UpdateOffer() method 오류!");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
+	
+	//해당글에 오퍼한사람 리스트
+	public ArrayList<salesDto> getOfferList(int s_no) {
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select id, offer_price\r\n" + 
+				"from offer_price\r\n" + 
+				"where s_no = "+s_no+"\r\n" + 
+				"order by offer_price desc";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				String id = rs.getNString("id");
+				int offer_price = rs.getInt("offer_price");
+				salesDto dto = new salesDto(id, Integer.toString(offer_price), "", "", "", 0);
+				dtos.add(dto);
+			}
+		} catch(Exception e) {
+			System.out.println("getOfferList() Method Error");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return dtos;
+	}
+
+	//물건 거래상태 변경
+	public int ChangeStatus(int s_no, String status) {
+		int result = 0;
+		String query = "update sales\r\n" + 
+				"set status = '"+status+"'\r\n" + 
+				"where s_no = "+s_no+"";
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			result = ps.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("ChangeStatus() method 오류!");
+			System.out.println(query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
 	}
 }

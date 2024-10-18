@@ -39,8 +39,8 @@ public class SeachList implements CommonExecute {
 		
 		/* paging 설정 start*/
 		int totalCount = dao.getTotalCount(search, category_id, min_price, max_price, trade, product_status);
-		int list_setup_count = 20;  //한페이지당 출력 (행 * 열) 수
-		int pageNumber_count = 5;  //한페이지당 출력 페이지 갯수
+		int list_setup_count = 5;  //한페이지당 출력 (행 * 열) 수
+		int pageNumber_count = 2;  //한페이지당 출력 페이지 갯수
 		
 		String nowPage = request.getParameter("t_nowPage");
 		int current_page = 0; // 현재페이지 번호
@@ -55,15 +55,21 @@ public class SeachList implements CommonExecute {
 		
 		int start = (current_page -1) * list_setup_count + 1;
 		int end   = current_page * list_setup_count;
+		String pageDis = CommonUtil.pageListPost(current_page, total_page, pageNumber_count);
 		/* paging 설정 end*/
 		
-		String pageDis = CommonUtil.pageListPost(current_page, total_page, pageNumber_count);
-		
+		// 목록 불러오기
 		ArrayList<salesDto> dtos = dao.getSeachView(start, end, search, category_id, min_price, max_price, trade, product_status, sort);
 		
 		request.setAttribute("dtos", dtos);
-		request.setAttribute("search", search);
 		request.setAttribute("pageDis", pageDis);
+		request.setAttribute("search", search);
+		request.setAttribute("category_id", category_id);
+		request.setAttribute("min_price", min_price);
+		request.setAttribute("max_price", max_price);
+		request.setAttribute("trade", trade);
+		request.setAttribute("product_status", product_status);
+		request.setAttribute("sort", sort);
 	}
 
 	@Override
