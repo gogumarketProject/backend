@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
      sellersArray.sort((a, b) => {
        const priceA = parseInt(a.querySelector('.seller-price strong').innerText.replace(/[^0-9]/g, ''));
        const priceB = parseInt(b.querySelector('.seller-price strong').innerText.replace(/[^0-9]/g, ''));
-       return priceA - priceB; // 낮은 가격 순서대로 정렬
+       return priceB - priceA; // 낮은 가격 순서대로 정렬
      });
 
      // 정렬된 요소들을 다시 DOM에 추가

@@ -26,6 +26,7 @@ import member.command.Login;
 import member.command.MemberLogin;
 import product.command.ConsumerView;
 import product.command.IndexView;
+import product.command.PriceOffer;
 import product.command.SeachList;
 import product.command.UpdateView;
 import product.command.UploadDelete;
@@ -106,13 +107,50 @@ public class GogumaController {
 			goguma.execute(request);
 			viewPage = "common_alert";
 		}
+		//판매자 물품 글 삭제
 		else if(gubun.equals("Delete")) {
 			CommonExecute goguma = new UploadDelete();
 			goguma.execute(request);
 			viewPage = "common_alert";
 		}
+		//가격제안
+		else if(gubun.equals("Offer")) { 
+			CommonExecute goguma = new PriceOffer();
+			goguma.execute(request); 
+			viewPage = "common_alert"; 
+		}
+		
 		return viewPage;
 	}
+	
+	
+	//product_sell_consumer ajax, 찜기능 매핑
+		@RequestMapping("ChangeStatus") 
+		public void ChangeStatus(HttpServletRequest request, HttpServletResponse response,HttpSession session) {
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter out = null;
+			try {
+		         out = response.getWriter();
+		      } catch (IOException e) {
+		         e.printStackTrace();
+		      }
+			salesDao dao = new salesDao(); 
+			int s_no = Integer.parseInt(request.getParameter("s_no"));
+			String status = request.getParameter("status");
+			if(status.equals("판매중")) {
+				status = "1";
+			}else if(status.equals("예약중")) {
+				status = "2";
+			}else if(status.equals("판매완료")) {
+				status = "3";
+			}
+			int result = dao.ChangeStatus(s_no,status);
+			if(result == 1) {
+				out.print("거래 제안 변경 완료!");
+			}else {
+				out.print("거래 제안 변경 실패! 관리자에게 문의해주세요.");
+			}
+		}
 	
 	//product_sell_consumer ajax, 찜기능 매핑
 	@RequestMapping("OnLikes") 
@@ -140,7 +178,7 @@ public class GogumaController {
 		  else out.print("찜 오류 offlikes"); 
 		}
 	}
-	
+		
     //네이버 로그인 성공시 callback호출 메소드
     @RequestMapping(value = "callback", method = { RequestMethod.GET, RequestMethod.POST })
     public String callback(Model model,  @RequestParam(required = false) String code, 

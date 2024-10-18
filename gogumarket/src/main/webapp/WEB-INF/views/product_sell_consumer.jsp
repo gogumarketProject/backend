@@ -48,19 +48,82 @@
   			success:function(data){
   				var result = $.trim(data);
   				alert(result);
-  				/* var result = $.trim(data);
-  				  
-  				/* all.t_id_result.value = result;
-  				if(result == "사용가능"){
-  					all.t_id_checkValue.value = all.t_id.value;
-  				}else{
-  					all.t_id_checkValue.value = "";
-  				} */  
   			}
   		});
 		
 	}
+	//제안하기
+	function goOffer(){
+		var price = document.getElementById('priceInput').value;
+		
+		if(price == ""){
+			alert("가격을 입력해주세요!");
+			return;
+		}
+		if(confirm(price+"원을 제의하시겠습니까?")){
+			
+			// 쉼표 제거 후 값 설정
+			var cleanPrice = price.replace(/,/g, '');
+			offer.offerPrice.value = cleanPrice; 
+			
+			offer.t_gubun.value = "Offer";
+			offer.method = "post";
+			offer.action = "market";
+			offer.submit();
+		}
+		// select 요소에 이벤트를 직접 추가하는 방식
+	    
+	}
 	
+	
+	//status 바꾸는 js
+	var previousStatus = "${productdto.getStatus()}";
+	
+	function confirmSelection(selectElement) {
+		
+	    const selectedValue = selectElement.value;
+	    if (selectedValue == '판매중') {
+	        if (!confirm("판매중 상태로 변경하시겠습니까?")) {
+	            selectElement.value = previousStatus;  // 취소 시 이전 상태로 복구
+	            return;
+	        } else {
+	            previousStatus = '판매중'; // 확인 시 상태를 업데이트
+	        }
+	    } else if (selectedValue == '예약중') {
+	        if (!confirm("예약중 상태로 변경하시겠습니까?")) {
+	            selectElement.value = previousStatus; // 취소 시 이전 상태로 복구
+	            return;
+	        } else {
+	            previousStatus = '예약중'; // 확인 시 상태를 업데이트
+	        }
+	    } else if (selectedValue === '판매완료') {
+	        if (!confirm("       판매완료 상태로 변경하시겠습니까?\r\n판매완료로 변경하실 경우에 거래제안 변경이 불가합니다!")) {
+	            selectElement.value = previousStatus; // 취소 시 이전 상태로 복구
+	            return;
+	        } else {
+	            previousStatus = '판매완료'; // 확인 시 상태를 업데이트
+	        }
+	    }
+	    $.ajax({
+  			type:"post",
+  			url :"ChangeStatus",
+  			data :"s_no="+statusform.s_no.value+"&status="+statusform.status.value,
+  			/* data:"s_no="+status.s_no.value+"&status="+status.status.value, */
+  			dataType:"text",
+  			error:function(){
+  				alert("통신 실패!!!!");
+  			},
+  			success:function(data){
+  				var result = $.trim(data);
+  				alert(result);
+  				location.reload(true);
+  			}
+  		});
+	    /* if(selectedValue === '판매완료'){
+	    	 $(selectElement).parent().html('<span>판매완료</span>');
+	    	 $(".fa-regular fa-pen-to-square").hide();	
+	    } */
+	}
 </script>
 <body>
 
@@ -68,7 +131,6 @@
 	<%@include file="menu_bar.jsp" %>
 	<%@include file="message.jsp" %>
 	<%@include file="message_send.jsp" %>
-	
 	
 	
 	<div class="container">
@@ -83,15 +145,20 @@
 				<div class="info-box-category">홈 > ${productdto.getCategory_name() }</div>
 				<div style="display: flex; justify-content: space-between;align-items: center;">
 					<div class="info-box-product-name">${productdto.getTitle() }</div>
+					
 					<div style="margin-right: 14px;">
-						<c:if test="${id eq productdto.getS_id() }">
-							<select style=" width:70px; height: 24px;border-radius: 5px;">
-								<option>판매중</option>
-								<option>예약중</option>
-								<option>판매완료</option>
+					<form name = "statusform">
+					<input type = "hidden" name = "s_no" value = "${productdto.getS_no() }">
+						<c:if test="${id eq productdto.getS_id() && (productdto.getStatus() eq '판매중'||productdto.getStatus() eq '예약중')}">
+							<select name = "status" style=" width:80px; height: 24px;border-radius: 5px;" onchange="confirmSelection(this)" >
+								<option value = "판매중" <c:if test="${productdto.getStatus() eq '판매중' }">selected</c:if>>판매중</option> 
+								<option value = "예약중" <c:if test="${productdto.getStatus() eq '예약중' }">selected</c:if>>예약중</option>
+								<option value = "판매완료" <c:if test="${productdto.getStatus() eq '판매완료' }">selected</c:if>>판매완료</option>
 							</select>
 						</c:if>
+					</form>	
 					</div>
+					
 				</div>
 				<div class="info-box-price"><strong>${productdto.getPrice() }원</strong></div>
 				<div class="info-box-product-meta">${productdto.getReg_date() } | 채팅 0 | 찜 ${productdto.getLikes() }</div>
@@ -99,7 +166,7 @@
 				<ul class="li-details">
 					<li class="li-line"><span>제품상태</span><button>${productdto.getProduct_status() }</button></li>
 					<li class="li-line"><span>거래방식</span><button>${productdto.getTrade() }</button></li>
-					<li class="li-line"><span>거래제안</span><button>가능</button></li>
+					<li class="li-line"><span>거래제안</span><button>${productdto.getStatus() }</button></li>
 				</ul>
 				<c:if test="${productdto.getTrade() eq '직거래' or productdto.getTrade() eq '직거래 | 택배'}">
 				<div class="trade">
@@ -119,14 +186,24 @@
 							else { OnLikes(); }" <c:if test="${CheckUserlike eq '1'}">checked</c:if>>
 	                  <i class="fa-regular fa-heart"></i>
 	               </label>
-	               <div class="trade-offer-container ">
-	                  <button class="trade-offer absolute" onclick="togglePriceBox()">가격제안</button>
-	                  <div class="trade-offer-hidden">
-	                     <input type="text" class="trade-offer-price absolute" placeholder=" 제안할 금액을 입력하세요." oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');">
-	                     <button class="trade-offer-price-submit absolute" onclick="if(${sessionId == null}) {alert('로그인 후 이용해주세요.'); goLogin();}
-							else { togglePriceBox();}">>제안하기</button>
-	                  </div>
-	               </div>
+	               
+	               <!-- 가격제안 form-->
+					<form name = "offer">
+						<input type = "hidden" name = "s_no" value = "${productdto.getS_no() }">
+						<input type = "hidden" name = "t_gubun">
+						<!-- 가격 text에 id를 지정해준후 jas에서 offerPrice에 값 옮겨주기 -->
+						<input type = "hidden" name ="offerPrice" id = "offerPrice">  
+					</form>
+	               <c:if test="${productdto.getStatus() eq '판매중' }">
+		               <div class="trade-offer-container ">
+		                  <button class="trade-offer absolute" onclick="togglePriceBox()">가격제안</button>
+		                  <div class="trade-offer-hidden">
+		                     <input type="text" id="priceInput" class="trade-offer-price absolute" placeholder=" 제안할 금액을 입력하세요." oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');">
+		                     <button class="trade-offer-price-submit absolute" onclick="if(${sessionId == null}) {alert('로그인 후 이용해주세요.'); goLogin();}
+								else { goOffer();}">>제안하기</button>
+		                  </div>
+		               </div>
+	               </c:if>
                </c:if>
             </div>
 					
@@ -136,7 +213,7 @@
 
 
 		
-		
+		<!-- 상품 정보 -->
 		<!-- 업데이트 전용 Form -->
 		<form name = "update">
 			<input type = "hidden" name = "s_no">
@@ -148,9 +225,9 @@
 			<div class="left-box">
 				<h3 class="left-box-header">
 						상품 정보
-						<c:if test="${id eq productdto.getS_id() }">
+					<c:if test="${id eq productdto.getS_id() }">
 						<div class="left-box-setting-box">
-							<c:if test="${productdto.getStatus() !=  '예약완료'}">
+							<c:if test="${productdto.getStatus() !=  '판매완료'}">
 								<a href="javascript:goUpdate('${productdto.getS_no() }')">
 									수정<i class="fa-regular fa-pen-to-square"></i>
 								</a>
@@ -173,7 +250,7 @@
 				</div>
 			</div>
 			<!-- 우측 큰 div -->
-			
+			<!-- 가격제안 판매자 입장에서만 보임 -->
 			<c:if test="${id eq productdto.getS_id() }">	
 			<div class="right-box">
 				<a href="#">
@@ -183,37 +260,18 @@
 				</a>
 				<div class="trade-seller-container">
 					<div class="trade-overflow">
-						<div class="trade-seller">
-							<div class="trade-seller-left">
-								<p>가렌</p>
-								<p class="trade-counterparty-location">중화제2동</p>
+						<c:forEach items="${OfferDtos}" var="OfferDtos">
+							<div class="trade-seller">
+								<div class="trade-seller-left">
+									<p>${OfferDtos.getS_id() }</p>
+									<p class="trade-counterparty-location">중화짬뽕</p>
+								</div>
+								<div class="trade-seller-right">
+									<span class="seller-price"><strong>${OfferDtos.getPrice() }원</strong></span>
+								</div>
+								<button class="trade-options"><i class="fa-solid fa-comments"></i></button>
 							</div>
-							<div class="trade-seller-right">
-								<span class="seller-price"><strong>9500원</strong></span>
-							</div>
-							<!-- 새로운 div: trade-options -->
-							<button class="trade-options" id="noteButton"><i class="fa-solid fa-comments"></i></button>
-						</div>
-						<div class="trade-seller">
-							<div class="trade-seller-left">
-								<p>다리우스</p>
-								<p class="trade-counterparty-location">중화짜장동</p>
-							</div>
-							<div class="trade-seller-right">
-								<span class="seller-price"><strong>9300원</strong></span>
-							</div>
-						  	<button class="trade-options"><i class="fa-solid fa-comments"></i></button>
-						</div>
-						<div class="trade-seller">
-							<div class="trade-seller-left">
-								<p>신짜오</p>
-								<p class="trade-counterparty-location">중화짬뽕</p>
-							</div>
-							<div class="trade-seller-right">
-								<span class="seller-price"><strong>999999원</strong></span>
-							</div>
-							<button class="trade-options"><i class="fa-solid fa-comments"></i></button>
-						</div>
+						</c:forEach>
 					</div>
 				</div>
 			</div>
