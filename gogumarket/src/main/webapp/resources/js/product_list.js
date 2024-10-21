@@ -56,6 +56,107 @@ document.getElementById('reset-btn').addEventListener('click', () => {
     event.preventDefault();
 });
 
+// 가격 기입에 관한 기능
+function applyPriceFilter() {
+    const minPriceInput = document.getElementById('min-price').value;
+    const maxPriceInput = document.getElementById('max-price').value;
+
+    const minPrice = parseInt(minPriceInput, 10);
+    const maxPrice = parseInt(maxPriceInput, 10);
+
+    let filterText = '';
+
+    // 최소/최대 가격이 기입되었을 때만 체크
+    if (minPriceInput && minPrice < 10) {
+        // 최소가격이 10원 미만이면 경고
+        alert('최소가격을 10원 이상 적어주세요.');
+        document.getElementById('min-price').focus();
+        return;
+    }
+
+    if (maxPriceInput && maxPrice < 10) {
+        // 최대가격이 10원 미만이면 경고
+        alert('최대가격을 10원 이상 적어주세요.');
+        document.getElementById('max-price').focus();
+        return;
+    }
+
+    if (minPriceInput && maxPriceInput && maxPrice < minPrice) {
+        // 최대가격이 최소가격보다 낮으면 경고
+        alert('최대가격이 최소가격보다 낮습니다.');
+        document.getElementById('max-price').focus();
+        return;
+    }
+
+    // 가격 필터 적용
+    if (minPriceInput && !maxPriceInput) {
+        // 최소가격만 입력된 경우 "10원 ~"
+        filterText = ` ${minPriceInput} ~ `;
+    } else if (!minPriceInput && maxPriceInput) {
+        // 최대가격만 입력된 경우 "~ 20원"
+        filterText = ` ~ ${maxPriceInput} `;
+    } else if (minPriceInput && maxPriceInput) {
+        // 최소가격과 최대가격 모두 입력된 경우
+        filterText = ` ${minPriceInput} ~ ${maxPriceInput} `;
+    }
+
+    // 카테고리 필터 추가
+    const selectedCategory = document.getElementById('selected-category').textContent;
+    if (selectedCategory) {
+        filterText += ` ${selectedCategory} `;
+    }
+
+    // 체크박스 (거래 방법) 필터 추가
+    const delivery = document.getElementById('delivery').checked ? '택배' : '';
+    const direct = document.getElementById('direct').checked ? '직거래' : '';
+    const deliveryMethod = [delivery, direct].filter(Boolean).join(' ');
+
+    if (deliveryMethod) {
+        filterText += ` ${deliveryMethod} `;
+    }
+
+    // 라디오 버튼 (상품 상태) 필터 추가
+	const productStatusNew = document.getElementById('new');
+	const productStatusUsed = document.getElementById('used');
+	
+	if (productStatusNew.checked) {
+	    filterText += ` ${productStatusNew.nextElementSibling.textContent} `;
+	} else if (productStatusUsed.checked) {
+	    filterText += ` ${productStatusUsed.nextElementSibling.textContent} `;
+	}
+
+    // 필터 텍스트 업데이트
+    document.getElementById('filter-text').textContent = filterText;
+}
+
+// 카테고리 선택 시 필터 적용
+document.getElementById('category-list').addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('category-item')) {
+        var selectedCategory = event.target.textContent;
+        
+        // 선택된 카테고리를 표시
+        document.getElementById('selected-category').textContent = selectedCategory;
+        
+        // input 필드의 value에 선택된 카테고리 값을 설정
+        document.getElementById('category-input').value = selectedCategory;
+        
+        // 카테고리 선택 시 필터 텍스트 업데이트 (필요 시 추가 작업)
+        applyPriceFilter();
+    }
+});
+
+
+// 체크박스와 라디오 버튼 변경 시 필터 적용
+document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+    input.addEventListener('change', applyPriceFilter);  // 선택 상태가 변경되면 필터 적용
+});
+
+
+// 페이지가 로드될 때 기본 정렬을 recent로 설정
+window.onload = function() {
+    sortProducts('recent');  // 페이지가 처음 로드되면 자동으로 'recent' 정렬
+};
+
 // 모든 정렬 버튼을 선택
 const sortButtons = document.querySelectorAll('.sort-btn');
 

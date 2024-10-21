@@ -185,63 +185,8 @@ public class salesDao {
 		return dtos;
 	}
 	
-	//상품 상세보기 불러오기
-	   public salesDto ProductView(int s_no) {
-	      salesDto dto = null;
-	      String query = "SELECT s_no, s_id,s.category_id,c.c_name, title, contents, status, product_status,\r\n" + 
-	      		"       to_char(price, '999,999,999') as price, -- 천의 자리마다 ',' 포맷\r\n" + 
-	      		"       trade, area, likes, image_dir,\r\n" + 
-	      		"       CASE\r\n" + 
-	      		"           WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\r\n" + 
-	      		"           WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\r\n" + 
-	      		"           WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\r\n" + 
-	      		"           WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\r\n" + 
-	      		"           ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\r\n" + 
-	      		"       END AS reg_date\r\n" + 
-	      		"FROM sales s, category c\r\n" + 
-	      		"where s_no = '"+s_no+"'\r\n" + 
-	      		"and c.category_id = s.category_id";
-	      try {
-	         con = DBConnection.getConnection();
-	         ps = con.prepareStatement(query);
-	         rs = ps.executeQuery();
-	         
-	         if(rs.next()) {
-	            String s_id = rs.getString("s_id");
-	            String category_id = rs.getString("category_id");
-	            String c_name = rs.getString("c_name");
-	            String title = rs.getString("title");
-	            String contents = rs.getString("contents");
-	            String status = rs.getString("status");
-	            if(status.equals("1")) status = "판매중";
-	            else if(status.equals("2")) status = "예약중";
-	            else if(status.equals("3")) status = "판매완료";
-	            String product_status = rs.getString("product_status");
-	            if(product_status.equals("1")) product_status = "중고";
-	            else if(product_status.equals("2")) product_status = "새 상품";
-	            String price = rs.getNString("price");
-	            String trade = rs.getString("trade");
-	            if(trade.equals("1")) trade = "택배거래";
-	            else if(trade.equals("2")) trade = "직거래";
-	            else if(trade.equals("3")) trade = "직거래 | 택배";
-	            String area = rs.getString("area");
-	            int likes = rs.getInt("likes");
-	            String reg_date = rs.getNString("reg_date");
-	            String image_dir = rs.getNString("image_dir");
-	            dto = new salesDto(s_id, category_id, c_name,title, contents, status, product_status, trade, area, reg_date, image_dir, s_no, price, likes);
-	         }
-	      } catch(Exception e) {
-	         System.out.println("ProductView method 오류!");
-	         System.out.println(query);
-	         e.printStackTrace();
-	      } finally {
-	         DBConnection.closeDB(con, ps, rs);
-	      }
-	      return dto ;
-	   }
-	   
 	 //상품 상세보기 불러오기
-	   public salesDto UpdateProductView(int s_no) {
+	   public salesDto ProductView(int s_no) {
 	      salesDto dto = null;
 	      String query = "SELECT s_no, s_id,s.category_id,c.c_name, title, contents, status, product_status,\r\n" + 
 	      		"       price,\r\n" + 
@@ -283,7 +228,7 @@ public class salesDao {
 	            int likes = rs.getInt("likes");
 	            String reg_date = rs.getNString("reg_date");
 	            String image_dir = rs.getNString("image_dir");
-	            dto = new salesDto(s_id, category_id, c_name,title, contents, status, product_status, trade, area, reg_date, image_dir, s_no, price, likes);
+	            dto = new salesDto(s_id, category_id, title, contents, product_status, trade, area, reg_date, image_dir, price, s_no);
 	         }
 	      } catch(Exception e) {
 	         System.out.println("ProductView method 오류!");
@@ -549,7 +494,7 @@ public class salesDao {
 			while(rs.next()) {
 				String id = rs.getNString("id");
 				int offer_price = rs.getInt("offer_price");
-				salesDto dto = new salesDto(id, Integer.toString(offer_price));
+				salesDto dto = new salesDto(id, Integer.toString(offer_price), "", "", "", 0);
 				dtos.add(dto);
 			}
 		} catch(Exception e) {

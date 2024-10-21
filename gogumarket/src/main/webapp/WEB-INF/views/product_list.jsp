@@ -62,6 +62,9 @@
 		                카테고리
 		                <button id="category-btn" class="category-btn">+</button>
 	                </td>
+	                <td id="selected-category"></td>
+	                <!-- 카테고리 선택 시 필터 적용되는 input 필드 추가 -->
+					<input type="text" id="category-input" placeholder="카테고리 선택" />
 	                <td id="selected-category">
 	                	<c:if test="${category_id eq ''}">전체</c:if>
 	                	<c:if test="${category_id eq '1'}">패션의류</c:if>
