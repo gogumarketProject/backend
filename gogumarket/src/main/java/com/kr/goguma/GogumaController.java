@@ -2,6 +2,9 @@ package com.kr.goguma;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import javax.servlet.http.Cookie;
@@ -23,13 +26,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import common.CommonExecute;
+import common.CommonUtil;
 import dao.salesDao;
+import dto.salesDto;
 import member.command.GoogleLogin;
 import member.command.Login;
 import member.command.MemberLogin;
@@ -60,6 +64,7 @@ public class GogumaController {
         this.googleLoginBO = googleLoginBO;
     }
 	
+    
 	@RequestMapping(value="market",method = { RequestMethod.GET, RequestMethod.POST })
 	public String market(HttpServletRequest request, Model model, HttpSession session) {
 		String gubun = request.getParameter("t_gubun");
@@ -201,6 +206,53 @@ public class GogumaController {
 		  if(result == 1) out.print("찜이 취소되었습니다!"); 
 		  else out.print("찜 오류 offlikes"); 
 		}
+	}
+	
+	
+	// 검색, 메뉴바-카테고리
+	@RequestMapping(value = "search", method = { RequestMethod.GET })
+	public Map<String, Object> searchList(
+			@RequestParam(required = false, defaultValue = "") String search,
+			@RequestParam(required = false, defaultValue = "") String categoryId,
+			@RequestParam(required = false, defaultValue = "0") String minPrice,
+			@RequestParam(required = false, defaultValue = "99999999") String maxPrice,
+			@RequestParam(required = false, defaultValue = "") String trade,
+			@RequestParam(required = false, defaultValue = "") String productStatus,
+			@RequestParam(required = false, defaultValue = "s_no desc") String sort,
+			@RequestParam(required = false) String page,
+			Model model
+	){
+		salesDao dao = new salesDao();
+		
+		/* paging 설정 start*/
+		int totalCount = dao.getTotalCount(search, categoryId, minPrice, maxPrice, trade, productStatus);
+		int list_setup_count = 5;  //한페이지당 출력 (행 * 열) 수
+		int pageNumber_count = 2;  //한페이지당 출력 페이지 갯수
+		
+		int current_page = 0; // 현재페이지 번호
+		int total_page = 0;    // 전체 페이지 수
+		
+		if(page == null || page.equals("")) current_page = 1; 
+		else current_page = Integer.parseInt(page);
+		
+		total_page = totalCount / list_setup_count;  // 몫 : 2
+		int rest = 	totalCount % list_setup_count;   // 나머지:1
+		if(rest !=0) total_page = total_page + 1;     // 3
+		
+		int start = (current_page -1) * list_setup_count + 1;
+		int end   = current_page * list_setup_count;
+		String pageDis = CommonUtil.pageListPost(current_page, total_page, pageNumber_count);
+		/* paging 설정 end*/
+		
+		// 목록 불러오기
+		ArrayList<salesDto> dtos = dao.getSeachView(start, end, search, categoryId, minPrice, maxPrice, trade, productStatus, sort);
+		
+		// 결과를 Map에 담아 반환
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("pageDis", pageDis);
+	    result.put("dtos", dtos);
+	    
+	    return result; // JSON 형태로 응답
 	}
 	
     //네이버 로그인 성공시 callback호출 메소드

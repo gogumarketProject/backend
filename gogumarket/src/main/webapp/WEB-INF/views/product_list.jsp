@@ -13,45 +13,19 @@
     
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product_list.css">
-    <script type="text/javascript">
-    	function goPage(page){
-    		paging.t_nowPage.value = page;
-    		paging.method = "get";
-    		paging.action = "market"
-    		paging.submit();
-    	}
-    	function goSearch(){
-    		paging.t_nowPage.value = page;
-    		paging.method = "get";
-    		paging.action = "market"
-    		paging.submit();
-    	}
-    </script>
 </head>
 <body>
 
 	<%@include file="header.jsp" %>
 	<%@include file="menu_bar.jsp" %>
 	<%@include file="message.jsp" %>
-    <form name="paging">
-    	<input type="hidden" name="t_gubun" value="Search">
-    	<input type="hidden" name="t_nowPage">
-    	<input type="hidden" name="search" value="${search }">
-    	<input type="hidden" name="category_id" value="${category_id }">
-    	<input type="hidden" name="min_price" value="${min_price }">
-    	<input type="hidden" name="max_price" value="${max_price }">
-    	<input type="hidden" name="trade" value="${trade }">
-    	<input type="hidden" name="product_status" value="${product_status }">
-    	<input type="hidden" name="sort" value="${sort }">
-    </form>
+    
 	<div class="container">
 	    <!-- 2열 4행 테이블 -->
-	    <form name="search">
-	    <input type="hidden" name="t_gubun" value="Search">
-	    <input type="hidden" name="category_id" id="category" value="${category_id }">
-	    <input type="hidden" name="search" value="${search }">
 	    <div class="table-container">
-	    	<span class="search-result">검색 결과</span>
+	    	<div class="table-title-con">
+	    		<span class="search-result"><strong>'~에 대한'</strong> 검색 결과</span><span class="list-count">총 N개</span>
+	    	</div>
 	        <table id="details-table">
 	        	<colgroup>
 	        		<col width="15%">
@@ -63,20 +37,6 @@
 		                <button id="category-btn" class="category-btn">+</button>
 	                </td>
 	                <td id="selected-category"></td>
-	                <!-- 카테고리 선택 시 필터 적용되는 input 필드 추가 -->
-					<input type="text" id="category-input" placeholder="카테고리 선택" />
-	                <td id="selected-category">
-	                	<c:if test="${category_id eq ''}">전체</c:if>
-	                	<c:if test="${category_id eq '1'}">패션의류</c:if>
-	                	<c:if test="${category_id eq '2'}">패션잡화</c:if>
-	                	<c:if test="${category_id eq '3'}">가방/핸드백</c:if>
-	                	<c:if test="${category_id eq '4'}">시계/쥬얼리</c:if>
-	                	<c:if test="${category_id eq '5'}">가전제품</c:if>
-	                	<c:if test="${category_id eq '6'}">모바일/태블릿</c:if>
-	                	<c:if test="${category_id eq '7'}">노트북/PC</c:if>
-	                	<c:if test="${category_id eq '8'}">게임</c:if>
-	                	<c:if test="${category_id eq '9'}">가구/인테리어</c:if>
-	                </td>
 	            </tr>
 	            <tr id="hidden-row" style="display: none;"> <!-- 기본적으로 숨겨져 있는 행 -->
 			        <td></td>
@@ -86,20 +46,27 @@
 	                <td>가격</td>
 	                <td>
 					    <div class="price-filter" style="display: inline-block;">
-					        <input type="text" id="min-price" placeholder="최소 가격" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-					        ~ 
-					        <input type="text" id="max-price" placeholder="최대 가격" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+					        <input type="text" id="min-price" placeholder="최소 가격" oninput="this.value = formatNumber(this.value)" maxlength="10" style="margin-left:0;"/>
+					        <span>~</span> 
+					        <input type="text" id="max-price" placeholder="최대 가격" oninput="this.value = formatNumber(this.value)" maxlength="10"/>
 					    </div>
 					</td>
 	            </tr>
 	            <tr>
 	                <td>거래 방법</td>
 	                <td>
-		                <div class="options">
-		                    <input type="checkbox" name="delivery" id="delivery" value="1">
-		                    <label for="delivery">택배</label>
-		                    <input type="checkbox" name="direct" id="direct" value="2">
-		                    <label for="direct">직거래</label>
+		                <div class="status-filter">
+		                	<input type="checkbox" id="tradeAll" checked>
+			                <label for="tradeAll" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">모두</span>
+		                
+		                	<input type="checkbox" id="delivery">
+			                <label for="delivery" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">택배</span>
+			                
+			                <input type="checkbox" id="direct">
+			                <label for="direct" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">직거래</span>
 		                </div>
 	                </td>
 	            </tr>
@@ -107,54 +74,104 @@
 	                <td>상품 상태</td>
 	                <td>
 		                <div class="status-filter">
-		                    <input type="radio" name="product_status" id="new" value="new">
-		                    <label for="new">새상품</label>
-		                    <input type="radio" name="product_status" id="used" value="used">
-		                    <label for="used">중고</label>
+		                	<input type="checkbox" id="statusAll" checked>
+			                <label for="statusAll" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">모두</span>
+		                
+		                	<input type="checkbox" id="new">
+			                <label for="new" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">새상품</span>
+			                
+			                <input type="checkbox" id="used">
+			                <label for="used" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">중고</span>
 		                </div>
 	                </td>
 	            </tr>
-	            <tr>
-	            	<td colspan="2">
-	            		<button id="reset-btn" style="white-space: pre;">초기화</button>
-	            		<button id="search-btn" style="white-space: pre;" onclick="goSearch()">검색</button>
-	            	</td>
-	            </tr>
 	        </table>
+	        <div style="display: flex; justify-content: center; ">
+		        <div class="filter-control-box">
+		        	<button class="filter-btn" id="search-btn" onclick="applyPriceFilter()">검색</button>
+		        	<button class="filter-btn" id="reset-btn">초기화</button>
+		        </div>
+	        </div>
 	    </div>
-	    </form>
+	
 	    <!-- 정렬 박스 -->
 	    <div class="sort-box">
 		    <button class="sort-btn active" data-sort="recent">최신순</button> |
+		    <button class="sort-btn" data-sort="low-price">인기순</button> |
 		    <button class="sort-btn" data-sort="low-price">낮은가격순</button> |
 		    <button class="sort-btn" data-sort="high-price">높은가격순</button>
 		</div>
 	
 	    <!-- 상품 목록 -->
-		<div class="product-list">
-	    <c:forEach items="${dtos }" var="dto">
-        	<div class="item">
-        		<a href=javascript:goConsumer('${dto.getS_no() }')>
-            	<img src="${pageContext.request.contextPath}/resources/images/${dto.getImage_dir() }" alt="product image">
-            	<h3>${dto.getTitle() }</h3>
-            	<p>${dto.getPrice() }</p>
-            	<p>
-            	<c:choose>
-               	 	<c:when test="${dto.getArea() eq '' }">${dto.getReg_date() }</c:when>
-               	 	<c:otherwise>${dto.getArea() } | ${dto.getReg_date() }</c:otherwise>
-            	</c:choose>
-            	</p>
-            	</a>
-       		</div>
-        </c:forEach>
+		<div class="product-list" id="product-list">
+            <div class="product-card">
+                <div class="image-container">
+                    <img src="" alt="상품이미지">
+                </div>
+                <div class="product-info">
+                    <h3>상품명</h3>
+                    <span class="product-price">1,000원</span>
+                    <div class="product-meta">
+                        <span class="location">대전 오류동</span> | 
+                        <span class="upload-time">3시간 전</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="image-container">
+                    <img src="" alt="상품이미지">
+                </div>
+                <div class="product-info">
+                    <h3>상품명</h3>
+                    <span class="product-price">1,000원</span>
+                    <div class="product-meta">
+                        <span class="location">대전 오류동</span> | 
+                        <span class="upload-time">3시간 전</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="image-container">
+                    <img src="" alt="상품이미지">
+                </div>
+                <div class="product-info">
+                    <h3>상품명</h3>
+                    <span class="product-price">1,000원</span>
+                    <div class="product-meta">
+                        <span class="location">대전 오류동</span> | 
+                        <span class="upload-time">3시간 전</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="image-container">
+                    <img src="" alt="상품이미지">
+                </div>
+                <div class="product-info">
+                    <h3>상품명</h3>
+                    <span class="product-price">1,000원</span>
+                    <div class="product-meta">
+                        <span class="location">대전 오류동</span> | 
+                        <span class="upload-time">3시간 전</span>
+                    </div>
+                </div>
+            </div>
+            
+
 		</div>
 		
 		<!-- 페이징 버튼 -->
-		<nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-            	${pageDis }
-            </ul>
-        </nav>
+		<div class="pagination" id="pagination">
+			<a href><i class="fa-solid fa-angle-left"></i></a>
+			<a href class="active">1</a>
+			<a href>2</a>
+			<a href>3</a>
+			<a href>4</a>
+			<a href><i class="fa-solid fa-angle-right"></i></a>
+		</div>
 	</div>
 
 	<%@include file="footer.jsp" %>	
