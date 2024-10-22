@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page pageEncoding="UTF-8"%>
 <footer>
     <div class="footer-container">
         <div class="footer-left">
@@ -15,6 +15,17 @@
             <a href="#" class="facebook"><i class="fa-brands fa-facebook"></i></a>
             <a href="#" class="youtube"><i class="fa-brands fa-youtube"></i></a>
             <a href="#" class="instagram"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </div>
+    <!-- 추가된 div 상자 -->
+    <div class="footer-bottom-container">
+        <div class="footer-bottom-left">
+            <p>이용약관 | 개인정보처리방침 | 청소년보호정책 | 게시물 수집 및 이용 안내</p>
+            <p>고구마켓 고객센터</p>
+            <p class="msg">“고구마켓” 상점의 판매상품은 제휴한 모든 상품들에 대하여, (주)고구마켓은 통신판매중개자로서 거래 당사자가 아니며 <br>판매 책임과 구매 관련 간의 상품거래 정보 및 거래에 관여하지 않고, 어떠한 의무와 책임도 부담하지 않습니다.</p>
+        </div>
+        <div class="footer-bottom-right">
+            <p>카테고리 리스트</p>
         </div>
     </div>
 </footer>

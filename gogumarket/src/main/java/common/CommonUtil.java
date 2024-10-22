@@ -48,23 +48,23 @@ public class CommonUtil {
 		//첫번째 페이지 인덱스 화면이 아닌경우
 		if(current_page > pagenumber){
 			curpage = startpage -1;  //시작페이지 번호보다 1적은 페이지로 이동
-			strList = strList +"<a href=javascript:goPage('"+curpage+"') >이전</a>";
+			strList = strList +"<div data-page='"+curpage+"'><i class='fa-solid fa-angle-left'></i></div>";
 		}
 						
 		//시작페이지 번호부터 마지막 페이지 번호까지 화면에 표시
 		curpage = startpage;
 		while(curpage <= endpage){
 			if(curpage == current_page){
-				strList = strList +"<a class='active'>"+current_page+"</a>";
+				strList = strList +"<div class='active' data-page='"+curpage+"'>"+current_page+"</div>";
 			} else {
-				strList = strList +"<a href=javascript:goPage('"+curpage+"')>"+curpage+"</a>";
+				strList = strList +"<div data-page='"+curpage+"'>"+curpage+"</div>";
 			}
 			curpage++;
 		}
 		//뒤에 페이지가 더 있는 경우
 		if(total_page > endpage){
 			curpage = endpage+1;
-			strList = strList + "<a href=javascript:goPage('"+curpage+"') >다음</a>";
+			strList = strList + "<div data-page='"+curpage+"'><i class='fa-solid fa-angle-right'></i></div>";
 		}
 		return strList;
 	}			

@@ -1,7 +1,7 @@
 
 // 카테고리 배열
 const categories = [
-    "패션의류", "패션잡화", "가방/핸드백", "시계/쥬얼리", 
+   	"전체", "패션의류", "패션잡화", "가방/핸드백", "시계/쥬얼리", 
     "가전제품", "모바일/태블릿", "노트북/PC", "게임", "가구/인테리어"
 ];
 
@@ -21,44 +21,40 @@ document.getElementById('category-btn').addEventListener('click', function() {
 
 // 이벤트 위임: category-list 내부에서 클릭된 항목을 감지하여 처리
 document.getElementById('category-list').addEventListener('click', function(event) {
-    if (event.target && event.target.classList.contains('category-item')) {
-        document.getElementById('selected-category').textContent = event.target.textContent;
+	if (event.target && event.target.classList.contains('category-item')) {
+        // 선택된 카테고리의 이름
+        const selectedCategory = event.target.textContent;
+
+        // 카테고리 배열에서 선택된 카테고리의 인덱스 찾기
+        const categoryIndex = categories.indexOf(selectedCategory);
+
+        // hidden input에 값 설정
+        document.getElementById('category-id').value = categoryIndex;
+
+        // 선택된 카테고리 표시
+        document.getElementById('selected-category').textContent = selectedCategory;
+        document.getElementById('hidden-row').style.display = "none";
     }
-    document.getElementById('hidden-row').style.display = "none";
 });
-
-// 하트 찜 기능 이벤트 리스너 추가 함수
-function addWishlistEventListeners() {
-    document.querySelectorAll('.like-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            button.classList.toggle('liked');
-            const wishlistText = button.previousElementSibling.querySelector('.wishlist');
-            let currentWishlist = parseInt(wishlistText.textContent.replace('찜 ', ''), 10);
-            if (button.classList.contains('liked')) {
-                currentWishlist += 1;
-            } else {
-                currentWishlist -= 1;
-            }
-            wishlistText.textContent = `${currentWishlist}명 찜꽁!`;
-        });
-    });
-}
-
-// 초기 찜 기능 이벤트 리스너 설정
-addWishlistEventListeners();
-
 
 //초기화 기능
 document.getElementById('reset-btn').addEventListener('click', () => {
-    document.getElementById('selected-category').innerHTML = '';
+    document.getElementById('selected-category').innerHTML = '전체';
+    document.getElementById('category-id').value = '';
     document.getElementById('hidden-row').style.display = 'none';
     document.getElementById('min-price').value = '';
     document.getElementById('max-price').value = '';
-    document.getElementById('min-price-hidden').value = '';
-    document.getElementById('max-price-hidden').value = '';
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
-    document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
-    
+   	document.getElementById('tradeAll').checked = true;
+   	document.getElementById('delivery').checked = false;
+   	document.getElementById('direct').checked = false;
+   	document.getElementById('statusAll').checked = true;
+   	document.getElementById('new').checked = false;
+   	document.getElementById('used').checked = false;
+   	
+    const sortButtons = document.querySelectorAll('.sort-btn')
+    sortButtons.forEach(btn => btn.classList.remove('active')); // 모든 버튼 비활성화
+    const recentButton = document.getElementById('recent');
+    recentButton.classList.add('active'); // #recent 버튼 활성화
 });
 
 
@@ -111,27 +107,9 @@ statusAllCheckbox.addEventListener('change', handleStatusChange);
 statusNewCheckbox.addEventListener('change', handleStatusChange);
 statusUsedCheckbox.addEventListener('change', handleStatusChange);
 
-// 모든 정렬 버튼을 선택
-const sortButtons = document.querySelectorAll('.sort-btn');
-
-// 버튼 클릭 시 활성화 처리
-sortButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        sortButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-    });
-});
-
-
-
-
-
-
-
-
-
 
 // input price에 천 단위 콤마 추가 함수
 function formatNumber(value) {
     return value.replace(/[^0-9]/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+

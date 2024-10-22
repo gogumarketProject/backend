@@ -7,6 +7,11 @@
 </form>
 
 <header>
+	<!-- 상단 배너 -->
+    <div class="top-banner">
+    	<i class="fa-solid fa-gift"></i> <!-- 선물 아이콘 추가 -->
+        <span>고구마켓 고객이 판매하는 하루 10만개 가량의 상품을 편리하게 검색해보세요</span>
+    </div>
     <div class="header-container">
         <div class="logo">
         	<a href="javascript:location.href='market'" style="">Gogumarket</a>
