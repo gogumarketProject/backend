@@ -7,16 +7,21 @@
 </form>
 
 <header>
+	<!-- 상단 배너 -->
+    <div class="top-banner">
+    	<i class="fa-solid fa-gift"></i> <!-- 선물 아이콘 추가 -->
+        <span>고구마켓 고객이 판매하는 하루 10만개 가량의 상품을 편리하게 검색해보세요</span>
+    </div>
     <div class="header-container">
         <div class="logo">
         	<a href="javascript:location.href='market'" style="">Gogumarket</a>
        	</div>
-       		<form action="market" method="get">
+       		<form action="market" method="post">
 		        <div class="search-bar">
 		            <i class="fa-solid fa-magnifying-glass" style="color: black; margin-right: 5px;"></i>
 		           	<input type="text" name="search" value="${search }" placeholder="어떤 상품을 찾으시나요? 카페상품, 앱상품 모두 검색">
-		           	<input type="button" onclick="goList()" style="display:none;">
-		           	<input type="hidden" name="t_gubun" value="Search">
+		           	<input type="hidden" name="t_gubun" value="search">
+		           	<input type="submit" style="display:none;">
 		        </div>
 	        </form>
         <div class="search-buttons">

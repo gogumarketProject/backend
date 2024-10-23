@@ -13,45 +13,24 @@
     
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/product_list.css">
-    <script type="text/javascript">
-    	function goPage(page){
-    		paging.t_nowPage.value = page;
-    		paging.method = "get";
-    		paging.action = "market"
-    		paging.submit();
-    	}
-    	function goSearch(){
-    		paging.t_nowPage.value = page;
-    		paging.method = "get";
-    		paging.action = "market"
-    		paging.submit();
-    	}
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
 	<%@include file="header.jsp" %>
 	<%@include file="menu_bar.jsp" %>
 	<%@include file="message.jsp" %>
-    <form name="paging">
-    	<input type="hidden" name="t_gubun" value="Search">
-    	<input type="hidden" name="t_nowPage">
-    	<input type="hidden" name="search" value="${search }">
-    	<input type="hidden" name="category_id" value="${category_id }">
-    	<input type="hidden" name="min_price" value="${min_price }">
-    	<input type="hidden" name="max_price" value="${max_price }">
-    	<input type="hidden" name="trade" value="${trade }">
-    	<input type="hidden" name="product_status" value="${product_status }">
-    	<input type="hidden" name="sort" value="${sort }">
-    </form>
+    
 	<div class="container">
 	    <!-- 2열 4행 테이블 -->
-	    <form name="search">
-	    <input type="hidden" name="t_gubun" value="Search">
-	    <input type="hidden" name="category_id" id="category" value="${category_id }">
-	    <input type="hidden" name="search" value="${search }">
 	    <div class="table-container">
-	    	<span class="search-result">검색 결과</span>
+	    	<div class="table-title-con">
+	    		<span class="search-result"><strong><c:if test="${search ne '' }">'${search }'</c:if></strong> 검색 결과&nbsp;</span><span class="list-count" id="list-count"></span>
+	    		<input type="hidden" id="search-input" value="${search }">
+	    		<input type="hidden" id="category-id" value="${category_id }"/>
+	    	</div>
 	        <table id="details-table">
 	        	<colgroup>
 	        		<col width="15%">
@@ -62,20 +41,11 @@
 		                카테고리
 		                <button id="category-btn" class="category-btn">+</button>
 	                </td>
-	                <td id="selected-category"></td>
-	                <!-- 카테고리 선택 시 필터 적용되는 input 필드 추가 -->
-					<input type="text" id="category-input" placeholder="카테고리 선택" />
 	                <td id="selected-category">
-	                	<c:if test="${category_id eq ''}">전체</c:if>
-	                	<c:if test="${category_id eq '1'}">패션의류</c:if>
-	                	<c:if test="${category_id eq '2'}">패션잡화</c:if>
-	                	<c:if test="${category_id eq '3'}">가방/핸드백</c:if>
-	                	<c:if test="${category_id eq '4'}">시계/쥬얼리</c:if>
-	                	<c:if test="${category_id eq '5'}">가전제품</c:if>
-	                	<c:if test="${category_id eq '6'}">모바일/태블릿</c:if>
-	                	<c:if test="${category_id eq '7'}">노트북/PC</c:if>
-	                	<c:if test="${category_id eq '8'}">게임</c:if>
-	                	<c:if test="${category_id eq '9'}">가구/인테리어</c:if>
+	                	<c:choose>
+	                		<c:when test="${category eq '' }">전체</c:when>
+	                		<c:otherwise>${category }</c:otherwise>
+	                	</c:choose>
 	                </td>
 	            </tr>
 	            <tr id="hidden-row" style="display: none;"> <!-- 기본적으로 숨겨져 있는 행 -->
@@ -86,20 +56,27 @@
 	                <td>가격</td>
 	                <td>
 					    <div class="price-filter" style="display: inline-block;">
-					        <input type="text" id="min-price" placeholder="최소 가격" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-					        ~ 
-					        <input type="text" id="max-price" placeholder="최대 가격" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+					        <input type="text" id="min-price" placeholder="최소 가격" oninput="this.value = formatNumber(this.value)" maxlength="10" style="margin-left:0;"/>
+					        <span>~</span> 
+					        <input type="text" id="max-price" placeholder="최대 가격" oninput="this.value = formatNumber(this.value)" maxlength="10"/>
 					    </div>
 					</td>
 	            </tr>
 	            <tr>
 	                <td>거래 방법</td>
 	                <td>
-		                <div class="options">
-		                    <input type="checkbox" name="delivery" id="delivery" value="1">
-		                    <label for="delivery">택배</label>
-		                    <input type="checkbox" name="direct" id="direct" value="2">
-		                    <label for="direct">직거래</label>
+		                <div class="status-filter">
+		                	<input type="checkbox" name="trade" value="" id="tradeAll" checked>
+			                <label for="tradeAll" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">택배/직거래</span>
+		                
+		                	<input type="checkbox" name="trade" value="1" id="delivery">
+			                <label for="delivery" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">택배</span>
+			                
+			                <input type="checkbox" name="trade" value="2" id="direct">
+			                <label for="direct" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">직거래</span>
 		                </div>
 	                </td>
 	            </tr>
@@ -107,58 +84,320 @@
 	                <td>상품 상태</td>
 	                <td>
 		                <div class="status-filter">
-		                    <input type="radio" name="product_status" id="new" value="new">
-		                    <label for="new">새상품</label>
-		                    <input type="radio" name="product_status" id="used" value="used">
-		                    <label for="used">중고</label>
+		                	<input type="checkbox" name="productStatus" value="" id="statusAll" checked>
+			                <label for="statusAll" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">모두</span>
+		                
+		                	<input type="checkbox" name="productStatus" value="2" id="new">
+			                <label for="new" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">새상품</span>
+			                
+			                <input type="checkbox" name="productStatus" value="1" name="productStatus"name="productStatus"id="used">
+			                <label for="used" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
+			                <span class="label-text">중고</span>
 		                </div>
 	                </td>
 	            </tr>
-	            <tr>
-	            	<td colspan="2">
-	            		<button id="reset-btn" style="white-space: pre;">초기화</button>
-	            		<button id="search-btn" style="white-space: pre;" onclick="goSearch()">검색</button>
-	            	</td>
-	            </tr>
 	        </table>
+	        <div style="display: flex; justify-content: center; ">
+		        <div class="filter-control-box">
+		        	<button class="filter-btn" id="search-btn">검색</button>
+		        	<button class="filter-btn" id="reset-btn">초기화</button>
+		        </div>
+	        </div>
 	    </div>
-	    </form>
+	
 	    <!-- 정렬 박스 -->
 	    <div class="sort-box">
-		    <button class="sort-btn active" data-sort="recent">최신순</button> |
-		    <button class="sort-btn" data-sort="low-price">낮은가격순</button> |
-		    <button class="sort-btn" data-sort="high-price">높은가격순</button>
+	    	<c:choose>
+	    		<c:when test="${sort eq 'likes' }">
+	    			<button class="sort-btn" id="recent" data-sort="recent">최신순</button> |
+				    <button class="sort-btn active" id="likes" data-sort="likes">인기순</button> |
+				    <button class="sort-btn" id="low-price" data-sort="low-price">낮은가격순</button> |
+				    <button class="sort-btn" id="high-price" data-sort="high-price">높은가격순</button>
+	    		</c:when>
+	    		<c:otherwise>
+	    			<button class="sort-btn active" id="recent" data-sort="recent">최신순</button> |
+				    <button class="sort-btn" id="likes" data-sort="likes">인기순</button> |
+				    <button class="sort-btn" id="low-price" data-sort="low-price">낮은가격순</button> |
+				    <button class="sort-btn" id="high-price" data-sort="high-price">높은가격순</button>
+	    		</c:otherwise>
+	    	</c:choose>
 		</div>
 	
 	    <!-- 상품 목록 -->
-		<div class="product-list">
-	    <c:forEach items="${dtos }" var="dto">
-        	<div class="item">
-        		<a href=javascript:goConsumer('${dto.getS_no() }')>
-            	<img src="${pageContext.request.contextPath}/resources/images/${dto.getImage_dir() }" alt="product image">
-            	<h3>${dto.getTitle() }</h3>
-            	<p>${dto.getPrice() }</p>
-            	<p>
-            	<c:choose>
-               	 	<c:when test="${dto.getArea() eq '' }">${dto.getReg_date() }</c:when>
-               	 	<c:otherwise>${dto.getArea() } | ${dto.getReg_date() }</c:otherwise>
-            	</c:choose>
-            	</p>
-            	</a>
-       		</div>
-        </c:forEach>
+		<div class="product-list" id="product-list">
+			<div class="item placeholder">
+			    <div class="placeholder-image"></div>
+			    <div class="placeholder-content">
+			        <div class="placeholder-title"></div>
+			        <div class="placeholder-price"></div>
+			        <div class="placeholder-description"></div>
+			        <div class="placeholder-badge"></div>
+			    </div>
+			</div>
 		</div>
 		
 		<!-- 페이징 버튼 -->
-		<nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-            	${pageDis }
-            </ul>
-        </nav>
+		<div class="pagination" id="pagination"></div>
 	</div>
 
 	<%@include file="footer.jsp" %>	
 
     <script src="${pageContext.request.contextPath}/resources/js/product_list.js"></script>
+   	<script>
+ 		// 페이지 진입 시 실행
+ 		showLoadingPlaceholder();
+		goAjax(true);
+   		
+   	
+		// 페이징 컨테이너
+	    const pageContainer = document.getElementById('pagination');
+   	
+ 		// -------------------------------- 상세검색 ------------------------------- //
+ 		
+   		// 검색버튼
+	    const searchBtn = document.getElementById('search-btn');
+	    
+	    // 검색버튼 클릭 시
+	    searchBtn.addEventListener('click', function() {
+	    	showLoadingPlaceholder();
+	    	resetToFirstPage();
+	    	goAjax(true);
+	    	
+	    });
+
+	 	// -------------------------------- 정렬(sort) ------------------------------- //
+	    
+	 	// 모든 정렬 버튼을 선택
+		const sortButtons = document.querySelectorAll('.sort-btn');
+		
+		// 버튼 클릭 시 활성화 처리
+		sortButtons.forEach(button => {
+		    button.addEventListener('click', async function() {
+		    	showLoadingPlaceholder();
+		    	
+		        // 비동기 작업이 진행 중일 때 클릭을 무시
+		        if (this.classList.contains('active')) return;
+		
+		        resetToFirstPage();
+		        
+		        // 모든 버튼 비활성화
+		        sortButtons.forEach(btn => btn.classList.remove('active'));
+		        this.classList.add('active');
+		        
+		     	// 페이지 비동기 새로고침
+		        goAjax(true);
+		        
+		    });
+		});
+	 	
+	    
+	    // -------------------------------- 페이징 ------------------------------- //
+	    
+	    
+	 	// 페이지를 생성하는 함수
+	    function createPaging(pageDis) {
+	        // 기존 내용 삭제
+	        if(pageDis == ''){
+	        	pageContainer.innerHTML = "<div class='active' data-page='1'>1</div>";
+	        } else {
+	        	pageContainer.innerHTML = pageDis;
+	        }
+	        
+	    }
+
+	    // 이벤트 위임을 사용하여 클릭 이벤트 처리
+	    pageContainer.addEventListener('click', function(event) {
+	        // 클릭된 요소가 데이터 속성을 가진 div인지 확인
+	        if (event.target.dataset.page) {
+	            goPage.call(event.target);
+	        }
+	    });
+
+		 // 검색 또는 정렬 버튼 클릭 시 active 페이지를 첫 페이지로 설정
+	    function resetToFirstPage() {
+	      const firstPage = document.querySelector('.pagination .active');
+	      if (firstPage) {
+	        firstPage.classList.remove('active'); // 현재 활성화된 페이지 클래스 제거
+	      }
+	      const newActivePage = document.querySelector('.pagination div[data-page="1"]');
+	      newActivePage.classList.add('active'); // 첫 페이지에 active 클래스 추가
+	    }
+	    
+	    // 페이지 처리 함수
+	    function goPage() {
+	    	showLoadingPlaceholder();
+	    	
+	        // 기존 active 클래스 제거
+	        const activePage = pageContainer.querySelector('.active');
+	        if (activePage) activePage.classList.remove('active');
+	        
+	        // 클릭한 요소에 active 클래스 추가
+	        this.classList.add('active');
+	        
+	        // 페이지 비동기 새로고침
+	        goAjax(false);
+	        
+	        // 페이지 상단 이동
+	       	window.scrollTo({
+	       			top: 0,
+	       			left: 0,
+	       			behavior: 'smooth'
+	       	});
+	    }
+	    
+	    
+	    //페이징 출력
+	    function createTotalCount(count){
+	    	const totalCountContainer = document.getElementById('list-count');
+	    	
+	    	// 기존 내용 삭제
+	        totalCountContainer.innerHTML = '총 ' + count + '개';
+	    }
+	    
+	 // -------------------------------- Ajax ------------------------------- //
+	 
+		// event 시 비동기 새로고침 실행 함수
+	    function goAjax(paging){
+		 	var page = "";	
+		 
+		 	if(paging) page = "1";
+		 	else $('#pagination div.active').data('page');
+		 
+    		const filterData = {
+    			   search: $('#search-input').val().trim() || null, // 검색어
+                   categoryId: $('#category-id').val().trim(), // 카테고리 ID
+                   minPrice: $('#min-price').val().replace(/,/g, ''), // 최소 가격, 공백이면 null
+                   maxPrice: $('#max-price').val().replace(/,/g, ''), // 최대 가격, 공백이면 null
+                   trade: $('input[name="trade"]:checked').val(), // 거래 방식 선택된 값
+                   status: $('input[name="productStatus"]:checked').val(), // 상품 상태 선택된 값
+                   sort: $('button.sort-btn.active').data('sort'), // 정렬 기준
+                   page: $('#pagination div.active').data('page') // 현재 페이지 (없으면 기본값)
+	    	}
+	    	
+	    	// AJAX 요청
+            $.ajax({
+            	type: "GET",
+                url: "search",
+                data: filterData,
+                success: function(responseData) {
+                	const responseArray = JSON.parse(responseData);
+                	
+                	if(!responseArray){
+                		alert("data is null!");
+                		return false;
+                	}
+                	
+                	const product = responseArray[0];
+                	const pageDis = responseArray[1];
+                	const totalCount = responseArray[2];
+                	
+                	// 상품 목록 출력
+                	createProductCard(product);
+                	
+                	// 상품 갯수 출력
+                	createTotalCount(totalCount);
+                	
+                	// 페이징 출력
+                	createPaging(pageDis);
+                },
+                error: function(xhr, status, error) {
+                	alert("통신 실패!");
+                	console.log("상태 코드:", xhr.status);       // HTTP 상태 코드
+                    console.log("응답 텍스트:", xhr.responseText); // 서버가 반환한 에러 메시지
+                    console.log("에러 메시지:", error);          // JavaScript 오류 메시지
+                }
+            });
+	    }
+	 	// -------------------------------- 로딩 중 카드 플레이스 홀더 HTML 출력 ------------------------------- //
+	 	
+	 	// 데이터를 로드하기 전 플레이스홀더 추가
+		function showLoadingPlaceholder() {
+	 		
+			const productContainer = document.getElementById('product-list');
+			
+			// 기존 카드 삭제
+	        productContainer.innerHTML = ''; // 이전 카드 제거
+	 		
+		    for (let i = 0; i < 15; i++) { // 임의로 15개의 플레이스홀더 생성
+		        const placeholder = document.createElement('div');
+		        placeholder.className = 'item placeholder';
+		        placeholder.innerHTML = `
+		            <div class="placeholder-image"></div>
+		            <div class="placeholder-content">
+		                <div class="placeholder-title"></div>
+		                <div class="placeholder-price"></div>
+		                <div class="placeholder-description"></div>
+		                <div class="placeholder-badge"></div>
+		            </div>
+		        `;
+		        productContainer.appendChild(placeholder);
+		    }
+		}
+	 
+	 	// -------------------------------- Ajax로 가져온 값 HTML 출력 ------------------------------- //
+	 
+	    //상품 목록 출력
+	    function createProductCard(productList) {
+	        const productContainer = document.getElementById('product-list');
+
+	        // 기존 카드 삭제
+	        productContainer.innerHTML = ''; // 이전 카드 제거
+
+	        productList.forEach(product => {
+
+	         	// 새로운 div 요소 생성
+	            var newItem = document.createElement('div');
+	            newItem.className = 'item';
+
+	            // a 요소 생성
+	            var link = document.createElement('a');
+	            link.href = "javascript:goConsumer(" + product.s_no + ")";
+
+	            // 이미지 요소 생성
+	            var img = document.createElement('img');
+	            img.src = "${pageContext.request.contextPath}/resources/images/" + product.image_dir; // 이미지 경로 설정
+	            img.alt = 'product image';
+
+	            // 제목 h3 요소 생성
+	            var title = document.createElement('h3');
+	            title.textContent = product.title; // 제목 설정
+
+	            // 가격 p 요소 생성
+	            var price = document.createElement('p');
+	            price.textContent = product.price.trim(); // 가격 설정
+
+	            // 조건에 따른 내용 표시 p 요소 생성
+	            var description = document.createElement('p');
+
+	            // JSON 데이터의 유무에 따른 조건 처리
+	            if (product.area) {
+	                // 지역 있을 때 표시할 내용
+	                description.textContent = product.area + " | " + product.reg_date;
+	            } else {
+	                // 지역 없을 때 표시할 내용
+	                description.textContent = product.reg_date;
+	            }
+	            var payBadge = document.createElement('div');
+	            payBadge.className = 'pay-badge';
+	            payBadge.textContent = 'Pay';
+
+	            // a 요소에 이미지와 텍스트 추가
+	            link.appendChild(img);
+	            link.appendChild(title);
+	            link.appendChild(price);
+	            link.appendChild(description);
+	            link.appendChild(payBadge);
+
+	            // item div에 a 요소 추가
+	            newItem.appendChild(link);
+
+	            // product-list div에 item div 추가
+	            var productList = document.getElementById('product-list');
+	            productList.appendChild(newItem);
+	        });
+	    }
+	</script>
 </body>
 </html>

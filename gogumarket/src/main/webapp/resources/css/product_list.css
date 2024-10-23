@@ -7,9 +7,10 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f8f8;
+    margin-top: 200px
 }
 
-/* 상단 공백 및 검색 결과 제목 */
+/* ��� ���� �� �˻� ��� ���� */
 .top-space {
     height: 50px;
 }
@@ -21,92 +22,127 @@ body {
     margin-bottom: 40px;
 }
 
-/* 컨테이너 설정 */
+/* �����̳� ���� */
 .container {
-    max-width: 1200px;
+    width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 0 20px;
 }
 
-.search-result {
-    font-size: 43px; /* 폰트 크기를 50px로 설정 */
-    padding: 0 0 20px;
-    display:inline-block;
-}
-
-/* 테이블 스타일 */
+/* ���̺� ��Ÿ�� */
 .table-container {
     max-width: 100%;
     margin: 0 auto;
+    padding: 60px 0 0px;
+}
+
+.table-title-con{
+	display: flex;
+	align-items: center;
+	padding: 0 0 20px;
+}
+
+.search-result {
+    font-size: 25px; /* ��Ʈ ũ�⸦ 50px�� ���� */
+    display:inline-block;
+}
+
+.list-count{
+	font-size: 15px;
+	color: #5A616B;
+	margin: 4px 0 0 8px;
 }
 
 table {
     width: 100%;
-    border-collapse: collapse; /* 중첩된 테두리 제거 */
+    border-collapse: collapse; /* ��ø�� �׵θ� ���� */
 }
 
-table, td {
-    border: 1px solid black;
+
+tr{
+	border: 1px solid #d6d0d0;
+	border-right: none;
+	border-left: none;
+}
+
+tr:nth-child(1){
+	border-top: 2px solid black;
+}
+
+tr td:nth-child(1){
+	background: #efefef;
+	text-shadow: 0.4px 0 0 #141313;	
 }
 
 td {
-    padding: 20px;
+    padding: 16px 20px;
     vertical-align: middle;
 }
 
 .category-cell {
     display: flex;
-    align-items: center; /* 수직 가운데 정렬 */
-    position: relative; /* 버튼의 위치 제어 */
-    box-sizing: border-box; /* 테두리를 포함한 크기 계산 */
-    border: 0px solid #ccc; /* 원래 두께의 테두리 유지 */
+    align-items: center; /* ���� ��� ���� */
+    position: relative; /* ��ư�� ��ġ ���� */
+    box-sizing: border-box; /* �׵θ��� ������ ũ�� ��� */
+    border: 0px solid #ccc; /* ���� �β��� �׵θ� ���� */
 }
 
-/* 카테고리+ 버튼 테두리 없애기 */
+/* ī�װ�+ ��ư �׵θ� ���ֱ� */
 .category-btn {
     position: absolute;
-    right: 20px;
-    background: none; /* 배경 제거 */
-    border: none; /* 테두리 제거 */
-    font-size: 40px; /* 원하는 크기로 조절 */
-    cursor: pointer; /* 커서 모양을 손가락 모양으로 변경 */
-    padding: 0; /* 불필요한 여백 제거 */
-    color : #adadad;
+    right: 19px;
+    background: none; /* ��� ���� */
+    border: none; /* �׵θ� ���� */
+    font-size: 32px; /* ���ϴ� ũ��� ���� */
+    cursor: pointer; /* Ŀ�� ����� �հ��� ������� ���� */
+    padding: 0; /* ���ʿ��� ���� ���� */
+    color : #c6c6c6;
 }
 
-/* td 거래방법 */
-.options {
-    display: flex;
-    align-items: center; /* 자식 요소를 수직 중앙 정렬 */
-    gap: 10px; /* 자식 요소 사이의 간격을 줌 */
+#category-list{
+	cursor: pointer;
+	color:#4a4848;
+	display: flex;
+	justify-content: left;
+	gap:22px; 
+	font-size:14px;
+	text-shadow:none;
+	width: 800px
 }
 
-/* 리셋 버튼 위치 */
-.filter-container {
-    display: flex;
-    justify-content: space-between; /* 좌측 요소는 좌측, 버튼은 우측 */
-    align-items: center; /* 수직 정렬 */
-}
 
-#reset-btn {
-    padding: 5px 10px;
-    background-color: #007BFF;
-    color: white;
+.filter-control-box button {
+    width: 70px;
+    padding: 9px 10px;
+    color: #181717;
     border: none;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 15px 2px;
+	border: 1px solid #c3bfbf;
+	background-color: #f8f8f8;
+	text-shadow: 0.7px 0 0.3px #181717;
+	transition: transform 0.4s ease, background-color 0.4s ease;
 }
 
-#search-btn {
-    padding: 5px 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
+#search-btn{
+	background-color: #252323;
+	color: white;
+	text-shadow: 0.7px 0 0.3px white;
 }
 
-/* 필터 박스 */
+#search-btn:hover{
+	background-color: #7c7979;
+}
+
+#reset-btn:hover{
+	background-color: #aeaeae;
+	color: #fff;
+    text-shadow: 0.7px 0 0.3px #fff;
+}
+
+/* ���� �ڽ� */
 .filter-box {
     display: flex;
     justify-content: space-between;
@@ -117,35 +153,97 @@ td {
     padding: 20px;
 }
 
+.price-filter span{
+	font-size: 14px;
+}
+
 .price-filter input {
-    width: 100px;
-    margin-right: 10px;
-    padding: 5px;
+    width: 120px;
+    margin: 0 10px;
+    padding: 11px 7px;
+    border: 1px solid rgb(220 220 220);
+    background-color: #f8f8f8;
+    text-shadow: 0.2px 0.2px 0 rgb(220 220 220);
 }
 
 .price-filter input, .apply-btn {
-    display: inline-block; /* 줄바꿈 없이 나란히 배치 */
-    margin-left: 5px; /* 약간의 여백 추가 */
+    display: inline-block; /* �ٹٲ� ���� ������ ��ġ */
+    font-size: 14px;
+    border-radius: 5px;
 }
 
 .apply-btn {
-    padding: 5px 10px;
-    background-color: #007BFF;
+    background-color: #141313;
+    margin-left: 5px;
     color: white;
     border: none;
     cursor: pointer;
-    border-radius: 3px;
+    height: 42px;
+    letter-spacing: 1px;
+    padding: 0 12px;
+    text-shadow: 0px 0.5px 0 white;
+    transition: background-color 0.3s ease;
 }
 
 .apply-btn:hover {
-    background-color: #0056b3;
+    background-color: #393535;
 }
 
-/* 정렬 박스 */
+
+
+
+.options {
+    display: flex;
+    align-items: center; /* �ڽ� ��Ҹ� ���� �߾� ���� */
+    gap: 7px; /* �ڽ� ��� ������ ������ �� */
+}
+
+.options input[type="checkbox"], .status-filter input[type="checkbox"] {
+    display: none;
+}
+
+/* ���� ���� �ڽ� ��Ÿ�Ϸ� ���� */
+.round-checkbox {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-radius: 50%; /* ���� ����� */
+    vertical-align: middle;
+    text-align: center; /* �ؽ�Ʈ�� �߾� ���� */
+    line-height: 20px; /* ��Ʈ�� �ڽ��� ���� ���� */
+    font-size: 14px; /* üũ ǥ���� ũ�� */
+    color:#b9b9b9;
+}
+
+/* üũ�ڽ��� üũ�Ǿ��� �� ���� �ڽ� ��ü ���� �� üũ ǥ�� */
+.options input[type="checkbox"]:checked + .round-checkbox, 
+.status-filter input[type="checkbox"]:checked + .round-checkbox {
+    background-color: #0dcb5a; /* ���� */
+    border-color: #0dcb5a; /* �׵θ� �� */
+    color: white; /* üũ ǥ�� �� */
+}
+
+/* �ؽ�Ʈ ��Ÿ�� */
+.label-text {
+    font-size: 16px;
+    vertical-align: middle;
+    margin-right: 20px; /* ���� üũ�ڽ����� ���� */
+}
+
+
+
+
+
+
+
+/* ����Ʈ ��� */
+
+/* ���� �ڽ� */
 .sort-box {
     display: flex;
     justify-content: flex-end;
-    margin: 35px 5px 15px;
+    margin: 0px 5px;
     font-size: 14px;
     color: #767976;
     font-weight: bold;
@@ -161,72 +259,117 @@ td {
 }
 
 .sort-btn.active {
-    color: black; /* 활성화된 버튼의 색상 */
+    color: black; /* Ȱ��ȭ�� ��ư�� ���� */
     font-weight: bold;
 }
 
-/* 상품 리스트 */
+/* ��ǰ ����Ʈ */
 .product-list {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 20px;
+	padding: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-bottom: 30px;
 }
 
-/* 상품 카드 */
-.product-card {
-    background-color: white;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative;
+/* 카드 전체 컨테이너 스타일 */
+.items-section {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-bottom: 30px;
 }
 
-/* 이미지 정사각형 박스 */
-.image-container {
-    width: 100%;
-    padding-top: 100%; /* 정사각형 비율 유지 */
-    position: relative;
+.items-section h2 {
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 14px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.slider {
     overflow: hidden;
-    border-radius: 8px;
-    background-color: #f0f0f0; /* 이미지가 없을 때 배경색 */
+    position: relative;
 }
 
-.image-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-/* 상품 정보 */
 .items {
     display: flex;
+    flex-wrap: nowrap; /* 한 줄에 모든 카드가 정렬되도록 함 */
     transition: transform 0.5s ease;
     width: 100%;
 }
 
+/* 각 상품 카드 */
 .item {
-    background-color: white;
-    padding: 10px;
-    margin: 0px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    flex: 0 0 18.4%; /* 아이템이 5개 보이도록 수정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 세로 정렬을 고르게 유지 */
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
+    height: 100%; /* 카드 전체 높이를 고정 */
 }
 
+/* 카드 내부의 이미지 */
 .item img {
     width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
+    height: 200px; /* 이미지 높이를 조절하여 카드 크기 맞춤 */
+    object-fit: cover; /* 이미지 크기를 유지하며 잘림 */
+    margin-top: 10px;
+    border-radius: 7px; /* 둥근 모서리를 제거하여 네모난 형태로 */
+    transition: transform 0.3s ease-in-out; /* 부드러운 확대 효과를 위한 전환 */
 }
 
+/* 호버 시 확대 효과 적용 */
+.item:hover img {
+    transform: scale(1.05); /* 이미지 확대 비율 */
+}
+
+/* 카드의 제목 */
 .item h3 {
-    font-size: 16px;
+    font-size: 14px;
     margin: 10px 0 5px;
+    color: black;
+    font-family : 'NanumSquare', sans-serif;
+    font-weight : 400;
+    line-height: 1.4em; /* 줄 간격 설정 */
+    max-height: 2.8em; /* 두 줄로 제한 (1.4em × 2) */
+    min-height: 2.8em; /* 한 줄이어도 두 줄 높이로 고정 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 텍스트가 넘칠 때 생략표시(...) 추가 */
+    white-space: normal;
+}
+
+/* 가격 정보 */
+.item p:first-of-type {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 5px 0;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+/* 지역 및 시간 정보 */
+.item p:last-of-type {
+    font-size: 12px;
+    font-family : 'NanumSquare', sans-serif;
+    font-weight : 400;
+    color: #555;
+    text-align: left;
+}
+
+/* Pay 배지 스타일 */
+.pay-badge {
+    background-color: #2ecc71;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 5px;
 }
 
 .item p {
@@ -234,37 +377,65 @@ td {
     color: #555;
 }
 
-/* 찜 버튼 */
-.like-btn {
-    position: absolute;
-    top: 12px;
-    right: 17px;
-    background: none;
-    border: none;
-    font-size: 35px;
-    cursor: pointer;
-    color: #bababa; /* 비활성화 상태의 색상 */
+/* 카드 내부의 텍스트 정렬 */
+.item-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 텍스트와 배지를 위쪽에 정렬 */
+    height: 100%;
+    flex-grow: 1; /* 여유 공간을 차지하도록 설정 */
 }
 
-.like-btn.liked {
-    color: red;
+.item-text p {
+    margin: 0;
 }
 
-/* 페이지네이션 */
+/* 상품 정보의 배지와 텍스트 높이 맞춤 */
+.item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* 아이템의 마지막 부분으로 배치 */
+}
+
+/* ���������̼� */
 .pagination {
+    text-align: center;
+    margin: 10px 0 30px;
     display: flex;
     justify-content: center;
-    margin: 20px 0 0;
+    gap: 5px;
 }
 
-.pagination span {
-	font-size: 20px;
-    margin: 0 5px;
-    cursor: pointer;
+.pagination div{
+	width:40px;
+	height:40px;
+    font-size: 16px;
+    padding: 4px 4px;
+    color: #3b3b3b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s ease, background-color 0.5s ease;
 }
 
-.pagination span:hover {
+.pagination div:hover {
     text-decoration: underline;
+    color:#2ee075bf;
+    font-weight: 600;
+}
+.pagination .active:hover{
+	text-decoration:none;
+	color:white;
+	font-weight: 600;
+    font-size: 17px;
+    background: #1de16bde;
+}
+
+.pagination .active{
+	color:white;
+	background-color: #0dcc5acc;
+	border-radius: 5px;
 }
 
 .product-list {
@@ -287,4 +458,78 @@ td {
 }
 .page-number {
     cursor: pointer;
+}
+
+
+/* Placeholder 기본 스타일 */
+.item.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    border: none;
+    background-color: #f8f8f8;
+    width: 212px;
+    height: 310px;
+    margin: 10px 0px 20px 0px;
+}
+
+/* Placeholder 이미지 */
+.placeholder-image {
+    width: 100%;
+    height: 200px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 0px;
+    animation: loading 1.5s infinite ease-in-out;
+}
+
+/* Placeholder 텍스트 요소들 */
+.placeholder-content {
+    width: 100%;
+}
+
+.placeholder-title,
+.placeholder-price,
+.placeholder-description,
+.placeholder-badge {
+    height: 15px;
+    background-color: #e0e0e0;
+    margin: 5px 0;
+    border-radius: 4px;
+    animation: loading 1.5s infinite ease-in-out;
+}
+
+/* Placeholder 개별 요소 높이 설정 */
+.placeholder-title {
+    width: 70%;
+    height: 20px;
+}
+
+.placeholder-price {
+    width: 40%;
+    height: 15px;
+}
+
+.placeholder-description {
+    width: 90%;
+    height: 15px;
+}
+
+.placeholder-badge {
+    width: 30%;
+    height: 20px;
+}
+
+/* 로딩 애니메이션 효과 */
+@keyframes loading {
+    0% {
+        background-color: #e0e0e0;
+    }
+    50% {
+        background-color: #f0f0f0;
+    }
+    100% {
+        background-color: #e0e0e0;
+    }
 }

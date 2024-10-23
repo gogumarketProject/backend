@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 Manifest-Version: 1.0
 Built-By: minseok
 Build-Jdk: 11.0.24
 Created-By: Maven Integration for Eclipse
 
+=======
+Manifest-Version: 1.0
+Built-By: Hoejun
+Build-Jdk: 11.0.24
+Created-By: Maven Integration for Eclipse
+
+>>>>>>> 2a7b04af3cf117106586fef712da6e45be93db8e
