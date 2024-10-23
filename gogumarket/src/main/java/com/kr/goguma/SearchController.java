@@ -2,8 +2,6 @@ package com.kr.goguma;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,7 +20,7 @@ import dto.salesDto;
 @Controller
 public class SearchController {
 	
-	// 검색, 메뉴바-카테고리
+		// 검색, 메뉴바-카테고리(비동기)
 		@RequestMapping(value = "search", method = { RequestMethod.GET, RequestMethod.POST })
 		
 		public void searchList(
@@ -39,10 +37,12 @@ public class SearchController {
 			salesDao dao = new salesDao();
 			ObjectMapper mapper = new ObjectMapper();
 		    // 기본값 처리
-		    if(search == null) search = "";
-		    if(categoryId == null) categoryId = "";
+		    if (search == null) search = "";
+		    if (categoryId == null) categoryId = "";
 		    if (minPrice == null || minPrice.equals("")) minPrice = "0";
 		    if (maxPrice == null || maxPrice.equals("")) maxPrice = "99999999";
+		    if (trade == null) trade = "";
+		    if (status == null) status = "";
 		    if (sort.equals("recent")) sort = "s_no desc";
 		    if (sort.equals("likes")) sort = "likes desc";
 		    if (sort.equals("low-price")) sort = "price asc";

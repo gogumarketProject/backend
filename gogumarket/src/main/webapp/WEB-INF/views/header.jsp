@@ -16,12 +16,12 @@
         <div class="logo">
         	<a href="javascript:location.href='market'" style="">Gogumarket</a>
        	</div>
-       		<form action="market" method="get">
+       		<form action="market" method="post">
 		        <div class="search-bar">
 		            <i class="fa-solid fa-magnifying-glass" style="color: black; margin-right: 5px;"></i>
 		           	<input type="text" name="search" value="${search }" placeholder="어떤 상품을 찾으시나요? 카페상품, 앱상품 모두 검색">
-		           	<input type="button" onclick="goList()" style="display:none;">
-		           	<input type="hidden" name="t_gubun" value="Search">
+		           	<input type="hidden" name="t_gubun" value="search">
+		           	<input type="submit" style="display:none;">
 		        </div>
 	        </form>
         <div class="search-buttons">

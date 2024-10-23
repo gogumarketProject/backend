@@ -18,15 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,16 +31,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import common.CommonExecute;
-import common.CommonUtil;
 import dao.salesDao;
-import dto.salesDto;
 import member.command.GoogleLogin;
 import member.command.Login;
 import member.command.MemberLogin;
 import product.command.ConsumerView;
 import product.command.IndexView;
 import product.command.PriceOffer;
-import product.command.SeachList;
 import product.command.UpdateView;
 import product.command.UploadDelete;
 import product.command.UploadSales;
@@ -122,9 +116,21 @@ public class GogumaController {
 			viewPage = "product_sell_consumer";
 		}
 		//검색 및 메뉴 > 카테고리 클릭
-		else if(gubun.equals("Search")) {
-			CommonExecute goguma = new SeachList();
-			goguma.execute(request);
+		else if(gubun.equals("search")) {
+			String search = request.getParameter("search");
+			String category = request.getParameter("category");
+			String category_id = request.getParameter("category_id");
+			String sort = request.getParameter("sort");
+			
+			if(search == null) search = "";
+			if(category == null) category = "";
+			if(category_id == null) category_id = "";
+			if(sort == null) sort = "";
+			
+			model.addAttribute("search", search);
+			model.addAttribute("category", category);
+			model.addAttribute("category_id", category_id);
+			model.addAttribute("sort", sort);
 			viewPage = "product_list";
 		}
 		//판매자 물품 수정창 폼 이동

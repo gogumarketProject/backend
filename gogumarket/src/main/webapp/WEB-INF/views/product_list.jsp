@@ -27,9 +27,9 @@
 	    <!-- 2열 4행 테이블 -->
 	    <div class="table-container">
 	    	<div class="table-title-con">
-	    		<span class="search-result"><strong>'${search }'</strong> 검색 결과&nbsp;</span><span class="list-count" id="list-count">총 N개</span>
+	    		<span class="search-result"><strong><c:if test="${search ne '' }">'${search }'</c:if></strong> 검색 결과&nbsp;</span><span class="list-count" id="list-count"></span>
 	    		<input type="hidden" id="search-input" value="${search }">
-	    		<input type="hidden" id="category-id" value=""/>
+	    		<input type="hidden" id="category-id" value="${category_id }"/>
 	    	</div>
 	        <table id="details-table">
 	        	<colgroup>
@@ -41,7 +41,12 @@
 		                카테고리
 		                <button id="category-btn" class="category-btn">+</button>
 	                </td>
-	                <td id="selected-category">전체</td>
+	                <td id="selected-category">
+	                	<c:choose>
+	                		<c:when test="${category eq '' }">전체</c:when>
+	                		<c:otherwise>${category }</c:otherwise>
+	                	</c:choose>
+	                </td>
 	            </tr>
 	            <tr id="hidden-row" style="display: none;"> <!-- 기본적으로 숨겨져 있는 행 -->
 			        <td></td>
@@ -63,7 +68,7 @@
 		                <div class="status-filter">
 		                	<input type="checkbox" name="trade" value="" id="tradeAll" checked>
 			                <label for="tradeAll" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
-			                <span class="label-text">모두</span>
+			                <span class="label-text">택배/직거래</span>
 		                
 		                	<input type="checkbox" name="trade" value="1" id="delivery">
 			                <label for="delivery" class="round-checkbox"><i class="fa-solid fa-check"></i></label>
@@ -104,30 +109,48 @@
 	
 	    <!-- 정렬 박스 -->
 	    <div class="sort-box">
-		    <button class="sort-btn active" id="recent" data-sort="recent">최신순</button> |
-		    <button class="sort-btn" id="likes" data-sort="likes">인기순</button> |
-		    <button class="sort-btn" id="low-price" data-sort="low-price">낮은가격순</button> |
-		    <button class="sort-btn" id="high-price" data-sort="high-price">높은가격순</button>
+	    	<c:choose>
+	    		<c:when test="${sort eq 'likes' }">
+	    			<button class="sort-btn" id="recent" data-sort="recent">최신순</button> |
+				    <button class="sort-btn active" id="likes" data-sort="likes">인기순</button> |
+				    <button class="sort-btn" id="low-price" data-sort="low-price">낮은가격순</button> |
+				    <button class="sort-btn" id="high-price" data-sort="high-price">높은가격순</button>
+	    		</c:when>
+	    		<c:otherwise>
+	    			<button class="sort-btn active" id="recent" data-sort="recent">최신순</button> |
+				    <button class="sort-btn" id="likes" data-sort="likes">인기순</button> |
+				    <button class="sort-btn" id="low-price" data-sort="low-price">낮은가격순</button> |
+				    <button class="sort-btn" id="high-price" data-sort="high-price">높은가격순</button>
+	    		</c:otherwise>
+	    	</c:choose>
 		</div>
 	
 	    <!-- 상품 목록 -->
-		<div class="product-list" id="product-list"></div>
-		<!-- 페이징 버튼 -->
-		<div class="pagination" id="pagination">
-		    <div class="prev"><i class="fa-solid fa-angle-left"></i></div>
-		    <div class="active" data-page="1">1</div>
-		    <div data-page="2">2</div>
-		    <div data-page="3">3</div>
-		    <div data-page="4">4</div>
-		    <div class="next"><i class="fa-solid fa-angle-right"></i></div>
+		<div class="product-list" id="product-list">
+			<div class="item placeholder">
+			    <div class="placeholder-image"></div>
+			    <div class="placeholder-content">
+			        <div class="placeholder-title"></div>
+			        <div class="placeholder-price"></div>
+			        <div class="placeholder-description"></div>
+			        <div class="placeholder-badge"></div>
+			    </div>
+			</div>
 		</div>
+		
+		<!-- 페이징 버튼 -->
+		<div class="pagination" id="pagination"></div>
 	</div>
 
 	<%@include file="footer.jsp" %>	
 
     <script src="${pageContext.request.contextPath}/resources/js/product_list.js"></script>
    	<script>
+ 		// 페이지 진입 시 실행
+ 		showLoadingPlaceholder();
+		goAjax(true);
    		
+   	
 		// 페이징 컨테이너
 	    const pageContainer = document.getElementById('pagination');
    	
@@ -138,15 +161,10 @@
 	    
 	    // 검색버튼 클릭 시
 	    searchBtn.addEventListener('click', function() {
+	    	showLoadingPlaceholder();
 	    	resetToFirstPage();
 	    	goAjax(true);
 	    	
-	    	// 페이지 상단 이동
-	       	window.scrollTo({
-	       			top: 0,
-	       			left: 0,
-	       			behavior: 'smooth'
-	       	});
 	    });
 
 	 	// -------------------------------- 정렬(sort) ------------------------------- //
@@ -157,6 +175,8 @@
 		// 버튼 클릭 시 활성화 처리
 		sortButtons.forEach(button => {
 		    button.addEventListener('click', async function() {
+		    	showLoadingPlaceholder();
+		    	
 		        // 비동기 작업이 진행 중일 때 클릭을 무시
 		        if (this.classList.contains('active')) return;
 		
@@ -165,16 +185,10 @@
 		        // 모든 버튼 비활성화
 		        sortButtons.forEach(btn => btn.classList.remove('active'));
 		        this.classList.add('active');
-		
+		        
 		     	// 페이지 비동기 새로고침
 		        goAjax(true);
 		        
-		        // 페이지 상단 이동
-		       	window.scrollTo({
-		       			top: 0,
-		       			left: 0,
-		       			behavior: 'smooth'
-		       	});
 		    });
 		});
 	 	
@@ -185,7 +199,12 @@
 	 	// 페이지를 생성하는 함수
 	    function createPaging(pageDis) {
 	        // 기존 내용 삭제
-	        pageContainer.innerHTML = pageDis;
+	        if(pageDis == ''){
+	        	pageContainer.innerHTML = "<div class='active' data-page='1'>1</div>";
+	        } else {
+	        	pageContainer.innerHTML = pageDis;
+	        }
+	        
 	    }
 
 	    // 이벤트 위임을 사용하여 클릭 이벤트 처리
@@ -208,6 +227,8 @@
 	    
 	    // 페이지 처리 함수
 	    function goPage() {
+	    	showLoadingPlaceholder();
+	    	
 	        // 기존 active 클래스 제거
 	        const activePage = pageContainer.querySelector('.active');
 	        if (activePage) activePage.classList.remove('active');
@@ -289,7 +310,32 @@
                 }
             });
 	    }
-	    
+	 	// -------------------------------- 로딩 중 카드 플레이스 홀더 HTML 출력 ------------------------------- //
+	 	
+	 	// 데이터를 로드하기 전 플레이스홀더 추가
+		function showLoadingPlaceholder() {
+	 		
+			const productContainer = document.getElementById('product-list');
+			
+			// 기존 카드 삭제
+	        productContainer.innerHTML = ''; // 이전 카드 제거
+	 		
+		    for (let i = 0; i < 15; i++) { // 임의로 15개의 플레이스홀더 생성
+		        const placeholder = document.createElement('div');
+		        placeholder.className = 'item placeholder';
+		        placeholder.innerHTML = `
+		            <div class="placeholder-image"></div>
+		            <div class="placeholder-content">
+		                <div class="placeholder-title"></div>
+		                <div class="placeholder-price"></div>
+		                <div class="placeholder-description"></div>
+		                <div class="placeholder-badge"></div>
+		            </div>
+		        `;
+		        productContainer.appendChild(placeholder);
+		    }
+		}
+	 
 	 	// -------------------------------- Ajax로 가져온 값 HTML 출력 ------------------------------- //
 	 
 	    //상품 목록 출력
@@ -333,12 +379,16 @@
 	                // 지역 없을 때 표시할 내용
 	                description.textContent = product.reg_date;
 	            }
+	            var payBadge = document.createElement('div');
+	            payBadge.className = 'pay-badge';
+	            payBadge.textContent = 'Pay';
 
 	            // a 요소에 이미지와 텍스트 추가
 	            link.appendChild(img);
 	            link.appendChild(title);
 	            link.appendChild(price);
 	            link.appendChild(description);
+	            link.appendChild(payBadge);
 
 	            // item div에 a 요소 추가
 	            newItem.appendChild(link);

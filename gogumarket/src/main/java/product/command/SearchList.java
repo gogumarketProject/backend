@@ -16,7 +16,7 @@ import common.CommonUtil;
 import dao.salesDao;
 import dto.salesDto;
 
-public class SeachList implements CommonExecute {
+public class SearchList implements CommonExecute {
 
 	@Override
 	public void execute(HttpServletRequest request) {

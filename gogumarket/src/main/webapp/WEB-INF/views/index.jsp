@@ -16,44 +16,13 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
     <script>
-		function goLogin() {
-			mem.t_gubun.value = "login";
-			mem.method = "post";
-			mem.action = "market";
-			mem.submit();
-		}
-		
-		function goWrite() {
-			mem.t_gubun.value = "writeForm";
-			mem.method = "post";
-			mem.action = "market";
-			mem.submit();
-		}
-		
-		function goMyPage() {
-			mem.t_gubun.value = "myPage";
-			mem.method = "post";
-			mem.action = "market";
-			mem.submit();
-		}
-		function goConsumer(no){
-			mem.t_gubun.value = "Consumer";
-			mem.s_no.value = no;
-			mem.method = "post";
-			mem.action = "market";
-			mem.submit();
-		}
-		function goSeller(){
-			mem.t_gubun.value = "Seller";
-			mem.method = "post";
-			mem.action = "market";
-			mem.submit();
-		}
-		function goLogout(){
-			mem.method = "get";
-			mem.action = "logout";
-			mem.submit();
-		}
+    	function goSortSearch(sort){
+    		sortSearch.sort.value = sort;
+    		
+    		sortSearch.method = "post";
+    		sortSearch.action = "market";
+    		sortSearch.submit();
+    	}
     </script>
 </head>
 <body>
@@ -61,7 +30,10 @@
 	<%@include file="menu_bar.jsp" %>
 	<%@include file="message.jsp" %>
 
-
+	<form name="sortSearch">
+		<input type="hidden" name="sort">
+		<input type="hidden" name="t_gubun" value="search">
+	</form>
     <!-- 배너 슬라이더 -->
     <div class="banner-slider">
 	    <button class="arrow left" onclick="prevBanner()">&#9664;</button>
@@ -97,7 +69,7 @@
     
     <!-- 실시간 인기 상품 섹션 -->
     <section class="items-section">
-        <h2>실시간 인기 상품 <a href="#" class="view-more-link">바로가기 ></a></h2>
+        <h2>실시간 인기 상품 <a href="javascript:goSortSearch('likes')" class="view-more-link">바로가기 ></a></h2>
         <div class="slider">
             <button class="arrow left" onclick="slideLeftPopular()">&#9664;</button>
             <div class="items" id="popularItemContainer">
@@ -132,7 +104,7 @@
 
     <!-- 방금 등록된 상품 섹션 -->
     <section class="items-section">
-        <h2>방금 등록된 상품 <a href="#" class="view-more-link">바로가기 ></a></h2>
+        <h2>방금 등록된 상품 <a href="javascript:goSortSearch('recent')" class="view-more-link">바로가기 ></a></h2>
         <div class="slider">
             <button class="arrow left" onclick="slideLeft()">&#9664;</button>
             <div class="items" id="itemContainer">
