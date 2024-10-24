@@ -24,6 +24,8 @@ public class Uploadupdate implements CommonExecute {
 		String msg = "", url = "";
 			int s_no = Integer.parseInt(request.getParameter("s_no"));
 			String price = request.getParameter("price");
+			//,로 넘어오는거 공백으로 바꾸는거 추가d
+			price = price.replace(",", "");
 			String category_id = request.getParameter("category_id");
 			String title	= request.getParameter("title");
 			String contents	= request.getParameter("contents");

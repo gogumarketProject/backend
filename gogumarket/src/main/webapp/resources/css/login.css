@@ -66,12 +66,93 @@ body, html {
 }
 
 .login-box .google-btn {
-    background-color: #5e4bc9;
-    color: white;
+    background-color: #4285f4; /* 구글 블루 배경색 */
+    font-size: 12px; /* 버튼 텍스트 크기 */
+    line-height: 1; /* 줄 간격 */
+    display: inline-flex; /* 버튼 내부의 요소들이 한 줄에 표시되도록 설정 */
+    align-items: center; /* 아이콘과 텍스트가 수직으로 중앙에 정렬 */
+    cursor: pointer; /* 마우스 커서가 버튼 위에 있을 때 손가락 모양으로 변경 */
+    transition: all 0.3s ease-in-out; /* 모든 상태 변화에 트랜지션 효과 */
+    font-weight: 500; /* 글씨 두께 */
+    font-family: 'font-body'; /* 폰트 패밀리 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    border: none; /* 테두리 없음 */
+    outline: none; /* 포커스 시 외곽선 없음 */
+    border-radius: 0.55rem; /* 모서리 둥글게 */
+    color: white; /* 기본 텍스트 색상 */
+    padding: 1rem 1.25rem; /* 상하 패딩 1rem, 좌우 패딩 1.25rem */
+    justify-content: center; /* 아이콘과 텍스트를 가운데 정렬 */
+    width: 100%; /* 너비 100% */
+    margin-top: -0.5rem; /* 위쪽 여백 */
+    
+    height: 2.75rem; /* 높이 */
 }
+
+.google-btn:hover {
+    background-color: #357ae8; /* 호버 시 더 어두운 구글 블루 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 */
+}
+
+.google-btn i {
+    font-size: 1rem; /* 아이콘 크기 */
+    margin-right: 0.375rem; /* 텍스트와 아이콘 사이 간격 */
+    margin-left: 0.575rem; /* 아이콘을 오른쪽으로 이동시키기 위한 여백 */
+    display: flex; /* 아이콘 래퍼를 flex 컨테이너로 설정 */
+    align-items: center; /* 아이콘을 수직으로 중앙 정렬 */
+}
+
+.label-google {
+    font-size: 14px; /* 글씨 크기 조정 */
+    flex-grow: 1; /* 텍스트가 가능한 공간을 차지하도록 설정 */
+    margin-right: 1.375rem; /* 아이콘과 텍스트 사이 공간 */
+    text-align: center; /* 텍스트는 왼쪽 정렬 */
+    margin-left: 35px; /* 텍스트 왼쪽에 여백 추가하여 오른쪽으로 밀기 */
+}
+
 
 .naver-btn {
     background-color: #03C75A;
+}
+.naver-login-btn {
+    font-size: 12px; /* 버튼 텍스트 크기 */
+    line-height: 1; /* 줄 간격 */
+    display: inline-flex; /* 버튼 내부의 요소들이 한 줄에 표시되도록 설정 */
+    align-items: center; /* 아이콘과 텍스트가 수직으로 중앙에 정렬 */
+    cursor: pointer; /* 마우스 커서가 버튼 위에 있을 때 손가락 모양으로 변경 */
+    transition: all 0.3s ease-in-out; /* 모든 상태 변화에 트랜지션 효과 */
+    font-weight: 500; /* 글씨 두께 */
+    font-family: 'font-body'; /* 폰트 패밀리 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    border: none; /* 테두리 없음 */
+    outline: none; /* 포커스 시 외곽선 없음 */
+    border-radius: 0.375rem; /* 모서리 둥글게 */
+    color: white; /* 기본 텍스트 색상 */
+    padding: 1rem 1.25rem; /* 상하 패딩 1rem, 좌우 패딩 1.25rem */
+    background-color: #03C75A; /* 네이버 그린 배경색 */
+    justify-content: center; /* 아이콘과 텍스트를 가운데 정렬 */
+    width: 100%; /* 너비 100% */
+    margin-top: -0.5rem; /* 위쪽 여백 */
+    height: 2.75rem; /* 높이 */
+}
+
+.naver-login-btn:hover {
+    background-color: #02b053; /* 호버 시 더 어두운 네이버 그린 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 호버 시 그림자 */
+}
+
+.icon-wrapper {
+    font-size: 1rem; /* 아이콘 크기 */
+    margin-right: 0.375rem; /* 텍스트와 아이콘 사이 간격 */
+    margin-left: 0.775rem; /* 아이콘을 오른쪽으로 이동시키기 위한 여백 */
+    display: flex; /* 아이콘 래퍼를 flex 컨테이너로 설정 */
+    align-items: center; /* 아이콘을 수직으로 중앙 정렬 */
+}
+
+.label-naver {
+	font-size: 14px; /* 글씨 크기 조정 */
+    flex-grow: 1; /* 텍스트가 가능한 공간을 차지하도록 설정 */
+    margin-right: 1.375rem; /* 아이콘과 텍스트 사이 공간 */
+    text-align: center; /* 텍스트는 왼쪽 정렬 */
 }
 
 .login-box .kakao-btn {

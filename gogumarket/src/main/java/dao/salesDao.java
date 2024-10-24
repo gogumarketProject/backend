@@ -350,6 +350,7 @@ public class salesDao {
 				+ "where (title like '%"+search+"%' or contents like '%"+search+"%' or area like'%"+search+"%')\n"
 				+ "and category_id like '%"+category_id+"%'\n"
 				+ "and trade like '%"+trade+"%'\n"
+				+ "and status = 1\n"
 				+ "and product_status like '%"+product_status+"%'\n"
 				+ "and price >= "+min_price+"\n"
 				+ "and price <= " + max_price;
@@ -389,6 +390,7 @@ public class salesDao {
 				+ "where (title like '%"+search+"%' or contents like '%"+search+"%' or area like'%"+search+"%')\n"
 				+ "and category_id like '%"+category_id+"%'\n"
 				+ "and trade like '%"+trade+"%'\n"
+				+ "and status = 1\n"
 				+ "and product_status like '%"+product_status+"%'\n"
 				+ "and price >= "+min_price+"\n"
 				+ "and price <= "+max_price+"\n"

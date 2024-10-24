@@ -1,69 +1,81 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // 배너 슬라이더 스크립트
-    let currentBannerIndex = 0;
-    const banners = document.querySelectorAll('.banner-item');
-    const totalBanners = banners.length;
-    const bannerContainer = document.getElementById('bannerContainer');
-    const indicators = document.querySelectorAll('.indicator');
-    let autoSlide;
-
-    function updateBannerPosition() {
-        bannerContainer.style.transform = `translateX(-${currentBannerIndex * 100}%)`;
-        updateIndicators();
-    }
-
-    // 배너 밑 인디케이터
-    function updateIndicators() {
-        indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === currentBannerIndex);
-        });
-    }
-
-    function nextBanner() {
-        currentBannerIndex = (currentBannerIndex + 1) % totalBanners;
-        updateBannerPosition();
-        resetAutoSlide();
-    }
-
-    function prevBanner() {
-        currentBannerIndex = (currentBannerIndex - 1 + totalBanners) % totalBanners;
-        updateBannerPosition();
-        resetAutoSlide();
-    }
-
-    function jumpToBanner(index) {
-        currentBannerIndex = index;
-        updateBannerPosition();
-        resetAutoSlide();
-    }
-
-    function startAutoSlide() {
-        autoSlide = setInterval(nextBanner, 5000); // 5초마다 자동 전환
-    }
-
-    function resetAutoSlide() {
-        clearInterval(autoSlide);
-        startAutoSlide();
-    }
-
-    // 페이지 로드 시 자동 슬라이드 시작 및 인디케이터 초기화
-    startAutoSlide();
-    updateIndicators();
-
-    // 배너 인디케이터 클릭 이벤트 추가
-    indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', function () {
-            jumpToBanner(index);
-        });
-    });
-
-    // 버튼 클릭 이벤트 리스너 추가
-    document.querySelector('.arrow.left').addEventListener('click', prevBanner);
-    document.querySelector('.arrow.right').addEventListener('click', nextBanner);
-
-    // 함수들을 전역에 할당
-    window.nextBanner = nextBanner;
-    window.prevBanner = prevBanner;
+	window.onload = function() { //배너 스크립트 개 븅신되서 차선책
+	    // 배너 슬라이더 스크립트
+	    let currentBannerIndex = 0;
+	    const banners = document.querySelectorAll('.banner-item');
+	    const totalBanners = banners.length - 2;
+	    const bannerContainer = document.getElementById('bannerContainer');
+	    const indicators = document.querySelectorAll('.indicator');
+	    const bannersInView = 3; // 한 번에 보이는 배너 수를 정의
+	    const bannerWidth = banners[0].offsetWidth; // 각 배너의 너비 + 패딩
+	    let autoSlide;
+		
+		
+	    // 배너 위치 업데이트
+	    function updateBannerPosition() {
+	        const translateValue = currentBannerIndex * bannerWidth; // 이동 거리 계산
+	        bannerContainer.style.transform = `translateX(-${translateValue}px)`; // 픽셀 단위로 배너 이동
+	        updateIndicators();
+	    }
+		
+	    // 인디케이터 업데이트
+	    function updateIndicators() {
+	        indicators.forEach((indicator, index) => {
+	            indicator.classList.toggle('active', index === currentBannerIndex);
+	        });
+	    }
+	
+	    function nextBanner() {
+	        // 다음 배너로 한 장씩 이동
+	        currentBannerIndex++;
+	        if (currentBannerIndex >= totalBanners) { // 마지막 배너를 넘어가면 처음으로 돌아가기
+	            currentBannerIndex = 0;
+	        }
+	        updateBannerPosition();
+	        resetAutoSlide();
+	    }
+	
+	    function prevBanner() {
+	        // 이전 배너로 한 장씩 이동
+	        currentBannerIndex--;
+	        if (currentBannerIndex < 0) { // 처음을 넘어가면 마지막으로 돌아가기
+	            currentBannerIndex = totalBanners - 1;
+	        }
+	        updateBannerPosition();
+	        resetAutoSlide();
+	    }
+	    
+	    function jumpToBanner(index) {
+	        // 인디케이터 클릭 시 해당 배너로 이동
+	        currentBannerIndex = index;
+	        updateBannerPosition();
+	        resetAutoSlide();
+	    }
+	
+	    function startAutoSlide() {
+	        autoSlide = setInterval(nextBanner, 5000); // 5초마다 자동 전환
+	    }
+	
+	    function resetAutoSlide() {
+	        clearInterval(autoSlide);
+	        startAutoSlide();
+	    }
+	
+	    // 페이지 로드 시 자동 슬라이드 시작 및 인디케이터 초기화
+	    startAutoSlide();
+	    updateIndicators();
+	
+	    // 배너 인디케이터 클릭 이벤트 추가
+	    indicators.forEach((indicator, index) => {
+	        indicator.addEventListener('click', function () {
+	            jumpToBanner(index);
+	        });
+	    });
+	    
+	    // 전역에 함수 할당
+	    window.nextBanner = nextBanner;
+	    window.prevBanner = prevBanner;
+   	};
 
     // 실시간 인기 상품 슬라이드 스크립트
     let currentIndexPopular = 0;

@@ -98,6 +98,7 @@ public class salesDto {
 	public int getLikes() {
 		return likes;
 	}
+
 	public String getCategory_name() {
 		return category_name;
 	}

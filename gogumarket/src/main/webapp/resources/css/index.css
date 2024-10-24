@@ -5,66 +5,89 @@
     box-sizing: border-box;
 }
 body {
-    font-family: 'Arial', sans-serif;
     background-color: #f5f5f5;
+    margin-top: 100px
 }
-
 
 
 /* 배너 슬라이더 스타일 */
 .banner-slider {
     position: relative;
     width: 100%;
-    max-width: 1200px;
-    height: 300px;
+    max-width: 1160px;
+    margin: 0 auto;
     overflow: hidden;
-    margin: 20px auto;
 }
 
 .banner-container {
-    display: flex;
-    transition: transform 0.5s ease;
+    display: flex; /* 배너 아이템을 가로로 나열 */
+    transition: transform 0.8s ease; /* 부드러운 슬라이드 효과 */
+    width: calc(100% * 9 / 3); /* 전체 배너 수에 따라 컨테이너의 크기 조정 */
+    overflow: hidden; /* 화면 밖으로 넘치는 배너를 숨김 */
 }
 
 .banner-item {
-    flex: 0 0 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    height: 300px; /* 배너 아이템의 높이를 키움 */
 }
 
 .banner-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100%; /* 배너 아이템의 너비에 맞게 이미지 크기 조정 */
+    height: 100%; /* 배너 아이템 높이에 맞게 이미지 크기 조정 */
+    object-fit: cover; /* 이미지가 배너 크기에 맞게 비율을 유지하며 잘림 */
+    border-radius: 10px; /* 이미지 모서리를 둥글게 만듦 */
+    transition: transform 0.3s ease-in-out; /* 부드러운 확대 효과를 위한 전환 */
+}
+
+/* 이미지에 커서를 올렸을 때 확대 */
+.banner-item:hover img {
+    transform: scale(1.05); /* 5% 확대 */
 }
 
 /* 인디케이터 스타일 */
 .indicator-container {
     display: flex;
     justify-content: center;
-    margin-top: 10px;
+    align-items: center;
+    margin-top: 20px; /* 인디케이터 상단 여백 */
 }
 
 .indicator {
     width: 10px;
     height: 10px;
-    margin: 0 5px;
-    background-color: #ddd;
+    background-color: #ccc;
     border-radius: 50%;
-    pointer-events: none; /* 클릭 비활성화 */
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* 색상과 크기 전환 애니메이션 */
 }
 
 .indicator.active {
-    background-color: #333;
+    background-color: #000; /* 활성화된 인디케이터 */
+    transform: scale(1.4); /* 활성화된 원 크기 증가 */
 }
 
+/* hover 효과 */
+.indicator :hover {
+    background-color: #666; /* hover 시 회색을 어둡게 변경 */
+    cursor: pointer;
+}
+
+/* 카드 전체 컨테이너 스타일 */
 .items-section {
     padding: 20px;
-    position: relative;
     max-width: 1200px;
     margin: 0 auto;
+    margin-bottom: 30px;
 }
 
 .items-section h2 {
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+    margin-left: 14px;
     font-size: 20px;
     font-weight: bold;
 }
@@ -76,29 +99,81 @@ body {
 
 .items {
     display: flex;
+    flex-wrap: nowrap; /* 한 줄에 모든 카드가 정렬되도록 함 */
     transition: transform 0.5s ease;
     width: 100%;
 }
 
+/* 각 상품 카드 */
 .item {
-    background-color: white;
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 세로 정렬을 고르게 유지 */
+    padding: 0;
     margin: 0 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    flex: 0 0 18.4%; /* 아이템이 5개 보이도록 수정 */
+    border-radius: 4px;
+    flex: 0 0 18.28%; /* 너비 설정 */
+    height: 100%; /* 카드 전체 높이를 고정 */
 }
 
+/* 카드 내부의 이미지 */
 .item img {
     width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
+    height: 200px; /* 이미지 높이를 조절하여 카드 크기 맞춤 */
+    object-fit: cover; /* 이미지 크기를 유지하며 잘림 */
+    margin-top: 10px;
+    border-radius: 7px; /* 둥근 모서리를 제거하여 네모난 형태로 */
+    transition: transform 0.3s ease-in-out; /* 부드러운 확대 효과를 위한 전환 */
 }
 
+/* 호버 시 확대 효과 적용 */
+.item:hover img {
+    transform: scale(1.05); /* 이미지 확대 비율 */
+}
+
+/* 카드의 제목 */
 .item h3 {
-    font-size: 16px;
+    font-size: 14px;
     margin: 10px 0 5px;
+    color: black;
+    font-family : 'NanumSquare', sans-serif;
+    font-weight : 400;
+    line-height: 1.4em; /* 줄 간격 설정 */
+    max-height: 2.8em; /* 두 줄로 제한 (1.4em × 2) */
+    min-height: 2.8em; /* 한 줄이어도 두 줄 높이로 고정 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 텍스트가 넘칠 때 생략표시(...) 추가 */
+    white-space: normal;
+}
+
+/* 가격 정보 */
+.item p:first-of-type {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 5px 0;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+/* 지역 및 시간 정보 */
+.item p:last-of-type {
+    font-size: 12px;
+    font-family : 'NanumSquare', sans-serif;
+    font-weight : 400;
+    color: #555;
+    text-align: left;
+}
+
+/* Pay 배지 스타일 */
+.pay-badge {
+    background-color: #2ecc71;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 5px;
 }
 
 .item p {
@@ -106,16 +181,38 @@ body {
     color: #555;
 }
 
+/* 카드 내부의 텍스트 정렬 */
+.item-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 텍스트와 배지를 위쪽에 정렬 */
+    height: 100%;
+    flex-grow: 1; /* 여유 공간을 차지하도록 설정 */
+}
+
+.item-text p {
+    margin: 0;
+}
+
+/* 상품 정보의 배지와 텍스트 높이 맞춤 */
+.item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* 아이템의 마지막 부분으로 배치 */
+}
+
 .arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
     padding: 10px;
     cursor: pointer;
-    z-index: 10;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    z-index: 1;
 }
 
 .arrow.left {
@@ -124,6 +221,36 @@ body {
 
 .arrow.right {
     right: 10px;
+}
+
+/* 버튼의 호버 효과 */
+.arrow:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* 바로가기> 링크 스타일 */
+.view-more-link {
+    font-size: 0.9rem;
+    color: #3498db;  /* 배경과 어울리는 색상으로 수정 */
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+/* hover 시 색상 변환 */
+.view-more-link:hover {
+    color: #929391;  /* hover 시 색상 변경 (예시: 빨간색) */
+}
+
+.ad-banner {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.ad-banner img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
         
