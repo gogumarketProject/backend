@@ -12,9 +12,9 @@
             <p>소비자상담: 이메일접수</p>
         </div>
         <div class="footer-right">
-            <a href="#" class="facebook"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="youtube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" class="instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com" class="facebook"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.youtube.com" class="youtube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.instagram.com" class="instagram"><i class="fa-brands fa-instagram"></i></a>
         </div>
     </div>
     <!-- 추가된 div 상자 -->
