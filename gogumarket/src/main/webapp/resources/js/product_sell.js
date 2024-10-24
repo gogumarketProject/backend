@@ -1,5 +1,3 @@
-
-
 //하트 찜 활성화 시 색깔
 document.addEventListener('DOMContentLoaded', function() {
      const wishlist = document.querySelector('.wishlist input');
@@ -17,9 +15,14 @@ document.addEventListener('DOMContentLoaded', function() {
        }
      });
 });
-   
 
 
+//게시물 삭제
+function goDelete(){
+   if(confirm('삭제된 게시물은 복구할 수 없습니다. \n해당 게시물을 삭제하시겠습니까?')){
+      alert('삭제띠~');
+   }
+}
 
 //가격 낮은 순으로 나열
 document.addEventListener('DOMContentLoaded', function() {
@@ -90,3 +93,51 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+
+// 드롭다운 열기/닫기 제어
+document.addEventListener("DOMContentLoaded", function() {
+  // selected-circum 요소가 존재하는지 확인
+  const selectedCircum = document.querySelector('.selected-circum');
+
+  if (selectedCircum) {
+    // 요소가 존재할 때만 이벤트 리스너를 등록
+    selectedCircum.addEventListener('click', function(event) {
+      event.stopPropagation(); // 클릭 이벤트가 부모로 전파되는 것을 방지
+      document.querySelector('.circum-options').style.display = 'block';
+    });
+  } else {
+    console.error("selected-circum 요소를 찾을 수 없습니다.");
+  }
+});
+
+
+// 문서 전체에 클릭 이벤트 추가
+document.addEventListener('click', function() {
+  // 드롭다운이 열린 상태에서 외부 클릭 시 닫기
+  document.querySelector('.circum-options').style.display = 'none';
+});
+
+
+// 신뢰지수 막대 애니메이션
+document.addEventListener("DOMContentLoaded", function() {
+    const trustScoreValue = parseInt(document.querySelector(".trust-score-value").innerText);
+    const trustBarInner = document.querySelector(".trust-bar-inner");
+    
+    //trust-bar의 max-width 가져오는 변수
+    let trustBarElement = document.querySelector(".trust-bar");
+    
+    // 최대 신뢰 지수 설정
+    const maxScore = 1000;
+    const targetWidth = (trustScoreValue / maxScore) * 100;
+   
+    // 애니메이션 효과를 위한 setInterval 사용
+    let currentValue = 0;
+    const interval = setInterval(() => {
+        if (currentValue >= targetWidth) {
+            clearInterval(interval);
+        } else {
+            currentValue += 1; // 증가 속도 조절 가능
+            trustBarInner.style.width = currentValue + "%";
+        }
+    }, 10); // 증가 간격 조절 가능
+});

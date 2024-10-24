@@ -12,8 +12,7 @@
 }
 /* 페이지 상단 여백 추가 */
 body {
-    margin-top: 250px; /* 탑배너, 헤더, 메뉴바의 높이를 반영하여 여백 추가 */
-    font-family: 'HakgyoansimDunggeunmisoTTF-B', sans-serif; /* 기본 폰트로 설정 */
+    margin-top: 250px !important; /* 탑배너, 헤더, 메뉴바의 높이를 반영하여 여백 추가 */
 }
 
 a {
@@ -50,6 +49,8 @@ a {
 
 /* 헤더 스타일 */
 header {
+	font-family: 'HakgyoansimDunggeunmisoTTF-B', sans-serif; /* 기본 폰트로 설정 */
+	
     display: flex;
     justify-content: center;
     align-items: center;
@@ -182,7 +183,41 @@ header .logo a:hover {
     top: 100%; /* 마이 버튼 바로 아래에 위치 */
     left: 77.3%;  /* 마이 버튼과 수평으로 정렬 */
     margin-top: -20px; /* 버튼과 드롭다운 사이 간격 */
+    width: 150px;
 }
+
+/* 드롭다운 메뉴가 보일 때 사용할 클래스 */
+.dropdown-menu.show {
+    display: block;
+}
+
+
+
+
+/* 연동해제 버튼들 */
+
+.dropdown-menu button {
+    display: block; /* 블록 요소로 설정 */
+    width: 100%; /* 가로 크기를 100%로 설정 */
+    padding: 10px 15px; /* 동일한 여백 설정 */
+    text-align: left; /* 텍스트를 왼쪽 정렬 */
+    font-size: 12px;
+    font-family: 'HakgyoansimDunggeunmisoTTF-B', sans-serif; /* 동일한 폰트 패밀리 설정 */
+    color: #333; /* 동일한 텍스트 색상 */
+    background-color: transparent; /* 기본 배경색 투명 */
+    border: none; /* 버튼의 기본 테두리 제거 */
+    cursor: pointer; /* 커서 모양 변경 */
+    text-decoration: none; /* 밑줄 제거 */
+    margin-left: 0px;
+}
+
+.dropdown-menu button:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+}
+
+/* 연동해제 버튼들 */
+
+
 
 .dropdown-menu a {
     display: block;

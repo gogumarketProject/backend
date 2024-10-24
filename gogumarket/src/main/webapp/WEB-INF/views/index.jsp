@@ -41,11 +41,11 @@
 	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner1.jpg" alt="Banner 1"></div>
 	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner2.jpg" alt="Banner 2"></div>
 	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner3.jpg" alt="Banner 3"></div>
-	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner3.jpg" alt="Banner 4"></div>
-	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner3.jpg" alt="Banner 5"></div>
+	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner1.jpg" alt="Banner 4"></div>
+	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner2.jpg" alt="Banner 5"></div>
 	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner3.jpg" alt="Banner 6"></div>
-	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner3.jpg" alt="Banner 7"></div>
-	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner3.jpg" alt="Banner 8"></div>
+	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner1.jpg" alt="Banner 7"></div>
+	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner2.jpg" alt="Banner 8"></div>
 	        <div class="banner-item"><img src="${pageContext.request.contextPath}/resources/images/banner/banner3.jpg" alt="Banner 9"></div>
 	        <!-- 더 많은 배너 아이템 추가 -->
 	    </div>

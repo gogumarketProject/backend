@@ -79,10 +79,11 @@ body {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 .items-section h2 {
+	font-family: 'HakgyoansimDunggeunmisoTTF-B', sans-serif;
 	display: flex;
     justify-content: space-between;
     align-items: center;
