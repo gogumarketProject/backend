@@ -31,13 +31,13 @@
                 <a href="javascript:goCategorySearch('가구/인테리어', '9')">가구/인테리어</a>
             </div>
         </div>
-        <a href="javascript:goSortSearch('likes')">인기상품</a>
-        <a href="#">이벤트</a>
-        <a href="#">사기예방</a>
-        <a href="#">J쿠폰</a>
-        <a href="#">시세조회</a>
-        <a href="#">콘텐츠</a>
-        <a href="#">찜한 상품</a>
-        <a href="#">내 폰 팔기</a>
+        <a class="menu" href="javascript:goSortSearch('likes')">인기상품</a>
+        <a class="menu" href="#">이벤트</a>
+        <a class="menu" href="#">사기예방</a>
+        <a class="menu" href="#">J쿠폰</a>
+        <a class="menu" href="#">시세조회</a>
+        <a class="menu" href="#">콘텐츠</a>
+        <a class="menu" href="#">찜한 상품</a>
+        <a class="menu" href="#">내 폰 팔기</a>
     </div>
 </nav>

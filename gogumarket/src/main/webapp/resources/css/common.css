@@ -13,6 +13,7 @@
 /* 페이지 상단 여백 추가 */
 body {
     margin-top: 250px !important; /* 탑배너, 헤더, 메뉴바의 높이를 반영하여 여백 추가 */
+    background-color: #f5f5f5 !important;
 }
 
 a {
@@ -49,8 +50,8 @@ a {
 
 /* 헤더 스타일 */
 header {
-	font-family: 'HakgyoansimDunggeunmisoTTF-B', sans-serif; /* 기본 폰트로 설정 */
-	
+   font-family: 'HakgyoansimDunggeunmisoTTF-B', sans-serif !important; /* 기본 폰트로 설정 */
+   
     display: flex;
     justify-content: center;
     align-items: center;
@@ -284,6 +285,8 @@ header .logo a:hover {
     height: 100%; /* 카테고리 버튼의 높이를 메뉴바 높이에 맞춤 */
     display: flex; /* 버튼 내부 아이콘과 텍스트를 세로로 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
+    height: 40px;
+    margin-top: 5px;
 }
 
 
@@ -295,7 +298,7 @@ header .logo a:hover {
 }
 
 /* 밑줄 애니메이션 */
-.menu-bar a::before {
+.menu-bar .menu::before {
     content: '';
     position: absolute;
     bottom: 0;

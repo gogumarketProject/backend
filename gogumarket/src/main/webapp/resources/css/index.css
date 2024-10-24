@@ -204,7 +204,7 @@ body {
 }
 
 .arrow {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgb(0 0 0 / 9%);
     color: white;
     border: none;
     padding: 10px;
@@ -212,8 +212,14 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 20px;
+    transition: all 0.3s ease-in-out;
+    font-size: 26px;
     z-index: 1;
+}
+
+/* 버튼의 호버 효과 */
+.arrow:hover {
+    background-color: rgba(0, 0, 0, 20%);
 }
 
 .arrow.left {
