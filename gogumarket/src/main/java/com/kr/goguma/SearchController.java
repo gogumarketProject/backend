@@ -38,7 +38,7 @@ public class SearchController {
 			ObjectMapper mapper = new ObjectMapper();
 		    // 기본값 처리
 		    if (search == null) search = "";
-		    if (categoryId == null || categoryId.equals("")) categoryId = "";
+		    if (categoryId == null || categoryId.equals("0")) categoryId = "";
 		    if (minPrice == null || minPrice.equals("")) minPrice = "0";
 		    if (maxPrice == null || maxPrice.equals("")) maxPrice = "99999999";
 		    if (trade == null) trade = "";
