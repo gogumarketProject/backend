@@ -38,7 +38,7 @@ public class SearchController {
 			ObjectMapper mapper = new ObjectMapper();
 		    // 기본값 처리
 		    if (search == null) search = "";
-		    if (categoryId == null) categoryId = "";
+		    if (categoryId == null || categoryId.equals("")) categoryId = "";
 		    if (minPrice == null || minPrice.equals("")) minPrice = "0";
 		    if (maxPrice == null || maxPrice.equals("")) maxPrice = "99999999";
 		    if (trade == null) trade = "";
@@ -52,8 +52,8 @@ public class SearchController {
 		    
 			/* paging 설정 start*/
 			int totalCount = dao.getTotalCount(search, categoryId, minPrice, maxPrice, trade, status);
-			int list_setup_count = 5;  //한페이지당 출력 (행 * 열) 수
-			int pageNumber_count = 2;  //한페이지당 출력 페이지 갯수
+			int list_setup_count = 5 * 3;  //한페이지당 출력 (행 * 열) 수
+			int pageNumber_count = 5;  //한페이지당 출력 페이지 갯수
 			
 			int current_page = 0; // 현재페이지 번호
 			int total_page = 0;    // 전체 페이지 수

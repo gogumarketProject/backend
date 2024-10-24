@@ -33,7 +33,7 @@ body {
 .table-container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 60px 0 0px;
+    padding: 0px;
 }
 
 .table-title-con{
@@ -447,9 +447,7 @@ td {
     text-align: center;
     margin-top: 20px;
 }
-.pagination span, .pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
+.pagination div {
     cursor: pointer;
 }
 .page-number.active {
