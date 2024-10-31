@@ -565,10 +565,11 @@ public class salesDao {
 	}
 
 	//물건 거래상태 변경
-	public int ChangeStatus(int s_no, String status) {
+	public int ChangeStatus(int s_no,int price) {
 		int result = 0;
 		String query = "update sales\r\n" + 
-				"set status = '"+status+"'\r\n" + 
+				"set status = '3',\r\n" + 
+				"price = "+price+"\r\n" + 
 				"where s_no = "+s_no+"";
 		try {
 			con = DBConnection.getConnection();

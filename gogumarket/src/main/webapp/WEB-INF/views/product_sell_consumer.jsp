@@ -48,14 +48,6 @@
   			success:function(data){
   				var result = $.trim(data);
   				alert(result);
-  				/* var result = $.trim(data);
-  				  
-  				/* all.t_id_result.value = result;
-  				if(result == "사용가능"){
-  					all.t_id_checkValue.value = all.t_id.value;
-  				}else{
-  					all.t_id_checkValue.value = "";
-  				} */  
   			}
   		});
 		
@@ -84,54 +76,28 @@
 	}
 	
 	
-	//status 바꾸는 js
-	var previousStatus = "${productdto.getStatus()}";
 	
-	function confirmSelection(element) {
-	    const selectedValue = element.getAttribute('data-value');
-	    
-	    if (selectedValue == '판매중' && previousStatus != selectedValue) {
-	        if (!confirm("판매중 상태로 변경하시겠습니까?")) {
-	        	element.value = previousStatus;  // 취소 시 이전 상태로 복구
-	            return;
-	        } 
-	    } else if (selectedValue == '예약중'  && previousStatus != selectedValue) {
-	        if (!confirm("예약중 상태로 변경하시겠습니까?")) {
-	        	element.value = previousStatus; // 취소 시 이전 상태로 복구
-	            return;
-	        } 
-	    } else if (selectedValue === '판매완료'  && previousStatus != selectedValue) {
-	        if (!confirm("       판매완료 상태로 변경하시겠습니까?\r\n판매완료로 변경하실 경우에 거래제안 변경이 불가합니다!")) {
-	        	element.value = previousStatus; // 취소 시 이전 상태로 복구
-	            return;
-	        } 
-	    } else{
-	    	alert("현재 "+previousStatus+" 상태이므로  "+previousStatus+" 상태로 변경 안됩니다.");
-	    	return;
-	    }
-	    
-	    document.querySelector('.selected-circum').textContent = selectedValue; //div에 거래상태 재출력
-    	statusform.StatusSelect.value = selectedValue; //hidden에 저장
-    	
-	    $.ajax({
-  			type:"post",
-  			url: "ChangeStatus",
-  			data :"s_no="+statusform.s_no.value+"&status="+statusform.StatusSelect.value,
-  			/* data:"s_no="+status.s_no.value+"&status="+status.status.value, */
-  			dataType:"text",
-  			error:function(){
-  				alert("통신 실패!!!!");
-  			},
-  			success:function(data){
-  				var result = $.trim(data);
-  				alert(result);
-  				location.reload(true);
-  			}
-  		});
-	    /* if(selectedValue === '판매완료'){
-	    	 $(selectElement).parent().html('<span>판매완료</span>');
-	    	 $(".fa-regular fa-pen-to-square").hide();	
-	    } */
+	function changestatus(s_price)	{
+		if(confirm("정말로 이 회원과 거래를 진행하곘습니까? 진행하시면 이 물품은 '거래완료' 상태로 변경되고 글 수정이 불가합니다.")){
+			console.log("s_no=" + statusform.s_no.value + "&price=" + s_price);
+			$.ajax({
+	  			type:"post",
+	  			url: "ChangeStatus",
+	  			data:"s_no="+statusform.s_no.value+"&price="+s_price,
+	  			/* data:"s_no="+status.s_no.value+"&status="+status.status.value, */
+	  			dataType:"text",
+	  			error:function(){
+	  				alert("통신 실패!!!!");
+	  			},
+	  			success:function(data){
+	  				var result = $.trim(data);
+	  				alert(result);
+	  				location.reload(true);
+	  			}
+	  		});
+		}else{
+			alert("취소되었습니다!");
+		}
 	}
 </script>
 <body>
@@ -161,24 +127,11 @@
 					<div class="info-box-category">홈 > ${productdto.getCategory_name() }</div>
 						<div style="display: flex; justify-content: space-between;align-items: center; margin: 0 0 6px;">
 							<div class="info-box-product-name">${productdto.getTitle() }</div>
-							<div style="margin-right: 14px;">
-								<c:if test="${id eq productdto.getS_id() && (productdto.getStatus() eq '판매중'||productdto.getStatus() eq '예약중')}">
-								<form name = "statusform">
-								<input type = "hidden" name = "s_no" value = "${productdto.getS_no() }">
-									<div class="selling-circumstances">
-										<div class="selected-circum">${productdto.getStatus()}</div>
-										  	<input type="hidden" class="circum-value" name = "StatusSelect">
-										<div class="circum-options">
-										  	<div class="circum-option circum-1" data-value="판매중" onclick="confirmSelection(this)">판매중</div>
-										  	<div class="circum-option circum-2" data-value="예약중" onclick="confirmSelection(this)">예약중</div>
-										  	<div class="circum-option circum-3" data-value="판매완료" onclick="confirmSelection(this)">판매완료</div>
-										</div>
-									</div>
-								</form>	
-								</c:if>
-							</div>
 						</div>
-						<div class="info-box-price"><strong>${productdto.getPrice() }원</strong></div>
+						<div class="info-box-price"><strong>
+							<c:if test="${productdto.getStatus() eq '판매중' }">${productdto.getPrice() }원</c:if>
+							<c:if test="${productdto.getStatus() eq '판매완료' }">${productdto.getPrice() }원에 판매된 상품입니다.</c:if>
+						</strong></div>
 						<div class="info-box-product-meta">${productdto.getReg_date() } | 채팅 0 | 찜 ${productdto.getLikes() }</div>
 						<!-- 한 줄로 나란히 배치된 li -->
 						<ul class="li-details">
@@ -266,8 +219,10 @@
 					</div>
 				</div>
 				<!-- 우측 큰 div -->
-				
-				<c:if test="${id eq productdto.getS_id() }">	
+				<form name = "statusform">
+								<input type = "hidden" name = "s_no" value = "${productdto.getS_no() }">
+				</form>	
+				<c:if test="${id eq productdto.getS_id() and productdto.getStatus() eq '판매중'}">	
 				<div class="right-box">
 						<h3 class="right-box-header">
 							가격제안
@@ -284,8 +239,9 @@
 									<span class="seller-price"><strong>${OfferDtos.getPrice() }원</strong></span>
 								</div>
 								<!-- 새로운 div: trade-options -->
-								<button class="trade-options" id="noteButton"><i class="fa-solid fa-comments"></i></button>
+								<button class="trade-options" id="noteButton" onclick = "changestatus(${OfferDtos.getPrice()})">수락</button>
 							</div>
+							
 						</c:forEach>
 						</div>
 					</div>
@@ -336,12 +292,13 @@
 								<c:when test="${empty likesDtos.getArea() }">택배</c:when>
 							</c:choose>
 						</div>
+						</div>
 					</li>
 					</c:forEach>
 				</ul>
 			</div>
 			<div class="advertising-container">
-            	<img src="${pageContext.request.contextPath}/resources/images/ad/advertising-image4.png" alt="ad">
+            	 <img src="${pageContext.request.contextPath}/resources/images/banner/ad-banner.jpg" alt="광고 배너">
             </div>
 		</div>
 	</main>

@@ -174,15 +174,8 @@ public class GogumaController {
 		      }
 			salesDao dao = new salesDao(); 
 			int s_no = Integer.parseInt(request.getParameter("s_no"));
-			String status = request.getParameter("status");
-			if(status.equals("판매중")) {
-				status = "1";
-			}else if(status.equals("예약중")) {
-				status = "2";
-			}else if(status.equals("판매완료")) {
-				status = "3";
-			}
-			int result = dao.ChangeStatus(s_no,status);
+			int price = Integer.parseInt(request.getParameter("price"));
+			int result = dao.ChangeStatus(s_no,price);
 			if(result == 1) {
 				out.print("거래 제안 변경 완료!");
 			}else {
