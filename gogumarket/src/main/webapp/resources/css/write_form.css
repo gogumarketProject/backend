@@ -302,7 +302,6 @@ main {
 }
 
 #locationConfirmButton {
-    width: 20px;
     height: 100%;
     padding: 0; /* 패딩 없애기 */
     margin: 0; /* 마진 없애기 */

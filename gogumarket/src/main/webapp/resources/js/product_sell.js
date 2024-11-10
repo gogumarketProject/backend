@@ -16,14 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
      });
 });
 
-
-//게시물 삭제
-function goDelete(){
-   if(confirm('삭제된 게시물은 복구할 수 없습니다. \n해당 게시물을 삭제하시겠습니까?')){
-      alert('삭제띠~');
-   }
-}
-
 //가격 낮은 순으로 나열
 document.addEventListener('DOMContentLoaded', function() {
    const sellers = document.querySelectorAll('.trade-seller');

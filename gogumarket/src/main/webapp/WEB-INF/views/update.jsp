@@ -188,9 +188,6 @@
             <div class="register-box" onclick="goupdate()">
                 등록
             </div>
-            <div class="advertising-container">
-            	<img src="${pageContext.request.contextPath}/resources/images/ad/advertising-image4.png" alt="ad">
-            </div>
         </form>
     </div>
 </main>
