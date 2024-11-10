@@ -565,10 +565,11 @@ public class salesDao {
 	}
 
 	//물건 거래상태 변경
-	public int ChangeStatus(int s_no, String status) {
+	public int ChangeStatus(int s_no,int price) {
 		int result = 0;
 		String query = "update sales\r\n" + 
-				"set status = '"+status+"'\r\n" + 
+				"set status = '3',\r\n" + 
+				"price = "+price+"\r\n" + 
 				"where s_no = "+s_no+"";
 		try {
 			con = DBConnection.getConnection();
@@ -582,5 +583,279 @@ public class salesDao {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		return result;
+	}
+	
+	//마이페이지 판매내역
+	public ArrayList<salesDto> MyPageSales(String id) {
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select * from\r\n" + 
+				"	(select rownum, tbl.*\r\n" + 
+				"	from\r\n" + 
+				"        (select s_no, s_id, image_dir, title, to_char(price, '999,999,999')||'원' as price, area, p_id, status,\r\n" + 
+				"        CASE\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전'\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전'\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전'\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전'\r\n" + 
+				"        ELSE to_char(reg_date,'yyyy-MM-dd')\r\n" + 
+				"        END AS reg_date\r\n" + 
+				"        from sales\r\n" + 
+				"        where s_id = '"+id+"'\r\n" + 
+				"        order by s_no desc\r\n" + 
+				"    )tbl)";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int s_no = rs.getInt("s_no");
+				
+				String s_id = rs.getString("s_id");
+				String image_dir = rs.getString("image_dir");
+				String title = rs.getString("title");
+				String price = rs.getString("price");
+				String area = rs.getString("area");
+				if(area == null) area = "";
+				String reg_date = rs.getString("reg_date");
+				String status = rs.getString("status");
+				String p_id = rs.getString("p_id");
+				if(p_id == null) p_id = "";
+				
+				
+				salesDto dto = new salesDto(s_id, title, status, area, reg_date, image_dir, price, p_id, s_no);
+				dtos.add(dto);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("MyPageSales() 오류\n" + query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return dtos;
+	}
+	
+	//마이페이지 판매내역
+	public ArrayList<salesDto> MyPagePurchase(String id) {
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select * from\r\n" + 
+				"	(select rownum, tbl.*\r\n" + 
+				"	from\r\n" + 
+				"        (select s_no, s_id, image_dir, title, to_char(price, '999,999,999')||'원' as price, area, p_id, status,\r\n" + 
+				"        CASE\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\\n\"\r\n" + 
+				"        ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\\n\"\r\n" + 
+				"        END AS reg_date\r\n" + 
+				"        from sales\r\n" + 
+				"        --where status = '1'\r\n" + 
+				"        where p_id = 'admin'\r\n" + 
+				"        order by s_no desc\r\n" + 
+				"    )tbl)";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int s_no = rs.getInt("s_no");
+				
+				String s_id = rs.getString("s_id");
+				String image_dir = rs.getString("image_dir");
+				String title = rs.getString("title");
+				String price = rs.getString("price");
+				String area = rs.getString("area");
+				if(area == null) area = "";
+				String reg_date = rs.getString("reg_date");
+				String status = rs.getString("status");
+				String p_id = rs.getString("p_id");
+				if(p_id == null) p_id = "";
+				
+				
+				salesDto dto = new salesDto(s_id, title, status, area, reg_date, image_dir, price, p_id, s_no);
+				dtos.add(dto);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("MyPagePurchase() 오류\n" + query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return dtos;
+	}
+	
+	
+	//마이페이지 찜한상품
+	public ArrayList<salesDto> MyPageWish(String id) {
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select * from\r\n" + 
+				"	(select rownum, tbl.*\r\n" + 
+				"	from\r\n" + 
+				"        (select s.s_no, s_id, image_dir, title, to_char(price, '999,999,999')||'원' as price, area, p_id, status, w.id,\r\n" + 
+				"        CASE\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\\n\"\r\n" + 
+				"        ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\\n\"\r\n" + 
+				"        END AS reg_date\r\n" + 
+				"        from sales s, wish_list w\r\n" + 
+				"        --where status = '1'\r\n" + 
+				"        where s.s_no = w.s_no\r\n" + 
+				"        and w.id = '"+id+"'\r\n" + 
+				"        order by s_no desc\r\n" + 
+				"    )tbl)";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int s_no = rs.getInt("s_no");
+				
+				String s_id = rs.getString("s_id");
+				String image_dir = rs.getString("image_dir");
+				String title = rs.getString("title");
+				String price = rs.getString("price");
+				String area = rs.getString("area");
+				if(area == null) area = "";
+				String reg_date = rs.getString("reg_date");
+				String status = rs.getString("status");
+				String p_id = rs.getString("p_id");
+				if(p_id == null) p_id = "";
+				
+				
+				salesDto dto = new salesDto(s_id, title, status, area, reg_date, image_dir, price, p_id, s_no);
+				dtos.add(dto);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("MyPageWish() 오류\n" + query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return dtos;
+	}
+	
+	
+	//마이페이지 제안받은상품
+	public ArrayList<salesDto> MyPageSellOffer(String id) {
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select * from\r\n" + 
+				"	(select rownum, tbl.*\r\n" + 
+				"	from\r\n" + 
+				"        (select s.s_no, s_id, image_dir, title, to_char(price, '999,999,999')||'원' as price, area, p_id, status, o.id, to_char(o.offer_price, '999,999,999')||'원' as offer_price,\r\n" + 
+				"        CASE\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\\n\"\r\n" + 
+				"        ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\\n\"\r\n" + 
+				"        END AS reg_date\r\n" + 
+				"        from sales s, offer_price o\r\n" + 
+				"        --where status = '1'\r\n" + 
+				"        where s.s_no = o.s_no\r\n" + 
+				"        and o.id = 'admin'\r\n" + 
+				"        order by s_no desc\r\n" + 
+				"    )tbl)";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int s_no = rs.getInt("s_no");
+				
+				String s_id = rs.getString("s_id");
+				String image_dir = rs.getString("image_dir");
+				String title = rs.getString("title");
+				String price = rs.getString("offer_price");
+				String area = rs.getString("area");
+				if(area == null) area = "";
+				String reg_date = rs.getString("reg_date");
+				String status = rs.getString("status");
+				String p_id = rs.getString("p_id");
+				if(p_id == null) p_id = "";
+				
+				
+				salesDto dto = new salesDto(s_id, title, status, area, reg_date, image_dir, price, p_id, s_no);
+				dtos.add(dto);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("MyPageSellOffer() 오류\n" + query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return dtos;
+	}
+	
+	//마이페이지 제안받은상품
+	public ArrayList<salesDto> MyPagePurchaseOffer(String id) {
+		ArrayList<salesDto> dtos = new ArrayList<salesDto>();
+		String query = "select * from\r\n" + 
+				"	(select rownum, tbl.*\r\n" + 
+				"	from\r\n" + 
+				"        (select s.s_no, s_id, image_dir, title, to_char(price, '999,999,999')||'원' as price, area, p_id, status, o.id, to_char(o.offer_price, '999,999,999')||'원' as offer_price,\r\n" + 
+				"        CASE\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 * 60 < 60 THEN ROUND((SYSDATE - reg_date) * 24 * 60, 0) || '분 전' -- 1시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) * 24 < 24 THEN ROUND((SYSDATE - reg_date) * 24, 0) || '시간 전' -- 24시간 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 7 THEN ROUND(SYSDATE - reg_date, 0) || '일 전' -- 7일 미만\\n\"\r\n" + 
+				"        WHEN (SYSDATE - reg_date) < 30 THEN ROUND((SYSDATE - reg_date) / 7, 0) || '주 전' -- 7일 이상, 30일 미만\\n\"\r\n" + 
+				"        ELSE to_char(reg_date,'yyyy-MM-dd')  -- 30일 이상\\n\"\r\n" + 
+				"        END AS reg_date\r\n" + 
+				"        from sales s, offer_price o\r\n" + 
+				"        --where status = '1'\r\n" + 
+				"        where s.s_no = o.s_no\r\n" + 
+				"        and s_id = 'admin'\r\n" + 
+				"        order by s_no desc\r\n" + 
+				"    )tbl)";
+		
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int s_no = rs.getInt("s_no");
+				
+				String s_id = rs.getString("s_id");
+				String image_dir = rs.getString("image_dir");
+				String title = rs.getString("title");
+				String price = rs.getString("offer_price");
+				String area = rs.getString("area");
+				if(area == null) area = "";
+				String reg_date = rs.getString("reg_date");
+				String status = rs.getString("status");
+				String p_id = rs.getString("p_id");
+				if(p_id == null) p_id = "";
+				
+				
+				salesDto dto = new salesDto(s_id, title, status, area, reg_date, image_dir, price, p_id, s_no);
+				dtos.add(dto);
+			}
+			
+		} catch (Exception e) {
+			System.out.println("MyPagePurchaseOffer() 오류\n" + query);
+			e.printStackTrace();
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		
+		return dtos;
 	}
 }

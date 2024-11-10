@@ -1,7 +1,7 @@
 package dto;
 
 public class salesDto {
-	private String s_id, category_id,category_name ,title, contents, status, product_status, trade, area, reg_date, image_dir, price;
+	private String s_id, category_id,category_name ,title, contents, status, product_status, trade, area, reg_date, image_dir, price, p_id;
 	private int s_no, likes;
 	
 	//판매제안 리스트
@@ -59,6 +59,25 @@ public class salesDto {
 	this.price = price;
 	}
 
+	
+	
+	
+	//마이페이지 판매
+	public salesDto(String s_id, String title, String status, String area, String reg_date, String image_dir,
+			String price, String p_id, int s_no) {
+		super();
+		this.s_id = s_id;
+		this.title = title;
+		this.status = status;
+		this.area = area;
+		this.reg_date = reg_date;
+		this.image_dir = image_dir;
+		this.price = price;
+		this.p_id = p_id;
+		this.s_no = s_no;
+	}
+
+	
 	public String getS_id() {
 		return s_id;
 	}

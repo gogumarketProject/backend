@@ -35,6 +35,7 @@ import dao.salesDao;
 import member.command.GoogleLogin;
 import member.command.Login;
 import member.command.MemberLogin;
+import mypage.command.MyPage;
 import product.command.ConsumerView;
 import product.command.IndexView;
 import product.command.PriceOffer;
@@ -62,7 +63,7 @@ public class GogumaController {
     }
 	
     
-	@RequestMapping(value="market",method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value="market",method = { RequestMethod.GET, RequestMethod.POST })
 	public String market(HttpServletRequest request, Model model, HttpSession session) {
 		String gubun = request.getParameter("t_gubun");
 		String viewPage = "";
@@ -107,6 +108,8 @@ public class GogumaController {
 		}
 		//마이페이지
 		else if(gubun.equals("myPage")) {
+			CommonExecute goguma = new MyPage();
+			goguma.execute(request);
 			viewPage = "mypage";
 		}
 		//소비자창 임시 버튼

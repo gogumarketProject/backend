@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c2" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -11,9 +12,94 @@
     <!-- 폰트어썸 -->
     <script src="https://kit.fontawesome.com/cbbeedc0db.js" crossorigin="anonymous"></script>
     
-    <style>
-        
-    </style>
+    <script>
+   		window.contextPath = "${pageContext.request.contextPath}";
+	    window.sellingProducts = [];
+	    window.soldProducts = [];
+	    
+	    <c2:forEach var="sale" items="${sales}">
+	        <c2:choose>
+	            <c2:when test="${sale.status eq '3'}">
+	            	window.soldProducts.push({
+	            		no: "${sale.getS_no()}",
+	                    name: "${sale.getTitle()}",
+	                    location: "${sale.getArea()}",
+	                    time: "${sale.getReg_date()}",
+	                    price: "${sale.getPrice()}",
+	                    imageDir: "${sale.getImage_dir()}"
+	                });
+	            </c2:when>
+	            <c2:when test="${sale.status eq '1'}">
+	           		window.sellingProducts.push({
+	           			no: "${sale.getS_no()}",
+	                    name: "${sale.getTitle()}",
+	                    location: "${sale.getArea()}",
+	                    time: "${sale.getReg_date()}",
+	                    price: "${sale.getPrice()}",
+	                    imageDir: "${sale.getImage_dir()}"
+	                });
+	            </c2:when>
+	        </c2:choose>
+	    </c2:forEach>
+	    
+	    window.purchasingProducts = [];
+	    window.purchasedProducts = [];
+	    
+	    <c2:forEach var="purchase" items="${purchase}">
+           	window.purchasedProducts.push({
+           		no: "${purchase.getS_no()}",
+	            name: "${purchase.getTitle()}",
+	            location: "${purchase.getArea()}",
+	            time: "${purchase.getReg_date()}",
+	            price: "${purchase.getPrice()}",
+	            imageDir: "${purchase.getImage_dir()}"
+            });
+	    </c2:forEach>
+	    
+	    
+	    
+	    window.wishlistProducts = [];
+	    
+	    <c2:forEach var="wish" items="${wish}">
+	       	window.wishlistProducts.push({
+	       		no: "${wish.getS_no()}",
+	            name: "${wish.getTitle()}",
+	            location: "${wish.getArea()}",
+	            time: "${wish.getReg_date()}",
+	            price: "${wish.getPrice()}",
+	            imageDir: "${wish.getImage_dir()}"
+	        });
+	    </c2:forEach>
+	    
+	    
+	    
+	    window.sellingOffers = [];
+	    window.purchaseOffers = [];
+	    
+	    <c2:forEach var="sellOffer" items="${sellOffer}">
+	       	window.sellingOffers.push({
+	       		no: "${sellOffer.getS_no()}",
+	            name: "${sellOffer.getTitle()}",
+	            location: "${sellOffer.getArea()}",
+	            time: "${sellOffer.getReg_date()}",
+	            price: "${sellOffer.getPrice()}",
+	            imageDir: "${sellOffer.getImage_dir()}"
+	        });
+	    </c2:forEach>
+	    
+	    <c2:forEach var="purchaseOffer" items="${purchaseOffer}">
+		   	window.purchaseOffers.push({
+		   		no: "${purchaseOffer.getS_no()}",
+		        name: "${purchaseOffer.getTitle()}",
+		        location: "${purchaseOffer.getArea()}",
+		        time: "${purchaseOffer.getReg_date()}",
+		        price: "${purchaseOffer.getPrice()}",
+		        imageDir: "${purchaseOffer.getImage_dir()}"
+		    });
+		</c2:forEach>
+	    
+	    
+    </script>
 </head>
 <body>
     <%@include file="header.jsp" %>
@@ -29,15 +115,15 @@
         <div class="profile-container">
             <div class="profile-left">
                 <div class="profile-img" id="profileImage">
-                    <img src="https://via.placeholder.com/120" alt="프로필 이미지">
+                    <img src="${pageContext.request.contextPath}/resources/images/member/mouse.jpg" alt="프로필 이미지">
                 </div>
                 <div class="profile-info">
-                    <div class="profile-name" id="nicknamemain">히텅</div>
-                    <div class="profile-level">Level 1</div>
-                    <div class="profile-location">동작구 사당동</div>
+                    <div class="profile-name" id="nicknamemain">관리자</div>
+                    <div class="profile-level">Level 99</div>
+                    <div class="profile-location">중구 오류동</div>
                     <!-- 신뢰지수 추가 -->
                     <div class="trust-score">
-                        <div class="trust-score-label">신뢰지수 <span id="trust-score-value">189</span></div>
+                        <div class="trust-score-label">신뢰지수 <span id="trust-score-value">999</span></div>
                         <div class="trust-bar">
                             <div class="trust-bar-inner" id="trust-bar-inner"></div>
                             <div class="trust-bar-value">1,000</div>
@@ -48,11 +134,18 @@
             <div class="vertical-line"></div>
             
             <div class="profile-stats" id="profile-stats">
-                <div class="profile-stat-item active" id="btn-purchase-history">구매 내역<span>60</span></div>
-                <div class="profile-stat-item" id="btn-selling">판매 상품<span>30</span></div>
-                <div class="profile-stat-item" id="btn-wishlist">찜한 상품<span>60</span></div>
-                <div class="profile-stat-item" id="btn-offers">가격 제안<span>60</span></div>
-                <div class="profile-stat-item" id="btn-transaction-reviews">거래 후기<span>10</span></div>
+                <button class="profile-stat-item active" id="btn-purchase-history">구매 내역<span>${purchase.size() }</span></button>
+                <button class="profile-stat-item" id="btn-selling">판매 상품<span>${sales.size()}</span></button>
+                <button class="profile-stat-item" id="btn-wishlist">찜한 상품<span>${wish.size() }</span></button>
+                <button class="profile-stat-item" id="btn-offers">가격 제안<span>${sellOffer.size() + purchaseOffer.size() }</span></button>
+                
+                
+                
+                
+                
+                
+                
+                <button class="profile-stat-item" id="btn-transaction-reviews">거래 후기<span>10</span></button>
             </div>
         </div>
         	
@@ -78,8 +171,8 @@
 	        <div class="sales-header">구매 내역</div>
 	        <div class="tab-menu-purchase">
 	            <div id="tab-all-purchase" class="active">전체</div>
-	            <div id="tab-purchasing">구매중</div>
-	            <div id="tab-purchased">구매완료</div>
+	            <div id="tab-purchasing" style="display: none;">구매중</div>
+	            <div id="tab-purchased" style="display: none;">구매완료</div>
 	        </div>
 	        <div class="product-list" id="product-list-purchase-history">
 	            <!-- 구매 상품 리스트가 표시될 부분 -->
@@ -107,8 +200,8 @@
         <div class="section-container" id="section-offers">
             <div class="sales-header">가격 제안</div>
             <div class="tab-menu-offers">
-                <div id="tab-all-offers" class="active">판매 상품 제안</div>
-                <div id="tab-purchase-offers">구매 상품 제안</div>
+                <div id="tab-all-offers" class="active">제안받은 상품</div>
+                <div id="tab-purchase-offers">제안한 상품</div>
             </div>
             <div class="product-list" id="product-list-offers">
                 <!-- 가격 제안 리스트가 표시될 부분 -->
@@ -143,8 +236,8 @@
     
     
     <script src="${pageContext.request.contextPath}/resources/js/mypage.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/mypage_profile.js"></script>
+    <%-- <script src="${pageContext.request.contextPath}/resources/js/mypage_profile.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/popup.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/message.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/message.js"></script> --%>
 </body>
 </html>

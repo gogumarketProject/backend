@@ -6,6 +6,10 @@ body {
     padding: 0;
 }
 
+a {
+	text-decoration: none;
+}
+
 /* 전체 컨테이너 */
 .container {
     max-width: 1200px;
@@ -421,6 +425,17 @@ body {
     margin-bottom: 20px;
 }
 
+.profile-stat-item {
+    background-color: white; /* 원래 div의 배경색 */
+    border: none; /* 기본 버튼 테두리 제거 */
+    padding: 10px 20px; /* 원하는 여백 추가 */
+    color: #333; /* 텍스트 색상 설정 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    cursor: pointer; /* 버튼처럼 클릭 가능하게 */
+    display: inline-block; /* div와 유사한 display 속성 */
+    text-align: center; /* 가운데 정렬 */
+}
+
 /* 탭 메뉴 */
 .tab-menu {
     display: flex;
@@ -429,7 +444,7 @@ body {
 }
 
 .tab-menu div {
-    flex: 1; /* 모든 탭의 너비가 균등하게 분배되도록 설정 */
+    flex: 1;
     text-align: center;
     font-size: 18px;
     padding: 10px;
@@ -437,11 +452,13 @@ body {
     font-weight: bold;
     color: #555;
     position: relative;
+    margin-bottom: -2.5px;
 }
 
 .tab-menu .active {
-    border-bottom: 3px solid #ff0000;
+    border-bottom: 2px solid red;
     color: #000;
+    font-size: 20px;
 }
 
 /* 구매 상품 섹션 스타일 */
@@ -452,7 +469,7 @@ body {
 }
 
 .tab-menu-purchase div {
-    flex: 1; /* 모든 탭의 너비가 균등하게 분배되도록 설정 */
+    flex: 1;
     text-align: center;
     font-size: 18px;
     padding: 10px;
@@ -460,11 +477,13 @@ body {
     font-weight: bold;
     color: #555;
     position: relative;
+    margin-bottom: -2.5px;
 }
 
 .tab-menu-purchase .active {
-    border-bottom: 3px solid #ff0000;
+    border-bottom: 2px solid red;
     color: #000;
+    font-size: 20px;
 }
 
 /* 찜한 상품 섹션 스타일 */
@@ -483,11 +502,13 @@ body {
     font-weight: bold;
     color: #555;
     position: relative;
+    margin-bottom: -2.5px;
 }
 
 .tab-menu-wishlist .active {
-    border-bottom: 3px solid #ff0000;
+    border-bottom: 2px solid red;
     color: #000;
+    font-size: 20px;
 }
 
 /* 거래 후기 섹션 */
@@ -624,7 +645,7 @@ body {
 }
 
 .tab-menu-offers div {
-    flex: 1; /* 모든 탭의 너비가 균등하게 분배되도록 설정 */
+    flex: 1;
     text-align: center;
     font-size: 18px;
     padding: 10px;
@@ -632,11 +653,13 @@ body {
     font-weight: bold;
     color: #555;
     position: relative;
+    margin-bottom: -2.5px;
 }
 
 .tab-menu-offers .active {
-    border-bottom: 3px solid #ff0000;
+    border-bottom: 2px solid red;
     color: #000;
+    font-size: 20px;
 }
 
 /* 가격 제안 상품 리스트를 2행 5열로 구성 */
@@ -660,19 +683,29 @@ body {
 }
 
 .product-item {
-    background-color: white;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     position: relative;
+    
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 세로 정렬을 고르게 유지 */
+    padding: 0;
+    margin: 0 10px;
+    border-radius: 4px;
+    flex: 0 0 18.28%; /* 너비 설정 */
+    height: 100%; /* 카드 전체 높이를 고정 */
 }
 
 .product-img {
     width: 100%;
-    height: 250px;
-    object-fit: cover;
+    height: 200px; /* 이미지 높이를 조절하여 카드 크기 맞춤 */
+    object-fit: cover; /* 이미지 크기를 유지하며 잘림 */
     margin-bottom: 10px;
+    border-radius: 7px; /* 둥근 모서리를 제거하여 네모난 형태로 */
+    transition: transform 0.3s ease-in-out; /* 부드러운 확대 효과를 위한 전환 */
 }
+
 
 .product-info {
     font-size: 14px;
@@ -683,6 +716,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     margin-top: 10px;
+    color: black;
 }
 
 .purchased-overlay {
@@ -690,28 +724,30 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 200px;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     font-size: 20px;
     font-weight: bold;
     display: flex;
     align-items: center;
+    border-radius: 7px;
     justify-content: center;
 }
 
-.reserved-overlay, .sold-overlay {
+.sold-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 200px;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     font-size: 20px;
     font-weight: bold;
     display: flex;
     align-items: center;
+    border-radius: 7px;
     justify-content: center;
 }
 
@@ -811,5 +847,11 @@ body {
     right: 15px;
     font-size: 20px;
     cursor: pointer;
+}
+
+/* 거래후기 버튼과 거래후기 섹션 숨기기 */
+#btn-transaction-reviews,
+#section-transaction-reviews {
+    display: none;
 }
 
