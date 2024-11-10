@@ -66,34 +66,6 @@ window.onload = function() {
   });
 }
 
-
-//쪽지 보내기 슬라이드 패널
-document.addEventListener('DOMContentLoaded', function () {
-    const tradeButtons = document.querySelectorAll('.trade-options'); // 모든 거래 옵션 버튼 선택
-    const tradeSlidePanel = document.getElementById('tradeSlidePanel'); // 슬라이드 패널
-   const closeButton = document.getElementsByClassName('msg-close-btn');
-   
-    // 각 거래 옵션 버튼에 이벤트 리스너 추가
-    tradeButtons.forEach(function (button) {
-        button.addEventListener('click', function () {
-            // 패널 열기/닫기
-            if (tradeSlidePanel.classList.contains('open')) {
-                tradeSlidePanel.classList.remove('open'); // 패널 닫기
-            } else {
-                tradeSlidePanel.classList.add('open'); // 패널 열기
-            }
-        });
-    });
-    
-     // 모든 닫기 버튼에 이벤트 리스너 추가
-    Array.from(closeButton).forEach(function (button) {
-        button.addEventListener('click', function () {
-            tradeSlidePanel.classList.remove('open'); // 패널 닫기
-        });
-    });
-});
-
-
 // 드롭다운 열기/닫기 제어
 document.addEventListener("DOMContentLoaded", function() {
   // selected-circum 요소가 존재하는지 확인
