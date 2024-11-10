@@ -118,7 +118,7 @@
                     <img src="${pageContext.request.contextPath}/resources/images/member/mouse.jpg" alt="프로필 이미지">
                 </div>
                 <div class="profile-info">
-                    <div class="profile-name" id="nicknamemain">관리자</div>
+                    <div class="profile-name" id="nicknamemain">${email}</div>
                     <div class="profile-level">Level 99</div>
                     <div class="profile-location">중구 오류동</div>
                     <!-- 신뢰지수 추가 -->

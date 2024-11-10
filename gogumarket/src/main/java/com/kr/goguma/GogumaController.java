@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import common.CommonExecute;
+import dao.memberDao;
 import dao.salesDao;
 import member.command.GoogleLogin;
 import member.command.Login;
@@ -286,6 +287,17 @@ public class GogumaController {
 	    JsonNode responseObj = jsonobj.path("response");
 
 	    String email = responseObj.path("email").asText();
+	    // DB에 이메일 존재 여부 확인
+	    memberDao dao = new memberDao();
+	    boolean userExists = dao.isExistingUser(email);
+
+	    if (!userExists) {
+	        // 이메일이 DB에 존재하지 않는 경우, 신규 사용자로 등록
+	        int result = dao.saveMember(email, 0);
+	        if (result == 1) {
+	            System.out.println("등록 성공~!");
+	        }
+	    }
 	    
 	    System.out.println("email: " + email);
 	    session.setAttribute("email", email);
@@ -381,13 +393,11 @@ public class GogumaController {
 
         // 사용자 정보 가져오기
         String userInfo = googleLoginBO.getUserInfo(accessToken);
-
+        String email = "";
         // 사용자 정보 처리
         try {
             JSONObject jsonUserInfo = new JSONObject(userInfo);
-            String email = jsonUserInfo.getString("email");
-            // 추가 사용자 정보 처리 (예: 사용자 세션에 저장)
-            session.setAttribute("email", email);
+            email = jsonUserInfo.getString("email");
         } catch (JSONException e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", "사용자 정보 처리 중 오류 발생");
@@ -397,10 +407,33 @@ public class GogumaController {
         // 세션 유지 시간 설정 (예: 30분)
         session.setMaxInactiveInterval(60 * 30);
 
-        // 성공 시 메시지 설정
-        String msg = "고객님 환영합니다!";
-        model.addAttribute("msg", msg);
-        model.addAttribute("url", "market");
+        if (email == null) {
+            model.addAttribute("errorMessage", "사용자 정보 처리 중 오류 발생");
+            return "redirect:/market"; // 실패 시 리다이렉트
+        }
+
+        // 이메일 존재 여부 확인
+        memberDao dao = new memberDao();
+        boolean exists = dao.isExistingUser(email);
+        String msg = "";
+        // 이메일이 존재할 경우 세션에 저장
+        if (exists) {
+            session.setAttribute("email", email);
+            msg = "고객님 환영합니다!";
+            model.addAttribute("msg", msg);
+            model.addAttribute("url", "market");
+        } else {
+            // 이메일이 존재하지 않으면 새로 저장
+            int result = dao.saveMember(email, 0);
+            if(result == 1) {
+            	msg = "회원가입이 완료되었습니다!";
+            }else {
+            	msg = "회원가입이 실패했습니다. 관리자한테 문의하세요!!";
+            }
+            session.setAttribute("email", email);
+            model.addAttribute("msg", msg);
+            model.addAttribute("url", "market");
+        }
 
         return "common_alert"; // 성공 시 환영 메시지 페이지로 이동
     }

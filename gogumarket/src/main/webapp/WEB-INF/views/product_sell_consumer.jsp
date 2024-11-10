@@ -253,7 +253,7 @@
 						<div class="right-box-trade">
 							<a href="#">
 								<p class="counterparty">
-									<span>${productdto.getS_id() }</span>
+									<span>${email }</span>
 									<i class="fa-solid fa-circle-user"></i>
 								</p>
 							</a>

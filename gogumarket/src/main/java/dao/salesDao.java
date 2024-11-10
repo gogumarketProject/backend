@@ -654,7 +654,7 @@ public class salesDao {
 				"        END AS reg_date\r\n" + 
 				"        from sales\r\n" + 
 				"        --where status = '1'\r\n" + 
-				"        where p_id = 'admin'\r\n" + 
+				"        where p_id = '"+id+"'\r\n" + 
 				"        order by s_no desc\r\n" + 
 				"    )tbl)";
 		
